@@ -56,38 +56,38 @@ export default function Footer() {
             <img
               src="assets/images/visa.png"
               alt=""
-              className="lg: w-15 lg: h-10 mr-12 mb-7 sm: w-10 sm: h-7"
+              className=" w-15 h-10 mr-12 mb-7 "
             />
             <img
               src="assets/images/discover.png"
               alt=""
-              className="lg: w-15 lg: h-10 mr-12 mb-7 sm: w-10 sm:h-7"
+              className="w-15 h-10 mr-12 mb-7"
             />
             <img
               src="assets/images/american-express.png"
               alt=""
-              className="lg: w-15 lg: h-10 mr-12 mb-7 sm: w-10 sm:h-7"
+              className="w-15 h-10 mr-12 mb-7"
             />
             <img
               src="assets/images/mastercard.png"
               alt=""
-              className="lg: w-15 lg: h-10 mr-12 mb-7 sm: w-10 sm:h-7"
+              className="w-15 h-10 mr-12 mb-7"
             />
 
             <img
               src="assets/images/jcb.png"
               alt=""
-              className="lg: w-15 lg: h-10 mr-12 mb-7 sm: w-10 sm:h-7"
+              className="w-15 h-10 mr-12 mb-7"
             />
             <img
               src="assets/images/payment.png"
               alt=""
-              className="lg: w-15 lg: h-10 mr-12 mb-7 sm: w-10 sm:h-7"
+              className="w-15 h-10 mr-12 mb-7"
             />
             <img
               src="assets/images/paypal.png"
               alt=""
-              className="lg: w-15 lg: h-10 mr-12 mb-7 sm: w-10 sm:h-7"
+              className="w-15 h-10 mr-12 mb-7"
             />
           </div>
         </div>

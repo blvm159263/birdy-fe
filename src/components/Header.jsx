@@ -43,7 +43,7 @@ export default function NavBar() {
         </div>
         <div className='absolute top-0 right-0 hidden md:flex'>
           <Link to="/" className='px-2 pt-1 mr-4'>SELL PRODUCT</Link>
-          <Link to="/" className='px-2 pt-1'>SIGN IN</Link>
+          <Link to="/login" className='px-2 pt-1'>SIGN IN</Link>
           <span className='px-2 pt-[0.2rem]'>|</span>
           <Link to="/" className='px-2 pt-1'>SIGN UP</Link>
         </div>

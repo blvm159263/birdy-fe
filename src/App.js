@@ -1,11 +1,12 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import "./App.css"
 
 // Components
-import Layout from './layouts/Layout';
-import HomePage from './pages/HomePage';
-import NoPage from './pages/NoPage';
-import SearchPage from './pages/SearchPage';
+import Layout from "./layouts/Layout"
+import HomePage from "./pages/HomePage"
+import NoPage from "./pages/NoPage"
+import SearchPage from "./pages/SearchPage"
+import LoginPage from "./pages/LoginPage"
 
 function App() {
   return (
@@ -16,9 +17,10 @@ function App() {
           <Route path="search" element={<SearchPage />} />
           <Route path="*" element={<NoPage />} />
         </Route>
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
 export default App
