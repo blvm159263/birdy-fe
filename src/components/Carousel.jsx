@@ -19,7 +19,7 @@ export default function Carousel({ imageUrls, autoSlide = false, autoSlideInterv
         <div className='carousel overflow-hidden relative'>
             <div className='flex duration-200 bg-red-200' style={{transform: `translateX(-${current * 100}%)`}}>
                 {imageUrls.map((imageUrl) => (
-                    <img alt="..." className='object-cover w-full' src={imageUrl}/>
+                    <img alt="..." className='object-cover w-full self-stretch' src={imageUrl}/>
                 ))}
             </div>
             <div className='absolute inset-0 flex items-center justify-between p-4'>
