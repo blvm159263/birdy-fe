@@ -21,7 +21,7 @@ function MainLogin() {
             <br /> A bird trading platform
           </h1>
         </div>
-        <div className="lg:w-1/2 sm:w-full p-5 sm:mx-auto">
+        <div className="lg:w-1/2 sm:w-full p-5 sm:mx-auto flex justify-center">
           <form className="lg:w-1/2 sm:w-full bg-white p-10 rounded-md">
             <h1 className="text-3xl mb-4">
               {isSignIn ? "Sign in" : "Sign up"}
@@ -35,15 +35,18 @@ function MainLogin() {
                 className="w-full border-gray-300 border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
               />
             </div>
-            <div className="mb-4">
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Password"
-                className="w-full border-gray-300 border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
-              />
-            </div>
+            {isSignIn && (
+              <div className="mb-4">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Password"
+                  className="w-full border-gray-300 border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
+                />
+              </div>
+            )}
+
             <button
               type="submit"
               className="bg-orange-400	w-full my-2 text-white px-4 py-2 rounded hover:bg-white hover:text-orange-400 hover:border-orange-400 hover:outline outline-1 focus:outline-none focus:bg-blue-600"
@@ -69,7 +72,7 @@ function MainLogin() {
                   className="cursor-pointer text-orange-400 hover:text-orange-700"
                   onClick={handleChangeSignState}
                 >
-                  {isSignIn ? "Sign in" : "Sign up"}
+                  {isSignIn ? "Sign up" : "Sign in"}
                 </a>
               </p>
             </div>
