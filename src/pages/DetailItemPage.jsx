@@ -11,7 +11,7 @@ function DetailItemPage() {
       <div className=" flex flex-col justify-center items-center mx-20">
         <ProductOverview />
         <ShopInfo />
-        <div>
+        <div className="flex">
           <ProductDetails />
           <Review />
         </div>

@@ -1,7 +1,7 @@
 import React from "react"
 import Footer from "../components/Footer"
-import MainLogin from "../components/store/Login/MainLogin"
-import HeaderLogin from "../components/store/Login/HeaderLogin"
+import MainLogin from "../components/Login/MainLogin"
+import HeaderLogin from "../components/Login/HeaderLogin"
 
 function LoginPage() {
   return (
