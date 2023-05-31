@@ -13,11 +13,11 @@ export default function ProductCard() {
           />
         </div>
         <div className="p-3">
-          <p className="line-clamp-2">
+          <p className="line-clamp-2 text-sm md:text-base">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. tur
             adipisicing elit
           </p>
-          <p className="text-lg font-bold text-orange-500 py-2">
+          <p className="text-base md:text-lg font-bold text-orange-500 py-2">
             $29.00 - $79.39
           </p>
           <div class="flex items-center">
