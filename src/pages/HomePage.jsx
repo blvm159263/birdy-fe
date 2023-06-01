@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import ImageCarousel from "../components/ImageCarousel"
 import ProductCardList from "../components/product/ProductCardList"
 import productApi from "../api/productApi";
+import { Link } from "react-router-dom";
 
 const imageUrls = [
   "https://i.pinimg.com/736x/b1/92/87/b192870538036f95ffc468da4874164e.jpg",
@@ -50,9 +51,9 @@ export default function HomePage() {
             </h1>
           </div>
           <ProductCardList products={products}/>
-          <button className="self-center rounded-sm bg-orange-500 text-white px-4 py-1 block mx-auto my-10">
+          <Link to="/search/all-products/0" className="self-center rounded-sm bg-orange-500 text-white px-4 py-1 block mx-auto my-10">
             SEE MORE
-          </button>
+          </Link>
         </div>
       </section>
 

@@ -24,7 +24,7 @@ export default function NavBar() {
             <input type="text" id="search-navbar" className="block w-full p-2 pr-10 text-sm border text-neutral-700 border-neutral-600 rounded-sm bg-sky-500 placeholder-neutral-100 outline-sky-500 ring-black" placeholder="Search on Birdy"/>
           </div>
           <ul className='hidden md:flex text-white justify-between pt-2'>
-            <li><Link to="/">All Products</Link></li>
+            <li><Link to="/search/all-products/0">All Products</Link></li>
             <li><Link to="/">Birds</Link></li>
             <li><Link to="/">Accessories</Link></li>
             <li><Link to="/">Decorations</Link></li>

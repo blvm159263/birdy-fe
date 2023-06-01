@@ -22,6 +22,7 @@ export default function ProductCard({ product }) {
           <div className="flex items-center">
             {[...Array(5)].map((x, i) => (
                 <svg
+                  key={i}
                   aria-hidden="true"
                   className={`w-5 h-5 ${i < product.rating ? "text-yellow-400" : "text-gray-300"}`}
                   fill="currentColor"
