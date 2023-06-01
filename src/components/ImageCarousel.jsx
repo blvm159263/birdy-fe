@@ -18,7 +18,7 @@ export default function ImageCarousel({ imageUrls, autoSlide = true, autoSlideIn
         <div className='rounded-lg overflow-hidden'>
             <Carousel autoplay={autoSlide}>
                 {imageUrls.map((imageUrl) => (
-                    <div className='h-[450px]'>
+                    <div key={imageUrl} className='h-[450px]'>
                         <img alt="bird ad" className='w-full h-full object-cover' src={imageUrl}/>
                     </div>
                 ))}
