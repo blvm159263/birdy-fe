@@ -21,8 +21,8 @@ const productApi = {
         const url = '/products/view/latest'
         return axiosClient.get(url, { params })
     },
-    get(id) {
-        const url = `/admin/products/${id}`
+    getProductById(id) {
+        const url = `/products/${id}`
         return axiosClient.get(url);
     },
     add(data) {

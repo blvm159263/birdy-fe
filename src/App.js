@@ -18,7 +18,7 @@ function App() {
           <Route path="search" >
             <Route path=":searchType/:page" element={<SearchPage />} />
           </Route>
-          <Route path="/detail-item" element={<DetailItemPage />} />
+          <Route path="/detail-item/:id" element={<DetailItemPage />} />
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />

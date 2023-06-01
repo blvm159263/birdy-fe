@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 export default function ProductCard({ product }) {
   return (
-    <Link to="/detail-item">
+    <Link to={`/detail-item/${product.id}`}>
       <div className="productCard cursor-pointer bg-white rounded-sm">
         <div className="max-h-[250px] overflow-hidden">
           <img
