@@ -1,30 +1,12 @@
 import React from "react"
 import { useState } from "react"
-function MainLogin() {
-  const [isSignIn, setIsSignIn] = useState(true)
-  const handleChangeSignState = () => {
-    setIsSignIn(!isSignIn)
-  }
-  return (
-    <div className=" py-8 bg-gradient-to-r from-sky-500 via-blue-500 to-sky-500 border-gray-200 ">
-      <div className="flex flex-wrap  mx-auto">
-        <div className="lg:w-1/2 sm:w-full flex flex-col justify-center items-center ">
-          <div className="h-12 mb-5">
-            <img
-              src="/assets/images/logo-white.png"
-              className="h-full"
-              alt="Flowbite Logo"
-            />
-          </div>
-          <h1 className="text-violet-600	 font-normal tracking-wide	 text-3xl text-center">
-            Welcome to Birdy!
-            <br /> A bird trading platform
-          </h1>
-        </div>
+
+function SignIn({setIsSignIn}){
+    return (
         <div className="lg:w-1/2 sm:w-full p-5 sm:mx-auto">
           <form className="lg:w-1/2 sm:w-full bg-white p-10 rounded-md">
             <h1 className="text-3xl mb-4">
-              {isSignIn ? "Sign in" : "Sign up"}
+              Sign In
             </h1>
             <div className="mb-4">
               <input
@@ -48,7 +30,7 @@ function MainLogin() {
               type="submit"
               className="bg-orange-400	w-full my-2 text-white px-4 py-2 rounded hover:bg-white hover:text-orange-400 hover:border-orange-400 hover:outline outline-1 focus:outline-none focus:bg-blue-600"
             >
-              {isSignIn ? "Sign in" : "Sign up"}
+              Sign In
             </button>
             <div className="flex justify-between items-center mb-4">
               <a href="#" className="text-blue-500 text-sm hover:underline">
@@ -67,17 +49,15 @@ function MainLogin() {
                 You don’t have an account?{" "}
                 <a
                   className="cursor-pointer text-orange-400 hover:text-orange-700"
-                  onClick={handleChangeSignState}
+                  onClick={() => setIsSignIn(false)}
                 >
-                  {isSignIn ? "Sign in" : "Sign up"}
+                    Sign Up
                 </a>
               </p>
             </div>
           </form>
         </div>
-      </div>
-    </div>
-  )
+    )
 }
 
-export default MainLogin
+export default SignIn;

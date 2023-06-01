@@ -4,7 +4,7 @@ import storageService from "./storage";
 let token;
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:8080/happygear/api/",
+  baseURL: "http://localhost/api/v1/",
 
 });
 
