@@ -1,6 +1,10 @@
 import axiosClient from "./axiosClient";
 
 const productApi = {
+    getLandingPageProducts(params) {
+        const url = '/products/landing-page'
+        return axiosClient.get(url, { params })
+    },
     getAll(params) {
         const url = '/admin/products'
         return axiosClient.get(url, { params })

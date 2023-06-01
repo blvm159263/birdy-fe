@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import ImageCarousel from "../components/ImageCarousel"
 import ProductCardList from "../components/product/ProductCardList"
+import productApi from "../api/productApi";
 
 const imageUrls = [
   "https://i.pinimg.com/736x/b1/92/87/b192870538036f95ffc468da4874164e.jpg",
@@ -9,6 +10,17 @@ const imageUrls = [
 ]
 
 export default function HomePage() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    productApi.getLandingPageProducts()
+      .then((response) => {
+        setProducts(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => console.log(error));
+  }, [])
+
   return (
     <div id="homePage" className="">
       <section className="container mx-auto flex flex-col pb-12">
@@ -37,7 +49,7 @@ export default function HomePage() {
               <span className="text-orange-500">Feature</span> Product
             </h1>
           </div>
-          <ProductCardList />
+          <ProductCardList products={products}/>
           <button className="self-center rounded-sm bg-orange-500 text-white px-4 py-1 block mx-auto my-10">
             SEE MORE
           </button>
