@@ -42,7 +42,8 @@ function MainLogin() {
               <SignIn setIsSignIn={setIsSignIn} />}
           </>
           :
-          <SignUpInformation phoneNumberRegister={phoneNumberRegister} passwordRegister={passwordRegister} />}
+          <SignUpInformation phoneNumberRegister={phoneNumberRegister} passwordRegister={passwordRegister} 
+          setIsVerified={setIsVerified} setIsSignIn={setIsSignIn}/>}
 
       </div>
     </div>

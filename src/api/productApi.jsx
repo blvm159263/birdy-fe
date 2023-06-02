@@ -1,9 +1,9 @@
 import axiosClient from "./axiosClient";
 
 const productApi = {
-    getAll(params) {
-        const url = '/admin/products'
-        return axiosClient.get(url, { params })
+    getLadingPage() {
+        const url = '/products/lading-page'
+        return axiosClient.get(url)
     },
     get(id) {
         const url = `/admin/products/${id}`
