@@ -44,7 +44,7 @@ const tailFormItemLayout = {
     },
 };
 
-const SignUpInformation = ({ phoneNumberRegister, passwordRegister }) => {
+const SignUpInformation = ({ phoneNumberRegister, passwordRegister, setIsVerified, setIsSignIn }) => {
 
     const [form] = Form.useForm();
     const onFinish = (values) => {
@@ -63,10 +63,12 @@ const SignUpInformation = ({ phoneNumberRegister, passwordRegister }) => {
             .then(res => {
                 if(res.status === 201){
                     alert("Create successfully!");
+                    setIsVerified(false);
+                    setIsSignIn(true);
                 }else if(res.status === 400){
                     alert("Create fail!");
                 }else if(res.status === 500){
-                    alert("Backend lỗi rùi");
+                    alert("Backend lỗi rùi! Thử lại sau");
                 }
             });
     };
