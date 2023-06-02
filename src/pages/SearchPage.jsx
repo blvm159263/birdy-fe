@@ -94,7 +94,7 @@ export default function SearchPage() {
             (<Link to={`/search/all-products/${page - 1}`} className="block px-2 rounded-sm text-neutral-500"><FontAwesomeIcon icon={faChevronLeft}/></Link>)
           }
           {[...Array(totalPage)].map((x, i) => (
-            <Link to={`/search/all-products/${i}`} key={i} className={`block px-2 rounded-sm ${page == i ? "text-white bg-orange-500" : ""}`}>{i + 1}</Link>
+            <Link to={`/search/all-products/${i}`} key={i} className={`block px-2 rounded-sm ${page === i ? "text-white bg-orange-500" : ""}`}>{i + 1}</Link>
           ))}
           {page >= totalPage - 1 ?
             (<span className="block px-2 rounded-sm text-neutral-300"><FontAwesomeIcon icon={faChevronRight}/></span>) :

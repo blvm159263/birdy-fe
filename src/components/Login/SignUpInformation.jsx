@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import { useState } from 'react';
 
-import accountApi from '../../api/accountApi';
+import authApi from '../../api/authApi';
 
 const { Option } = Select;
 
@@ -59,7 +59,14 @@ const SignUpInformation = ({ phoneNumberRegister, passwordRegister, setIsVerifie
             password: passwordRegister,
         }
         console.log(param)
-        accountApi.register(param)
+        authApi.register({
+            email: values.email,
+            fullName: values.fullName,
+            dob: dob,
+            gender: values.gender,
+            phoneNumber: phoneNumberRegister,
+            password: passwordRegister,
+        })
             .then(res => {
                 if(res.status === 201){
                     alert("Create successfully!");

@@ -2,6 +2,7 @@ import React from "react"
 import { useState } from "react"
 import validator from 'validator'
 import authApi from "../../api/authApi";
+import { redirect } from "react-router-dom";
 
 function SignIn({ setIsSignIn }) {
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
@@ -23,10 +24,13 @@ function SignIn({ setIsSignIn }) {
   const onSignIn = () => {
     validationPhoneNumber();
     if (isValidPhoneNumber) {
-      authApi.login(formatPhoneNumber(phoneNumber), password)
+      authApi.login({
+        phoneNumber: formatPhoneNumber(phoneNumber),
+        password: password})
         .then(res => {
           if (res.status === 200) {
-
+            alert("login thành công")
+            //  redirect("")
           } else if (res.status === 403) {
 
           }
