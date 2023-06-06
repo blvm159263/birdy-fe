@@ -11,6 +11,10 @@ import DetailItemPage from "./pages/DetailItemPage"
 import AdminLayout from "./layouts/AdminLayout"
 import AdminProductManage from "./components/admin/admin_product_manage/AdminProductManage"
 import AdminUserManage from "./components/admin/user_manage/AdminUserManage"
+import ShopLayout from "./layouts/ShopLayout"
+import ShopProfile from "./components/shop_manage/ShopProfile"
+import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
+import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
 
 function App() {
   return (
@@ -29,6 +33,11 @@ function App() {
           <Route index element={<AdminProductManage />} />
           <Route path="/admin/user-manage-ad" element={<AdminUserManage />} />
           {/* <Route path="/store-manage-ad" element={} /> */}
+        </Route>
+        <Route path="/shop" element={<ShopLayout />}>
+          <Route index element={<ShopProfile />} />
+          <Route path="/shop/products" element={<ShopProductManage />} />
+          <Route path="/shop/orders" element={<ShopOrderManage />} />
         </Route>
       </Routes>
     </BrowserRouter>
