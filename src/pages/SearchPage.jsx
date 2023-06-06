@@ -9,7 +9,7 @@ import ProductCardList from '../components/product/ProductCardList'
 import StoreCard from '../components/store/StoreCard'
 import SearchType from '../constants/SearchType'
 import SortType from '../constants/SortType'
-import { updateSearchText } from '../features/search/searchSlice'
+import { updateIsAtSearchPage, updateSearchText } from '../features/search/searchSlice'
 
 export default function SearchPage() {
   const searchText = useSelector((state) => state.search.searchText);
@@ -26,6 +26,8 @@ export default function SearchPage() {
   const { searchType, page } = useParams();
 
   useEffect(() => {
+    dispatch(updateIsAtSearchPage(true));
+
     console.log("SearchText: " + searchText);
     console.log("Search type: " + searchType);
     console.log("Page: " + page);
@@ -91,6 +93,10 @@ export default function SearchPage() {
         dispatch(updateSearchText(''));
       })
       .catch((error) => console.log(error));
+
+    return () => {
+      dispatch(updateIsAtSearchPage(false));
+    }
   }, [searchTrigger, page, searchType, sortType]);
 
   return (

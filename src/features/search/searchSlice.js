@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     searchText: '',
     searchTrigger: false,
-    isAtHomePage: false
+    isAtSearchPage: false
 }
 
 export const searchSlice = createSlice({
@@ -16,8 +16,8 @@ export const searchSlice = createSlice({
         updateSearchText: (state, action) => {
             state.searchText = action.payload;
         },
-        updateIsAtHomePage: (state, action) => {
-            state.isAtHomePage = action.payload;
+        updateIsAtSearchPage: (state, action) => {
+            state.isAtSearchPage = action.payload;
         },
         triggerSearch: (state) => {
             state.searchTrigger = !state.searchTrigger;
@@ -25,6 +25,6 @@ export const searchSlice = createSlice({
     }
 });
 
-export const { cleanSearchText, updateSearchText, updateIsAtHomePage, triggerSearch } = searchSlice.actions;
+export const { cleanSearchText, updateSearchText, updateIsAtSearchPage, triggerSearch } = searchSlice.actions;
 
 export default searchSlice.reducer;

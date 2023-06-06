@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react"
-import ImageCarousel from "../components/ImageCarousel"
-import ProductCardList from "../components/product/ProductCardList"
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import productApi from "../api/productApi";
-import { Link, useNavigate } from "react-router-dom";
-import SearchType from '../constants/SearchType'
-import { useDispatch } from "react-redux";
-import { updateIsAtHomePage } from "../features/search/searchSlice";
+import ImageCarousel from "../components/ImageCarousel";
+import ProductCardList from "../components/product/ProductCardList";
 
 const imageUrls = [
   "https://i.pinimg.com/736x/b1/92/87/b192870538036f95ffc468da4874164e.jpg",
@@ -15,11 +12,8 @@ const imageUrls = [
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(updateIsAtHomePage(true));
     productApi.getLandingPageProducts()
       .then((response) => {
         setProducts(response.data);
@@ -27,14 +21,7 @@ export default function HomePage() {
       })
       .catch((error) => console.log(error));
 
-    return () => {
-      dispatch(updateIsAtHomePage(false));
-    }
   }, [])
-
-  function doSearch() {
-    navigate("/search/" + SearchType.DEFAULT.text + "/0");
-  }
 
   return (
     <div id="homePage" className="">
