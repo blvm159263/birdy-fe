@@ -6,19 +6,23 @@ const productApi = {
         return axiosClient.get(url, { params })
     },
     getAll(params) {
-        const url = '/products/view'
+        let url = '/products/view'
+        if(params.id !== undefined) url = '/categories/' + params.id + url;
         return axiosClient.get(url, { params })
     },
     getAllAscending(params) {
-        const url = '/products/view/price-asc'
+        let url = '/products/view/price-asc'
+        if(params.id !== undefined) url = '/categories/' + params.id + url;
         return axiosClient.get(url, { params })
     },
     getAllDescending(params) {
-        const url = '/products/view/price-desc'
+        let url = '/products/view/price-desc'
+        if(params.id !== undefined) url = '/categories/' + params.id + url;
         return axiosClient.get(url, { params })
     },
     getAllLatest(params) {
-        const url = '/products/view/latest'
+        let url = '/products/view/latest'
+        if(params.id !== undefined) url = '/categories/' + params.id + url;
         return axiosClient.get(url, { params })
     },
     getProductById(id) {

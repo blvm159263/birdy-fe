@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SearchBar from '../features/search/SearchBar';
+import SearchType from '../constants/SearchType';
 
 export default function NavBar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -19,10 +20,10 @@ export default function NavBar() {
         <div className="flex flex-col">
           <SearchBar/>
           <ul className='hidden md:flex text-white justify-between pt-2'>
-            <li><Link to="/search/all-products/0">All Products</Link></li>
-            <li><Link to="/">Birds</Link></li>
-            <li><Link to="/">Accessories</Link></li>
-            <li><Link to="/">Decorations</Link></li>
+            <li><Link to={`/search/${SearchType.ALL_PRODUCT.text}/0`}>All Products</Link></li>
+            <li><Link to={`/search/${SearchType.BIRD.text}/0`}>Birds</Link></li>
+            <li><Link to={`/search/${SearchType.ACCESSORY.text}/0`}>Accessories</Link></li>
+            <li><Link to={`/search/${SearchType.FOOD.text}/0`}>Foods</Link></li>
           </ul>
         </div>
         <div className='flex'>
@@ -41,10 +42,10 @@ export default function NavBar() {
             <input type="text" id="search-navbar" className="block w-full p-2 pr-10 text-sm border text-neutral-700 border-neutral-600 rounded-sm bg-sky-500 placeholder-neutral-100 outline-sky-500 ring-black" placeholder="Search on Birdy"/>
           </div>
           <ul className="flex flex-col p-2 mt-4 gap-4 font-semibold text-white uppercase">
-            <li><Link to="/">All Products</Link></li>
-            <li><Link to="/">Birds</Link></li>
-            <li><Link to="/">Accessories</Link></li>
-            <li><Link to="/">Decorations</Link></li>
+            <li><Link to={`/search/${SearchType.ALL_PRODUCT.text}/0`}>All Products</Link></li>
+            <li><Link to={`/search/${SearchType.BIRD.text}/0`}>Birds</Link></li>
+            <li><Link to={`/search/${SearchType.ACCESSORY.text}/0`}>Accessories</Link></li>
+            <li><Link to={`/search/${SearchType.FOOD.text}/0`}>Foods</Link></li>
             <hr/>
             <li><Link to="/login">Sign in</Link></li>
             <li><Link to="/login">Sign up</Link></li>
