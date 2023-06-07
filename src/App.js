@@ -15,9 +15,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="search" element={<SearchPage />} />
-          <Route path="/detail-item" element={<DetailItemPage />} />
-
+          <Route path="/search" >
+            <Route path=":searchType/:page" element={<SearchPage />} />
+          </Route>
+          <Route path="/detail-item/:id" element={<DetailItemPage />} />
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
