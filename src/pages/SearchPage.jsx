@@ -10,23 +10,24 @@ import StoreCard from '../components/store/StoreCard'
 import SearchType from '../constants/SearchType'
 import SortType from '../constants/SortType'
 import { updateIsAtSearchPage, updateSearchText } from '../features/search/searchSlice'
+import FilterSideBar from '../components/FilterSideBar'
+import { toggleFilterSideBar } from '../features/ui/uiSlice'
 
 export default function SearchPage() {
   const searchText = useSelector((state) => state.search.searchText);
-  const isAtSearchPage = useSelector((state) => state.search.isAtSearchPage);
   const searchTrigger = useSelector((state) => state.search.searchTrigger);
   const dispatch = useDispatch();
-  const [oldSearchText, setOldSearchText] = useState('');
   const [sortType, setSortType] = useState(SortType.DEFAULT);
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(undefined);
-  const [rating, setRating] = useState(undefined);
-  const [fromPrice, setFromPrice] = useState(undefined);
-  const [toPrice, setToPrice] = useState(undefined);
+  const rating = useSelector(state => state.search.filterRating);
+  const fromPrice = useSelector(state => state.search.filterFromPrice);
+  const toPrice = useSelector(state => state.search.filterToPrice);
   const { searchType, page } = useParams();
 
   useEffect(() => {
     dispatch(updateIsAtSearchPage(true));
+    let isStillInPage = true;
 
     console.log("SearchText: " + searchText);
     console.log("Search type: " + searchType);
@@ -65,28 +66,31 @@ export default function SearchPage() {
     }
     
     // Process api if still in page
-    if(isAtSearchPage) {
-      apiPromise
+    apiPromise
       .then((response) => {
-        setProducts(response.data[0]);
-        setTotalPage(response.data[1]);
-        setOldSearchText(searchText);
-        console.log(response.data);
-        dispatch(updateSearchText(''));
+        if(isStillInPage) {
+          setProducts(response.data[0]);
+          setTotalPage(response.data[1]);
+          console.log(response.data);
+        } else {
+          console.log('Leave page, cancel load data');
+        }
       })
       .catch((error) => console.log(error));
-    }
 
     return () => {
       dispatch(updateIsAtSearchPage(false));
+      isStillInPage = false;
     }
-  }, [searchTrigger, page, searchType, sortType]);
+  }, [searchTrigger, page, searchType, sortType, rating, fromPrice, toPrice]);
 
   return (
     <div id='searchPage' className='bg-neutral-100 px-2 md:px-0 py-4'>
+      <FilterSideBar/>
+
       {searchType === SearchType.DEFAULT.text ? (<section className='container mx-auto'>
         <div className='flex justify-between mb-4'>
-          <p className='text-neutral-500'>Shop related to “<span className='text-orange-500'>{oldSearchText}</span>”</p>
+          <p className='text-neutral-500'>Shop related to “<span className='text-orange-500'>{searchText}</span>”</p>
           <button to="/search" className='text-orange-500 text-lg font-semibold'>See more <FontAwesomeIcon className='ml-1' icon={faChevronRight} size='xs'/></button>
         </div>
         <StoreCard/>
@@ -94,9 +98,9 @@ export default function SearchPage() {
 
       <section className='container mx-auto mt-6'>
         <div className='flex justify-between mb-4'>
-            <p className='text-neutral-500'>{searchType} - <span className='text-neutral-500'>Search result for “<span className='text-orange-500'>{oldSearchText}</span>”</span></p>
+            <p className='text-neutral-500'>{searchType} - <span className='text-neutral-500'>Search result for “<span className='text-orange-500'>{searchText}</span>”</span></p>
             
-          <button to="/search" className='text-orange-500 text-lg font-semibold'><FontAwesomeIcon className='mr-2' icon={faFilter} />Filter</button>
+          <button onClick={() => dispatch(toggleFilterSideBar())} className='text-orange-500 text-lg font-semibold'><FontAwesomeIcon className='mr-2' icon={faFilter} />Filter</button>
         </div>
         <div className='sortByMenu flex justify-between items-center bg-gradient-to-r from-sky-500 to-blue-500 p-4 py-0 rounded-sm mb-6 text-xs md:text-base'>
           <div className='flex items-center flex-wrap gap-2'>
@@ -124,6 +128,11 @@ export default function SearchPage() {
           </div>
         </div>
         <ProductCardList products={products}/>
+        {products.length === 0 ? (
+          <div className='px-8 py-16'>
+            <img className='w-64 h-64 mx-auto' src="/assets/images/No_Product_Found.png" alt='no product'/>
+          </div>
+        ) : ''}
         <div className='flex justify-center items-center gap-2 text-neutral-500 font-semibold py-4'>
           {page <= 0 ?
             (<span className="block px-2 rounded-sm text-neutral-300"><FontAwesomeIcon icon={faChevronLeft}/></span>) :
