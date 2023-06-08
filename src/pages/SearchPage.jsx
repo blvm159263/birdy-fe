@@ -13,7 +13,7 @@ import { updateIsAtSearchPage, updateSearchText } from '../features/search/searc
 
 export default function SearchPage() {
   const searchText = useSelector((state) => state.search.searchText);
-  const isSearching = useSelector((state) => state.search.isSearching);
+  const isAtSearchPage = useSelector((state) => state.search.isAtSearchPage);
   const searchTrigger = useSelector((state) => state.search.searchTrigger);
   const dispatch = useDispatch();
   const [oldSearchText, setOldSearchText] = useState('');
@@ -44,47 +44,29 @@ export default function SearchPage() {
       from: fromPrice,
       to: toPrice,
     };
-    if(categoryId === undefined) {
-      // Call API without category (All products)
-      switch(sortType) {
-        case SortType.DEFAULT:
-          apiPromise = productApi.getAll(params);
-          break;
-        case SortType.ASC:
-          apiPromise = productApi.getAllAscending(params);
-          break;
-        case SortType.DESC:
-          apiPromise = productApi.getAllDescending(params);
-          break;
-        case SortType.NEWEST:
-          apiPromise = productApi.getAllLatest(params);
-          break;
-        default:
-          console.log("SortType not found!");
-          return;
-      }
-    } else {
-      // Call API with category
-      switch(sortType) {
-        case SortType.DEFAULT:
-          apiPromise = productApi.getAll(params);
-          break;
-        case SortType.ASC:
-          apiPromise = productApi.getAllAscending(params);
-          break;
-        case SortType.DESC:
-          apiPromise = productApi.getAllDescending(params);
-          break;
-        case SortType.NEWEST:
-          apiPromise = productApi.getAllLatest(params);
-          break;
-        default:
-          console.log("SortType not found!");
-          return;
-      }
+
+    // Call api based on sortType
+    switch(sortType) {
+      case SortType.DEFAULT:
+        apiPromise = productApi.getAll(params);
+        break;
+      case SortType.ASC:
+        apiPromise = productApi.getAllAscending(params);
+        break;
+      case SortType.DESC:
+        apiPromise = productApi.getAllDescending(params);
+        break;
+      case SortType.NEWEST:
+        apiPromise = productApi.getAllLatest(params);
+        break;
+      default:
+        console.log("SortType not found!");
+        return;
     }
-      
-    apiPromise
+    
+    // Process api if still in page
+    if(isAtSearchPage) {
+      apiPromise
       .then((response) => {
         setProducts(response.data[0]);
         setTotalPage(response.data[1]);
@@ -93,6 +75,7 @@ export default function SearchPage() {
         dispatch(updateSearchText(''));
       })
       .catch((error) => console.log(error));
+    }
 
     return () => {
       dispatch(updateIsAtSearchPage(false));
