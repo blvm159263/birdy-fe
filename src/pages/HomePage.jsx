@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react"
-import ImageCarousel from "../components/ImageCarousel"
-import ProductCardList from "../components/product/ProductCardList"
-import productApi from "../api/productApi";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import productApi from "../api/productApi";
+import ImageCarousel from "../components/ImageCarousel";
+import ProductCardList from "../components/product/ProductCardList";
 
 const imageUrls = [
   "https://i.pinimg.com/736x/b1/92/87/b192870538036f95ffc468da4874164e.jpg",
@@ -20,6 +20,7 @@ export default function HomePage() {
         console.log(response.data);
       })
       .catch((error) => console.log(error));
+
   }, [])
 
   return (
