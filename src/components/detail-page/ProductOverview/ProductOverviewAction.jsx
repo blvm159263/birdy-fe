@@ -1,15 +1,18 @@
 import React, { useState } from "react"
 
-function ProductOverviewAction() {
+function ProductOverviewAction({ product }) {
   const [quantity, setQuantity] = useState(1)
+  const onUpdateQuantity = (value) => {
+    setQuantity(quantity + value)
+  }
+
   return (
     <div className="p-14 w-1/2">
-      <h1 className="text-2xl font-bold">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores,
-        laudantium ex numquam nisi dolorum,
-      </h1>
+      <h1 className="text-2xl font-bold">{product.productName}</h1>
       <div className="my-4 text-lg">
-        <p class="text-lg font-bold text-orange-500 py-2">$29.00 - $79.39</p>
+        <p className="text-lg font-bold text-orange-500 py-2">
+          {product.price}
+        </p>
       </div>
       <div className="flex my-4">
         <svg
@@ -67,7 +70,7 @@ function ProductOverviewAction() {
         </p>
       </div>
       <div className="my-4">
-        <p>Availability: 5 left in stock</p>
+        <p>Availability: {product.quantity} left in stock</p>
       </div>
       <div className="my-4">
         <p>
@@ -77,9 +80,21 @@ function ProductOverviewAction() {
       </div>
       <div className="flex my-4">
         <p className="mr-6">Quantity:</p>
-        <button className="border w-7 h-7 rounded-md bg-blue-100">-</button>
+        <button
+          className="border w-7 h-7 rounded-md bg-blue-100"
+          onClick={() => onUpdateQuantity(-1)}
+          disabled={quantity === 1}
+        >
+          -
+        </button>
         <p className="border mx-1 w-10 rounded-md text-center">{quantity}</p>
-        <button className="border w-7 h-7 rounded-md bg-blue-100 ">+</button>
+        <button
+          className="border w-7 h-7 rounded-md bg-blue-100 "
+          onClick={() => onUpdateQuantity(1)}
+          disabled={quantity >= product.quantity}
+        >
+          +
+        </button>
       </div>
       <div className="action my-4">
         <div className="w-full flex items-center my-3 ">

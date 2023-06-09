@@ -8,27 +8,28 @@ import productApi from "../api/productApi"
 import { useParams } from "react-router"
 
 function DetailItemPage() {
-  const [product, setProduct] = useState(undefined);
+  const [product, setProduct] = useState({})
   const { id } = useParams()
 
   useEffect(() => {
-    productApi.getProductById(id)
+    productApi
+      .getProductById(id)
       .then((response) => {
-        setProduct(response.data);
-        console.log(response.data);
+        setProduct(response.data)
+        console.log(response.data)
       })
-      .catch((error) => console.log(error));
-    
-    window.scrollTo(0, 0);
-  }, [id])
+      .catch((error) => console.log(error))
+
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <div className="bg-gray-200 py-10">
       <div className=" flex flex-col justify-center items-center mx-20">
-        <ProductOverview product={product}/>
+        <ProductOverview product={product} />
         <ShopInfo />
         <div className="flex">
-          <ProductDetails product={product}/>
+          <ProductDetails product={product} />
           <Review />
         </div>
         <RelatedProduct />
