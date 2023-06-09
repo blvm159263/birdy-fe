@@ -5,7 +5,7 @@ function ShopProductCard() {
     <div className="bg-white rounded-lg h-50 shadow-md p-6 sm:w-full lg:w-1/5 flex flex-col items-center">
       <div className="h-40 w-5/6">
         <img
-          src="assets/images/product-demo.png"
+          src="../assets/images/product-demo.png"
           alt="Card Image"
           className="h-full w-full object-cover object-center mb-4"
         />

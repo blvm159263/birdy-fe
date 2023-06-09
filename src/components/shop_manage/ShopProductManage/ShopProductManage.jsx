@@ -10,7 +10,7 @@ function ShopProductManage() {
   const [isAdding, setIsAdding] = useState(false)
   const [isChoosen, setIsChoosen] = useState("")
   return (
-    <div className="bg-gray-300 pt-10 pb-10 w-4/5 absolute top-0 right-0">
+    <div className="bg-gray-300 py-10 w-4/5 absolute top-0 right-0">
       <h1 className="text-2xl text-center font-bold mb-10">
         Product Management
       </h1>
