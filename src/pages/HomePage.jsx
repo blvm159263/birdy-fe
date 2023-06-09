@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import productApi from "../api/productApi";
-import ImageCarousel from "../components/ImageCarousel";
-import ProductCardList from "../components/product/ProductCardList";
+import React, { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import productApi from "../api/productApi"
+import ImageCarousel from "../components/ImageCarousel"
+import ProductCardList from "../components/product/ProductCardList"
 
 const imageUrls = [
   "https://i.pinimg.com/736x/b1/92/87/b192870538036f95ffc468da4874164e.jpg",
@@ -11,16 +11,16 @@ const imageUrls = [
 ]
 
 export default function HomePage() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([])
 
   useEffect(() => {
-    productApi.getLandingPageProducts()
+    productApi
+      .getLandingPageProducts()
       .then((response) => {
-        setProducts(response.data);
-        console.log(response.data);
+        setProducts(response.data)
+        console.log(response.data)
       })
-      .catch((error) => console.log(error));
-
+      .catch((error) => console.log(error))
   }, [])
 
   return (
@@ -51,8 +51,11 @@ export default function HomePage() {
               <span className="text-orange-500">Feature</span> Product
             </h1>
           </div>
-          <ProductCardList products={products}/>
-          <Link to="/search/all-products/0" className="self-center rounded-sm bg-orange-500 text-white px-4 py-1 block mx-auto my-10">
+          <ProductCardList products={products} />
+          <Link
+            to="/search/all-products/0"
+            className="self-center rounded-sm bg-orange-500 text-white px-4 py-1 block mx-auto my-10"
+          >
             SEE MORE
           </Link>
         </div>

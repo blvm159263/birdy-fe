@@ -1,6 +1,6 @@
 import React from "react"
 
-function ProductOverviewImg() {
+function ProductOverviewImg({ product }) {
   return (
     <div className="w-1/2 flex flex-col p-10">
       <div className="w-full p-5 ">
