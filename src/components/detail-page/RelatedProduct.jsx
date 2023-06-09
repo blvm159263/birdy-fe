@@ -18,7 +18,7 @@ function RelatedProduct() {
   return (
     <div className="bg-white p-7 w-full mt-3 rounded-md">
       <h1 className="text-3xl font-bold text-left mb-5">Related Products</h1>
-      <div className="flex justify-between gap-8">
+      <div className="lg:flex-row lg:flex-nowrap lg:justify-between gap-8 sm:flex-col sm: flex-wrap">
         {/*TO-DO: replace this code */}
         {/* {product == undefined ? (
           ""
