@@ -2,7 +2,7 @@ import React from "react"
 
 function ProductOverviewImg({ product }) {
   return (
-    <div className="w-1/2 flex flex-col p-10">
+    <div className="lg:w-1/2 sm: w-full flex flex-col lg:p-10 sm: p-3">
       <div className="w-full p-5 ">
         <img
           src="/assets/images/product-demo.png"

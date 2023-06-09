@@ -2,7 +2,7 @@ import React from "react"
 
 function Review() {
   return (
-    <div className="bg-white p-7 w-2/5 ml-4 rounded-md">
+    <div className="bg-white p-7 lg:w-2/5 sm:w-full lg:ml-4 sm:ml-0 rounded-md">
       <h1 className="text-3xl font-bold text-left mb-5">Reviews</h1>
       <div id="reviews">
         <div id="review-1" className="my-5">

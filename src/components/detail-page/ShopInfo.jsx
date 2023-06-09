@@ -2,9 +2,9 @@ import React from "react"
 
 function ShopInfo() {
   return (
-    <div className="my-3 w-full rounded-md bg-white flex py-3 px-8">
-      <div className="flex w-2/5 border-r-2 border-r-grey-200 pr-6 items-center">
-        <div className="h-14 mr-3 pl-4">
+    <div className="my-3 w-full rounded-md bg-white lg:flex-row sm: flex-col py-3 px-8">
+      <div className="lg:mb-0 sm: mb-2 flex lg:w-2/5 sm:w-full lg:border-r-2 lg:border-r-grey-200 sm:border-0 pr-6 items-center">
+        <div className="h-14 mr-3 lg:pl-4 sm: pl-0 lg:mb-0 sm:mb-2">
           <img src="/assets/images/shop_avar.png " alt="" className="h-full" />
         </div>
         <div className="">
@@ -20,7 +20,7 @@ function ShopInfo() {
           </button>
         </div>
       </div>
-      <div className="px-5 w-1/5">
+      <div className="lg:px-5 sm: px-3 lg:mb-0 md:mb-3 sm: mb-4 lg:w-1/5 md:w-full sm: w-full">
         <p>
           <span className="font-bold">128</span> Products
         </p>
@@ -83,7 +83,7 @@ function ShopInfo() {
           </p>
         </div>
       </div>
-      <div className="flex justify-start w-2/5 items-center pl-8 border-l-2 border-l-grey-200">
+      <div className="flex justify-start lg:w-2/5 md:w-full sm: w-full items-center lg:pl-8 lg:border-l-2 lg:sborder-l-grey-200 sm: border-0">
         <div className="h-5 w-5">
           <img src="/assets/images/location-log.png" alt="" />
         </div>

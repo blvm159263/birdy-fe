@@ -25,10 +25,10 @@ function DetailItemPage() {
 
   return (
     <div className="bg-gray-200 py-10">
-      <div className=" flex flex-col justify-center items-center mx-20">
+      <div className="flex flex-col justify-center items-center lg:mx-20 sm: mx-5">
         <ProductOverview product={product} />
         <ShopInfo />
-        <div className="flex">
+        <div className="flex lg:flex-row sm: flex-col">
           <ProductDetails product={product} />
           <Review />
         </div>
