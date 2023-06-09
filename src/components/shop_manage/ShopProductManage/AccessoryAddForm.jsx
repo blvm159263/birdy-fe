@@ -1,6 +1,14 @@
 import React from "react"
 
 function AccessoryAddForm({ isChoosen, setIsChoosen }) {
+
+  const handleEntailmentRequest = (e) => {
+    e.preventDefault();
+  }
+
+  const onSubmit = (values) => {
+    console.log(values);
+  }
   return (
     <div className="justify-center items-center  flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
       <div className="relative w-3/5 my-6 mx-auto max-w-3xl  ">
@@ -17,8 +25,16 @@ function AccessoryAddForm({ isChoosen, setIsChoosen }) {
           </div>
           {/*body*/}
 
-          <div className="relative overflow-x-auto">
-            <form className="w-full p-3 text-sm text-left text-gray-500 bg-gray-700 dark:text-gray-400">
+          <div className="relative overflow-x-auto overflow-y-scroll" style={{ maxHeight: 600 }}>
+            <form className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
+              onSubmit={(e) => {
+                handleEntailmentRequest(e);
+                var list = [];
+                for (var i = 0; i < e.target.length; i++) {
+                  list.push(e.target[i].value);
+                }
+                onSubmit(list);
+              }}>
               <div className="mb-2">
                 <label
                   htmlFor="name"
@@ -35,44 +51,43 @@ function AccessoryAddForm({ isChoosen, setIsChoosen }) {
               </div>
               <div className="mb-2">
                 <label
-                  htmlFor="pecies"
+                  htmlFor="material"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Species
+                  Material
                 </label>
                 <input
                   type="text"
-                  id="species"
+                  id="material"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
               </div>
               <div className="mb-2">
                 <label
-                  htmlFor="age"
+                  htmlFor="color"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Age
+                  Color
                 </label>
                 <input
                   type="text"
-                  id="age"
+                  id="color"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
               </div>
               <div className="mb-2">
                 <label
-                  htmlFor="gender"
+                  htmlFor="madeIn"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Gender
+                  Made in
                 </label>
                 <input
                   type="text"
-                  id="gender"
+                  id="madeIn"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="M/F"
                   required
                 />
               </div>
@@ -100,6 +115,35 @@ function AccessoryAddForm({ isChoosen, setIsChoosen }) {
                 <input
                   type="text"
                   id="price"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div className="mb-2">
+                <label
+                  htmlFor="quantity"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Quantity
+                </label>
+                <input
+                  type="number"
+                  id="quantity"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                />
+              </div>
+
+              <div className="mb-2">
+                <label
+                  htmlFor="description"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Description
+                </label>
+                <textarea
+                  type="text-area"
+                  id="description"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
