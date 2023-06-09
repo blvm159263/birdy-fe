@@ -12,6 +12,7 @@ function MainLogin() {
   const [passwordRegister, setPasswordRegister] = useState("")
   const [isVerified, setIsVerified] = useState(false)
 
+
   const handleChangeSignState = () => {
     setIsSignIn(!isSignIn)
   }

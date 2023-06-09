@@ -29,30 +29,10 @@ const productApi = {
         const url = `/products/${id}`
         return axiosClient.get(url);
     },
-    add(data) {
-        const url = '/admin/products/create'
-        return axiosClient.post(url, data);
+    addNewProduct(params) {
+        const url = '/products/create'
+        return axiosClient.post(url, params);
     },
-    update(data) {
-        const url = `/admin/products/update/${data.productId}`
-        return axiosClient.put(url, data);
-    },
-    remove(id) {
-        const url = `/admin/products/delete/${id}`
-        return axiosClient.delete(url);
-    },
-    getAllByPage(params) {
-        const url = '/admin/products/'
-        return axiosClient.get(url, { params })
-    },
-    getTotal() {
-        const url = '/admin/products/total'
-        return axiosClient.get(url)
-    },
-    getByPageAndName(params) {
-        const url = '/admin/products/name'
-        return axiosClient.get(url, { params })
-    }
 };
 
 export default productApi;
