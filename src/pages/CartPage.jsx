@@ -1,7 +1,12 @@
 import React from 'react'
 import ShopWrapper from '../components/cart/ShopWrapper'
+import { useSelector } from 'react-redux'
 
 export default function CartPage() {
+  const items = useSelector(state => state.cart.items);
+
+  const shopIds = items.map(item => item.shopId).filter((shopId, index, shopIds) => shopIds.indexOf(shopId) === index);
+
   return (
     <div id='cardPage' className='bg-neutral-100 py-6 pb-12'>
       <section className='container mx-auto'>
@@ -27,8 +32,9 @@ export default function CartPage() {
           <div className='col-span-1'>
           </div>
         </div>
-        <ShopWrapper />
-        <ShopWrapper />
+        {
+
+        }
         <div className='bg-white rounded-sm mt-4 grid grid-cols-9 items-center text-center p-2 drop-shadow-sm'>
           <div className='col-span-1'>
             <input type='checkbox' />
