@@ -1,4 +1,4 @@
-import { React, useState } from "react"
+import { React, useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Button, Menu } from "antd"
 
@@ -83,7 +83,30 @@ const items = [
 ];
 console.log(items);
 
+
+// const getPath = function () {
+//   window.location.pathname.split("/")[2];
+// }
+
 function Sidebar() {
+
+  const handlePath = function () {
+      switch (window.location.pathname.split("/shop")[1]) {
+        case "": return 1;
+        case "/orders": return 2;
+        case "/products": return 3;
+        case "/product/new": return 4;
+      }
+  }
+
+  // console.log(handlePath);
+  // useEffect(() => {
+  // console.log(window.location.pathname.split("/shop")[1]);
+  //   // return () => {
+  //   //   window.location.pathname.split("/shop")[1];
+  //   // }
+  // }, [window.location.pathname.split("/shop")[1]])
+
   return (
     <div className="flex w-1/5 fixed">
       <div className="flex flex-col h-screen py-10 bg-white shadow w-full">
@@ -93,7 +116,7 @@ function Sidebar() {
             <p className="mt-2 mb-3">"Shopname"</p>
             <div className="w-10 h-10">
               <img
-                src="../assets/images/shop_avar.png"
+                src="../assets/images/shop-avar.png"
                 className="w-full h-full"
                 alt=""
               />
@@ -106,7 +129,7 @@ function Sidebar() {
             >
 
               <Menu
-                defaultSelectedKeys={['1']}
+                defaultSelectedKeys={[handlePath().toString()]}
                 defaultOpenKeys={['sub1']}
                 mode="inline"
                 theme="light"
@@ -126,7 +149,7 @@ function Sidebar() {
                   </Menu.Item>
                   <Menu.Item className="font-normal text-black" key="4">
                     <span style={{ marginLeft: "38px" }} >{items[2].children[1].label}</span>
-                    <Link to="/shop/products" />
+                    <Link to="/shop/product/new" />
                   </Menu.Item>
                 </SubMenu>
                 <Menu.Item className="font-medium text-base text-gray-400" key="5" icon={items[3].icon}>

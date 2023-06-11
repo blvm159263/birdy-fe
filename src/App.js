@@ -15,6 +15,7 @@ import ShopLayout from "./layouts/ShopLayout"
 import ShopProfile from "./components/shop_manage/ShopProfile"
 import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
 import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
+import CreateProduct from "./components/shop_manage/CreateProduct"
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route index element={<ShopProfile />} />
           <Route path="/shop/products" element={<ShopProductManage />} />
           <Route path="/shop/orders" element={<ShopOrderManage />} />
+          <Route path="/shop/product/new" element={<CreateProduct />} />
         </Route>
       </Routes>
     </BrowserRouter>
