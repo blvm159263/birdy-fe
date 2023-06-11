@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import ProductRow from './ProductRow'
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import shopApi from '../../api/shopApi';
+import { deSelectAllItemsInShop, selectAllItemsInShop } from '../../features/cart/cartSlice';
+import ProductRow from './ProductRow';
 
 export default function ShopWrapper({shopId, itemsInShop}) {
     const [shop, setShop] = useState({shopName: 'null'});
+    const selected = itemsInShop.filter(item => item.selected === false).length === 0;
+    const dispatch = useDispatch();
 
     useEffect(() => {
         shopApi.getShopInformationByShopId(shopId).then((response) => {
@@ -16,7 +19,7 @@ export default function ShopWrapper({shopId, itemsInShop}) {
         <div className='bg-white rounded-sm mt-4'>
             <div className='grid grid-cols-9 text-center p-2 drop-shadow-sm'>
                 <div className='col-span-1'>
-                    <input type='checkbox' />
+                    <input type='checkbox' checked={selected} onChange={() => selected ? dispatch(deSelectAllItemsInShop({shopId: shopId})) : dispatch(selectAllItemsInShop({shopId: shopId}))}/>
                 </div>
                 <div className="col-span-3 text-left font-bold">
                     {shop.shopName}

@@ -5,24 +5,27 @@ import { useState } from 'react';
 import productApi from '../../api/productApi';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { decrementQuantity, incrementQuantity, removeItem } from '../../features/cart/cartSlice';
+import { decrementQuantity, incrementQuantity, removeItem, toggleSelectItem } from '../../features/cart/cartSlice';
 import { Link } from 'react-router-dom';
 
 export default function ProductRow({id}) {
     const [product, setProduct] = useState({});
     const quantity = useSelector(state => state.cart.items.find((item) => item.id === id).quantity);
+    const selected = useSelector(state => state.cart.items.find((item) => item.id === id).selected);
     const dispatch = useDispatch();
 
     useEffect(() => {
         productApi.getProductById(id).then((response) => {
             setProduct(response.data);
         }).catch((error) => console.error(error));
+
+        console.log("selected: " + selected);
     }, []);
 
     return (
         <div className='grid grid-cols-9 items-center text-center bg-white rounded-sm p-2 py-4 border-t'>
             <div className='col-span-1'>
-                <input type='checkbox' />
+                <input type='checkbox' checked={selected} onChange={() => dispatch(toggleSelectItem({id: id}))}/>
             </div>
             <Link className="flex col-span-3 items-center gap-4" to={`/detail-item/${id}`}>
                 <img className='aspect-square rounded-sm w-24' src='/assets/images/product-demo.png' alt='product' />
