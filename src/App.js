@@ -16,6 +16,7 @@ import ShopProfile from "./components/shop_manage/ShopProfile"
 import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
 import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
 import CartPage from "./pages/CartPage"
+import CheckoutPage from "./pages/CheckoutPage"
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/detail-item/:id" element={<DetailItemPage />} />
           <Route path="/cart">
             <Route index element={<CartPage/>}/>
+            <Route path="/cart/checkout" element={<CheckoutPage/>}/>
           </Route>
           <Route path="*" element={<NoPage />} />
         </Route>
