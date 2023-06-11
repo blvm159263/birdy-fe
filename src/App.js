@@ -15,6 +15,7 @@ import ShopLayout from "./layouts/ShopLayout"
 import ShopProfile from "./components/shop_manage/ShopProfile"
 import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
 import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
+import CartPage from "./pages/CartPage"
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
             <Route path=":searchType/:page" element={<SearchPage />} />
           </Route>
           <Route path="/detail-item/:id" element={<DetailItemPage />} />
+          <Route path="/cart">
+            <Route index element={<CartPage/>}/>
+          </Route>
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />

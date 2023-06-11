@@ -7,6 +7,7 @@ import RelatedProduct from "../components/detail-page/RelatedProduct"
 import productApi from "../api/productApi"
 import { useParams } from "react-router"
 
+
 function DetailItemPage() {
   const [product, setProduct] = useState({})
   const { id } = useParams()
