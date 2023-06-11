@@ -18,9 +18,7 @@ export default function ProductRow({id, hideControl}) {
         productApi.getProductById(id).then((response) => {
             setProduct(response.data);
         }).catch((error) => console.error(error));
-
-        console.log("selected: " + selected);
-    }, []);
+    }, [id, selected]);
 
     return (
         <div className={`grid ${hideControl ? 'grid-cols-7' : 'grid-cols-9'} items-center text-center bg-white rounded-sm p-2 py-4 border-t`}>

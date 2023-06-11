@@ -1,8 +1,6 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import ShopWrapper from '../components/cart/ShopWrapper';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
 
 export default function CheckoutPage() {
     const items = useSelector(state => state.cart.items);
@@ -10,7 +8,6 @@ export default function CheckoutPage() {
     const totalProduct = useSelector(state => state.cart.totalProduct);
     const totalPrice = useSelector(state => state.cart.totalPrice);
     const [address, setAddress] = useState('');
-    const dispatch = useDispatch();
     
     return (
         <div id='checkout' className='bg-neutral-100 py-6 pb-12'>
@@ -47,7 +44,7 @@ export default function CheckoutPage() {
                     <div className="col-span-2">
                         {totalProduct === 0 ?
                         (<span to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
-                        (<Link to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</Link>)}
+                        (<button to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</button>)}
                     </div>
                 </div>
             </section>

@@ -13,7 +13,7 @@ export default function ShopWrapper({shopId, itemsInShop, hideControl}) {
         shopApi.getShopInformationByShopId(shopId).then((response) => {
             setShop(response.data);
         }).catch((error) => console.error(error));
-    }, []);
+    }, [shopId]);
 
     return (
         <div className='bg-white rounded-sm mt-4'>
