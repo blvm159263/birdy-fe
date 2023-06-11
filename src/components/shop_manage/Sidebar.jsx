@@ -117,7 +117,7 @@ function Sidebar() {
             <div className="w-10 h-10">
               <img
                 src="../assets/images/shop-avar.png"
-                className="w-full h-full"
+                className="w-fit h-fit"
                 alt=""
               />
             </div>

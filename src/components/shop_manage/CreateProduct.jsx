@@ -17,6 +17,7 @@ const getBase64 = (file) =>
 
 function CreateProduct() {
 
+    const [message, setMessage] = useState(null);
     const [category, setCategory] = useState('Bird');
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -61,6 +62,7 @@ function CreateProduct() {
     }
 
     const handleImageMain = ({ fileList: newFileList }) => {
+        setMessage(null);
         for (var i = 0; i < newFileList.length; i++) {
             newFileList[i].status = 'done';
         }
@@ -179,15 +181,27 @@ function CreateProduct() {
 
                     <form className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
                         onSubmit={(e) => {
-                            handleEntailmentRequest(e);
-                            var list = [];
-                            for (var i = 0; i < e.target.length; i++) {
-                                if (e.target[i].name !== ''){                                    
-                                    list.push(e.target[i].name + '=' + e.target[i].value);
-                                }
-                                // console.log(e.target[i].id);
+                            if (imageMain.length === 0) {
+                                handleEntailmentRequest(e);
+                                setMessage('Please upload main image!');
+
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth',
+                                });
                             }
-                            onSubmit(list);
+                            else {
+                                setMessage(null);
+                                handleEntailmentRequest(e);
+                                var list = [];
+                                for (var i = 0; i < e.target.length; i++) {
+                                    if (e.target[i].name !== '') {
+                                        list.push(e.target[i].name + '=' + e.target[i].value);
+                                    }
+                                    // console.log(e.target[i].id);
+                                }
+                                onSubmit(list);
+                            }
                         }}>
                         <div className="mb-7">
                             <label
@@ -233,13 +247,13 @@ function CreateProduct() {
                                 className="block mb-2 text-sm font-medium text-gray-900"
                             >
                                 <p className="text-red-500 inline-block">*</p> Main Image
+                                <p className="text-red-500">{message}</p>
                             </label>
                             <Upload
                                 listType="picture-card"
                                 fileList={imageMain}
                                 onPreview={handlePreview}
                                 onChange={handleImageMain}
-                                required
                             >
                                 {imageMain.length >= 1 ? null : uploadButtonMain}
                             </Upload>
