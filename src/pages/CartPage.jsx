@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 export default function CartPage() {
   const items = useSelector(state => state.cart.items);
-
   const shopIds = items.map(item => item.shopId).filter((shopId, index, shopIds) => shopIds.indexOf(shopId) === index);
 
   return (
@@ -32,9 +31,10 @@ export default function CartPage() {
           <div className='col-span-1'>
           </div>
         </div>
-        {
-
-        }
+        {shopIds.map(shopId => {
+          const itemsInShop = items.filter(item => item.shopId === shopId);
+          return <ShopWrapper key={shopId} shopId={shopId} itemsInShop={itemsInShop}/>
+        })}
         <div className='bg-white rounded-sm mt-4 grid grid-cols-9 items-center text-center p-2 drop-shadow-sm'>
           <div className='col-span-1'>
             <input type='checkbox' />
