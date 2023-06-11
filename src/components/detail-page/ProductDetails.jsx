@@ -1,8 +1,9 @@
 import React from "react"
 
-function ProductDetails() {
+function ProductDetails({ product }) {
+  console.log(product)
   return (
-    <div className="bg-white p-7 w-3/5 rounded-md">
+    <div className="bg-white p-7 lg:w-3/5 sm:w-full rounded-md lg:mb-0 sm: mb-3">
       <h1 className="text-3xl font-bold text-left mb-5">Product Details</h1>
       <div id="detail" className="flex justify-between w-1/3 mb-5">
         <div id="" className="text-left">
@@ -15,13 +16,13 @@ function ProductDetails() {
           <p className="font-bold">Size:</p>
         </div>
         <div>
-          <p>Small bird</p>
-          <p>Mr.Beast</p>
-          <p>10 - 16 months</p>
-          <p>male</p>
-          <p>tinted gray</p>
-          <p>300 - 400 gram</p>
-          <p>Small</p>
+          <p> {product.categoryName} </p>
+          <p> {product.species} </p>
+          <p> {product.age} </p>
+          <p> {product.gender} </p>
+          <p> {product.color} </p>
+          <p> {product.weight} </p>
+          <p> {product.size} </p>
         </div>
       </div>
       <p id="description" className="mb-10">
