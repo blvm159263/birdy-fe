@@ -1,10 +1,12 @@
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { addToCart } from '../../../features/cart/cartSlice'
+import { useNavigate } from "react-router-dom";
 
 function ProductOverviewAction({ product }) {
   const [quantity, setQuantity] = useState(1)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onUpdateQuantity = (value) => {
     setQuantity(quantity + value)
   }
@@ -77,7 +79,10 @@ function ProductOverviewAction({ product }) {
             />
           </button>
         </div>
-        <button className="py-4 bg-sky-400 border-2 text-white font-bold border-white w-5/6 rounded-md hover:bg-white  hover:border-sky-300 hover:text-sky-400">
+        <button onClick={() => {
+          dispatch(addToCart({id: product.id, quantity: quantity, shopId: product.shopId, price: (product.unitPrice * (100 - product.salePtc) / 100)}));
+          navigate('/cart');
+          }} className="py-4 bg-sky-400 border-2 text-white font-bold border-white w-5/6 rounded-md hover:bg-white  hover:border-sky-300 hover:text-sky-400">
           BUY NOW
         </button>
       </div>
