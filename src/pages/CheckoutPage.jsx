@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import ShopWrapper from '../components/cart/ShopWrapper';
 
 export default function CheckoutPage() {
-    const items = useSelector(state => state.cart.items);
+    const items = useSelector(state => state.cart.items.filter(item => item.selected === true));
     const shopIds = items.map(item => item.shopId).filter((shopId, index, shopIds) => shopIds.indexOf(shopId) === index);
     const totalProduct = useSelector(state => state.cart.totalProduct);
     const totalPrice = useSelector(state => state.cart.totalPrice);
