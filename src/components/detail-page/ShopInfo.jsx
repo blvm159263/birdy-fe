@@ -3,16 +3,16 @@ import { Rate } from 'antd';
 
 function ShopInfo() {
   return (
-    <div className="my-3 w-full rounded-md bg-white lg:flex-row sm: flex-col py-3 px-8">
-      <div className="lg:mb-0 sm: mb-2 flex lg:w-2/5 sm:w-full lg:border-r-2 lg:border-r-grey-200 sm:border-0 pr-6 items-center">
-        <div className="h-14 mr-3 lg:pl-4 sm: pl-0 lg:mb-0 sm:mb-2">
+    <div className="my-3 w-full flex rounded-md bg-white lg:flex-row sm: flex-col py-3 px-8">
+      <div className="lg:mb-0 sm: mb-4 flex lg:flex-row sm: flex-col lg:w-2/5 sm: w-full lg:border-r-2 lg:border-r-grey-200 sm:border-0 lg:pr-6 sm: pr-0 items-center">
+        <div className="h-14 lg:mr-3 sm: mr-0 lg:pl-4 sm: pl-0 lg:mb-0 sm:mb-2">
           <img src="/assets/images/shop_avar.png " alt="" className="h-full" />
         </div>
         <div className="">
           <h1 className="font-bold text-2xl">BIRD CAGE.LTD</h1>
           <p className="text-lg">@cage.shop</p>
         </div>
-        <div className="ml-6 flex flex-col justify-between">
+        <div className="lg:ml-6 sm: ml-0 flex flex-col justify-between">
           <button className="py-1 px-10 my-1 bg-sky-300 rounded-md text-white border border-white font-bold hover:bg-white hover:border-blue-400 hover:text-blue-400">
             Chat
           </button>

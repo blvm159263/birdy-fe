@@ -2,6 +2,7 @@ import React from 'react'
 import ShopWrapper from '../components/cart/ShopWrapper'
 import { useDispatch, useSelector } from 'react-redux'
 import { deSelectAllItems, deleteAllSelected, selectAllItems } from '../features/cart/cartSlice';
+import { Link } from 'react-router-dom';
 
 export default function CartPage() {
   const items = useSelector(state => state.cart.items);
@@ -54,7 +55,9 @@ export default function CartPage() {
             Total (<span className='font-bold'>{totalProduct}</span> products): <span className='font-bold'>${totalPrice.toFixed(2)}</span>
           </div>
           <div className="col-span-2">
-            <button className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</button>
+            {totalProduct === 0 ?
+            (<span to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
+            (<Link to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</Link>)}
           </div>
         </div>
       </section>
