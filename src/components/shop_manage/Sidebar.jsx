@@ -91,12 +91,12 @@ console.log(items);
 function Sidebar() {
 
   const handlePath = function () {
-      switch (window.location.pathname.split("/shop")[1]) {
-        case "": return 1;
-        case "/orders": return 2;
-        case "/products": return 3;
-        case "/product/new": return 4;
-      }
+    switch (window.location.pathname.split("/shop")[1]) {
+      case "": return 1;
+      case "/orders": return 2;
+      case "/products": return 3;
+      case "/product/new": return 4;
+    }
   }
 
   // console.log(handlePath);

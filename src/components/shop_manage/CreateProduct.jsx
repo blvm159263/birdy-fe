@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Select, Modal, Upload, Input, DatePicker } from "antd"
+import { Select, Modal, Upload, DatePicker } from "antd"
 import { PlusOutlined } from "@ant-design/icons"
 import productApi from "../../api/productApi"
-
-const { TextArea } = Input
 
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
@@ -17,6 +15,8 @@ const getBase64 = (file) =>
 
 function CreateProduct() {
 
+    const [error, setError] = useState(null);
+    const [errorSub, setErrorSub] = useState(null);
     const [message, setMessage] = useState(null);
     const [category, setCategory] = useState('Bird');
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -55,8 +55,13 @@ function CreateProduct() {
         //setPreviewTitle(file.name);
     };
     const handleSubImages = ({ fileList: newFileList }) => {
+        setError(null);
         for (var i = 0; i < newFileList.length; i++) {
-            newFileList[i].status = 'done';
+            if (newFileList[i].type !== 'image/jpeg' && newFileList[i].type !== 'image/png') {
+                newFileList[i].status = 'error';
+                setErrorSub('Only JPG/PNG file can be uploaded!');
+            }
+            else {newFileList[i].status = 'done'; setErrorSub(null);}
         }
         setSubImages(newFileList);
     }
@@ -64,10 +69,15 @@ function CreateProduct() {
     const handleImageMain = ({ fileList: newFileList }) => {
         setMessage(null);
         for (var i = 0; i < newFileList.length; i++) {
-            newFileList[i].status = 'done';
+            if (newFileList[i].type !== 'image/jpeg' && newFileList[i].type !== 'image/png') {
+                newFileList[i].status = 'error';
+                setError('Only JPG/PNG file can be uploaded!');
+            }
+            else {newFileList[i].status = 'done'; setError(null);}
         }
         setImageMain(newFileList);
     }
+
 
 
     const uploadButton = (
@@ -190,6 +200,14 @@ function CreateProduct() {
                                     behavior: 'smooth',
                                 });
                             }
+                            else if (error !== null || errorSub !== null) {
+                                handleEntailmentRequest(e);                                
+
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth',
+                                });
+                            }
                             else {
                                 setMessage(null);
                                 handleEntailmentRequest(e);
@@ -247,9 +265,10 @@ function CreateProduct() {
                                 className="block mb-2 text-sm font-medium text-gray-900"
                             >
                                 <p className="text-red-500 inline-block">*</p> Main Image
-                                <p className="text-red-500">{message}</p>
+                                <p className="text-red-500">{message || error}</p>
                             </label>
                             <Upload
+                                id="mainImage"
                                 listType="picture-card"
                                 fileList={imageMain}
                                 onPreview={handlePreview}
@@ -273,6 +292,7 @@ function CreateProduct() {
                                 className="block mb-2 text-sm font-medium text-gray-900"
                             >
                                 Sub Images (optional)
+                                <p className="text-red-500">{errorSub}</p>
                             </label>
                             <Upload
                                 listType="picture-card"
@@ -471,6 +491,7 @@ function CreateProduct() {
                                                 min={1}
                                                 id="size"
                                                 name="size"
+                                                step={0.01}
                                                 placeholder="Width"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-r-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
                                             />
@@ -486,6 +507,7 @@ function CreateProduct() {
                                                 min={1}
                                                 id="size"
                                                 name="size"
+                                                step={0.01}
                                                 placeholder="Length"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-r-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
                                             />
@@ -501,6 +523,7 @@ function CreateProduct() {
                                                 min={1}
                                                 id="size"
                                                 name="size"
+                                                step={0.01}
                                                 placeholder="Height"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-r-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
                                             />
