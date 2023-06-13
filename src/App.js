@@ -16,6 +16,11 @@ import ShopProfile from "./components/shop_manage/ShopProfile"
 import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
 import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
 import CreateProduct from "./components/shop_manage/CreateProduct"
+import CartPage from "./pages/CartPage"
+import UserInfor from "./components/user/userInfor/UserInfor"
+import UserAddress from "./components/user/userAddress/UserAddress"
+import UserPage from "./pages/UserPage"
+import UserOrder from "./components/user/userOrder/UserOrder"
 
 function App() {
   return (
@@ -27,6 +32,14 @@ function App() {
             <Route path=":searchType/:page" element={<SearchPage />} />
           </Route>
           <Route path="/detail-item/:id" element={<DetailItemPage />} />
+          <Route path="/cart">
+            <Route index element={<CartPage />} />
+          </Route>
+          <Route path="/user/:userid" element={<UserPage />}>
+            <Route index element={<UserInfor />} />
+            <Route path="/user/:userid/address" element={<UserAddress />} />
+            <Route path="/user/:userid/order" element={<UserOrder />} />
+          </Route>
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
