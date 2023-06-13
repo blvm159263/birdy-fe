@@ -136,11 +136,11 @@ function ShopProfile() {
                     <label
                       className="pr-2 block text-right text-sm font-medium text-gray-400"
                     >
-                      Email
+                      Create Date
                     </label>
                   </div>
                   <div className="w-full pl-6">
-                    <span className="text-sm text-black">us*******@gmail.com</span>
+                    <span className="text-sm text-black">22/6/2020</span>
                     {/* <input
                       type="text"
                       id="phone"
