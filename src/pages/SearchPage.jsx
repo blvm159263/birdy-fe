@@ -100,7 +100,7 @@ export default function SearchPage() {
         <div className='flex justify-between mb-4'>
             <p className='text-neutral-500'>{searchType} - <span className='text-neutral-500'>Search result for “<span className='text-orange-500'>{searchText}</span>”</span></p>
             
-          <button onClick={() => dispatch(toggleFilterSideBar())} className='text-orange-500 text-lg font-semibold'><FontAwesomeIcon className='mr-2' icon={faFilter} />Filter</button>
+          <button onClick={() => {dispatch(toggleFilterSideBar())}} className='text-orange-500 text-lg font-semibold'><FontAwesomeIcon className='mr-2' icon={faFilter} />Filter</button>
         </div>
         <div className='sortByMenu flex justify-between items-center bg-gradient-to-r from-sky-500 to-blue-500 p-4 py-0 rounded-sm mb-6 text-xs md:text-base'>
           <div className='flex items-center flex-wrap gap-2'>

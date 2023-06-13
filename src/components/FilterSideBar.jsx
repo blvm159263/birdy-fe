@@ -15,15 +15,16 @@ export default function FilterSideBar() {
   const dispatch = useDispatch();
 
   return (
-    <aside className={`fixed top-0 right-0 h-screen bg-white w-[250px] ${isShowing ? '' : 'translate-x-full'} transition-transform p-6`}>
+    <aside className={`fixed top-0 right-0 h-screen bg-white w-[350px] ${isShowing ? '' : 'translate-x-full'} transition-transform p-6`}>
       <div className='flex text-neutral-500 justify-between items-center'>
         <p></p>
         <p className='font-bold'><FontAwesomeIcon className='mr-2 self-center' icon={faFilter}/>Filter</p>
         <button className='justify-self-end p-2' onClick={() => dispatch(toggleFilterSideBar())}><FontAwesomeIcon icon={faXmark} size='xl'/></button>
       </div>
-      <div className='mt-4'>
+      {/* <hr className='my-6'/> */}
+      <div className='mt-7'>
         <div className='flex justify-between items-center'>
-          <p>Rating</p>
+          <p className='ml-4'>Rating</p>
           <button onClick={() => dispatch(toggleRatingFilter())} className='p-2'>{rating !== undefined ? <FontAwesomeIcon icon={faMinus}/> : <FontAwesomeIcon icon={faPlus}/>}</button>
         </div>
         {rating !== undefined ? (
@@ -32,9 +33,10 @@ export default function FilterSideBar() {
             <Slider defaultValue={rating} min={1} max={5} onAfterChange={(value) => dispatch(updateRatingFilter(value))}/>
           </div>) : ''}
       </div>
-      <div className='mt-4'>
+      <hr className='border-1 border-orange-400'/>
+      <div className='mt-7'>
         <div className='flex justify-between items-center'>
-          <p>Price</p>
+          <p className='ml-4'>Price range</p>
           <button onClick={() => dispatch(togglePriceFilter())} className='p-2'>{fromPrice !== undefined ? <FontAwesomeIcon icon={faMinus}/> : <FontAwesomeIcon icon={faPlus}/>}</button>
         </div>
         {fromPrice !== undefined ? (
@@ -43,6 +45,7 @@ export default function FilterSideBar() {
             <Slider range defaultValue={[fromPrice, toPrice]} min={0} max={MAX_FILTER_PRICE} onAfterChange={([fromPrice, toPrice]) => dispatch(updatePriceFilter({fromPrice: fromPrice, toPrice: toPrice}))}/>
           </div>) : ''}
       </div>
+      <hr className='border-1 border-orange-400'/>
     </aside>
   )
 }
