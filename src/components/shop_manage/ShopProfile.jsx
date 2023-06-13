@@ -1,6 +1,7 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
+import shopApi from "../../api/shopApi";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -17,6 +18,8 @@ function ShopProfile() {
   const [previewTitle, setPreviewTitle] = useState('');
   const [shopAvar, setShopAvar] = useState([]);
   const [error, setError] = useState(null);
+  const [shop, setShop] = useState([]);
+  const [phone, setPhone] = useState('');
 
 
   const handleCancel = () => setPreviewOpen(false);
@@ -53,12 +56,36 @@ function ShopProfile() {
   );
 
 
+  useEffect(() => {
+    shopApi.getShopDetailByShopId(1).then((res) => {
+      console.log(res);
+      setShop(res.data[0]);
+      const hidePhone = hidePhoneNumber(res.data[1].phoneNumber);
+      setPhone(hidePhone);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }, []);
+
   const onSubmit = (data) => {
 
   }
 
   const handleEntailmentRequest = (e) => {
     e.preventDefault();
+  }
+
+  function hidePhoneNumber(phoneNumber) {
+    const visibleDigits = 2; // Number of digits to keep visible at the beginning and end
+    const hiddenDigits = phoneNumber.length - (visibleDigits * 2); // Number of digits to hide with asterisks
+  
+    // Create the masked phone number string
+    const maskedPhoneNumber =
+      phoneNumber.substr(0, visibleDigits) +
+      "*".repeat(hiddenDigits) +
+      phoneNumber.substr(-visibleDigits);
+  
+    return maskedPhoneNumber;
   }
 
   return (
@@ -100,7 +127,7 @@ function ShopProfile() {
                         alt=""
                       />
                     </div>
-                    <span className="pl-2 text-sm text-black">user name</span>
+                    <span className="pl-2 text-sm text-black">{shop.shopName}</span>
                     {/* <input
                       type="text"
                       id="name"
@@ -126,6 +153,7 @@ function ShopProfile() {
                       id="name"
                       name="name"
                       placeholder="shop name"
+                      defaultValue={shop.shopName}
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
                     />
                   </div>
@@ -140,7 +168,7 @@ function ShopProfile() {
                     </label>
                   </div>
                   <div className="w-full pl-6">
-                    <span className="text-sm text-black">22/6/2020</span>
+                    <span className="text-sm text-black">23/6/2020</span>
                     {/* <input
                       type="text"
                       id="phone"
@@ -160,7 +188,7 @@ function ShopProfile() {
                     </label>
                   </div>
                   <div className="w-full pl-6">
-                    <span className="text-sm text-black">091********95</span>
+                    <span className="text-sm text-black">{phone}</span>
                     {/* <input
                       type="text"
                       id="phone"
@@ -180,7 +208,8 @@ function ShopProfile() {
                     </label>
                   </div>
                   <div className="w-full pl-6">
-                    <span className="text-sm text-black">73/40, April 30th street, Trung Dung Ward,<br /> Bien Hoa city, Dong Nai province </span>
+                  <span className="text-sm text-black">{shop.address}</span>
+                    {/* <span className="text-sm text-black">73/40, April 30th street, Trung Dung Ward,<br /> Bien Hoa city, Dong Nai province </span> */}
                     {/* <input
                       type="text"
                       id="phone"
