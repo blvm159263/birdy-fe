@@ -2,9 +2,9 @@ import React, { useState } from "react"
 import data from "./UserAddressDataTMP"
 function UserAddress() {
   const [isModal, setIsModal] = useState(false)
-  const [isUpdate, setIsUpdate] = useState(false)
-  const [addresses, setAddresses] = useState(data)
-  const [selectedAddress, setSelectedAddress] = useState(null)
+  // const [isUpdate, setIsUpdate] = useState(false)
+  // const [addresses, setAddresses] = useState(data)
+  // const [selectedAddress, setSelectedAddress] = useState(null)
 
   // const handleSelectAddress = () => {
   //   add

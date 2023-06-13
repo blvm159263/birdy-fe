@@ -34,10 +34,10 @@ function App() {
           <Route path="/cart">
             <Route index element={<CartPage />} />
           </Route>
-          <Route path="/user" element={<UserPage />}>
+          <Route path="/user/:userid" element={<UserPage />}>
             <Route index element={<UserInfor />} />
-            <Route path="/user/address" element={<UserAddress />} />
-            <Route path="/user/order" element={<UserOrder />} />
+            <Route path="/user/:userid/address" element={<UserAddress />} />
+            <Route path="/user/:userid/order" element={<UserOrder />} />
           </Route>
           <Route path="*" element={<NoPage />} />
         </Route>
