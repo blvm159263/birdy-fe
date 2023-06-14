@@ -9,9 +9,9 @@ import { MAX_FILTER_PRICE } from '../constants/Constants'
 
 export default function FilterSideBar() {
   const isShowing = useSelector(state => state.ui.isShowFilterSideBar);
-  const rating = useSelector(state => state.search.filterRating);
-  const fromPrice = useSelector(state => state.search.filterFromPrice);
-  const toPrice = useSelector(state => state.search.filterToPrice);
+  const rating = useSelector(state => state.search.rating);
+  const fromPrice = useSelector(state => state.search.fromPrice);
+  const toPrice = useSelector(state => state.search.toPrice);
   const dispatch = useDispatch();
 
   return (
