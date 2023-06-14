@@ -17,8 +17,35 @@ import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopPr
 import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
 import CartPage from "./pages/CartPage"
 import CheckoutPage from "./pages/CheckoutPage"
+import { useEffect, useContext } from "react"
+import storageService from "./api/storage"
+import jwtDecode from "jwt-decode";
+import { LoginContext } from "./context/LoginProvider"
 
 function App() {
+
+  const { isLogin ,setIsLogin, setRole } = useContext(LoginContext);
+
+  function convertTimestampToDate(timestamp) {
+    return new Date(timestamp * 1000);
+  }
+
+  useEffect(() => {
+    var token = storageService.getAccessToken();
+    if(token){
+      token = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      if(currentTime > token.exp){
+        storageService.removeAccessToken();
+        setIsLogin(false);
+        setRole("");
+      }else{
+        setIsLogin(true);
+        setRole(token.role);
+      }
+    }
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -34,7 +61,7 @@ function App() {
           </Route>
           <Route path="*" element={<NoPage />} />
         </Route>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login"  element={<LoginPage />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminProductManage />} />
           <Route path="/admin/user-manage-ad" element={<AdminUserManage />} />

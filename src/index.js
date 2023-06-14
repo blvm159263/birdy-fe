@@ -6,12 +6,19 @@ import reportWebVitals from "./reportWebVitals"
 import { Provider } from "react-redux"
 import { persistor, store } from "./app/store"
 import { PersistGate } from "redux-persist/integration/react"
+import { LoginProvider } from "./context/LoginProvider"
+import { NotificationProvider } from "./context/NotificationProvider"
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <App />
+      <LoginProvider>
+        <NotificationProvider>
+          <App />
+        </NotificationProvider>
+      </LoginProvider>
+
     </PersistGate>
   </Provider>
 )

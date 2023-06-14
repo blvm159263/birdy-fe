@@ -2,13 +2,40 @@ import React from "react"
 import { useState } from "react"
 import validator from 'validator'
 import authApi from "../../api/authApi";
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { LoginContext } from "../../context/LoginProvider";
+import storageService from "../../api/storage";
+
+import jwtDecode from "jwt-decode";
+
 
 function SignIn({ setIsSignIn }) {
+
+  const { setIsLogin, setRole } = useContext(LoginContext);
+
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = storageService.getAccessToken();
+    let tokenDecode;
+    if (token) {
+      tokenDecode = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (currentTime < tokenDecode.exp) {
+        console.log(tokenDecode);
+        console.log("token hợp lệ")
+        setIsLogin(true);
+        setRole(tokenDecode.role);
+        navigate('/');
+      }
+    }
+
+  }, [])
+
 
   const validationPhoneNumber = () => {
     setIsValidPhoneNumber(validator.isMobilePhone(phoneNumber, 'vi-VN'));
@@ -22,17 +49,22 @@ function SignIn({ setIsSignIn }) {
     return number;
   }
 
-
   const onSignIn = () => {
     validationPhoneNumber();
     if (isValidPhoneNumber) {
       authApi.login({
         phoneNumber: formatPhoneNumber(phoneNumber),
-        password: password})
+        password: password
+      })
         .then(res => {
           if (res.status === 200) {
             // alert("login thành công")
-            navigate('/');
+            let token = jwtDecode(res.data.token);
+            const date = new Date();
+            storageService.setAccessToken(res.data.token);
+            setRole(token.role);
+            setIsLogin(true)
+            navigate('/')
           } else if (res.status === 403) {
 
           }
@@ -42,7 +74,7 @@ function SignIn({ setIsSignIn }) {
 
   const handleEntailmentRequest = (e) => {
     e.preventDefault();
-}
+  }
 
   return (
     <div className="lg:w-1/2 sm:w-full p-5 sm:mx-auto">
@@ -74,7 +106,7 @@ function SignIn({ setIsSignIn }) {
         <button
           type="submit"
           className="bg-orange-400	w-full my-2 text-white px-4 py-2 rounded hover:bg-white hover:text-orange-400 hover:border-orange-400 hover:outline outline-1 focus:outline-none focus:bg-blue-600"
-          onClick={(e)=>{
+          onClick={(e) => {
             handleEntailmentRequest(e);
             onSignIn();
           }}
