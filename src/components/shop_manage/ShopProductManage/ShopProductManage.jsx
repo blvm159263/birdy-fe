@@ -73,11 +73,11 @@ function ShopProductManage() {
           return <ShopProductCard key={product.id} product={product} />
         })}
 
-        {products.length === 0 ? (
+        {products.length === 0 &&
           <div className='px-8 py-16'>
             <img className='w-64 h-64 mx-auto' src="/assets/images/No_Product_Found.png" alt='no product'/>
           </div>
-        ) : null}
+        }
         {/* <ShopProductCard />
         <ShopProductCard />
         <ShopProductCard />

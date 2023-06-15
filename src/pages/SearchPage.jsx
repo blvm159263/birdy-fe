@@ -24,6 +24,7 @@ export default function SearchPage() {
   const fromPrice = useSelector(state => state.search.filterFromPrice);
   const toPrice = useSelector(state => state.search.filterToPrice);
   const { searchType, page } = useParams();
+  const [searchTypeText, setSearchTypeText] = useState(SearchType.DEFAULT.text.toUpperCase());
 
   useEffect(() => {
     dispatch(updateIsAtSearchPage(true));
@@ -35,6 +36,7 @@ export default function SearchPage() {
     console.log("Sort type: " + sortType);
     const categoryId = Object.values(SearchType).filter((type) => type.text === searchType)[0].id;
     console.log("Param Category id: " + categoryId);
+    setSearchTypeText(searchType.toUpperCase());
 
     let apiPromise;
     const params = {
@@ -98,7 +100,7 @@ export default function SearchPage() {
 
       <section className='container mx-auto mt-6'>
         <div className='flex justify-between mb-4'>
-            <p className='text-neutral-500'>{searchType} - <span className='text-neutral-500'>Search result for “<span className='text-orange-500'>{searchText}</span>”</span></p>
+            <p className='text-neutral-500'>{searchTypeText} - <span className='text-neutral-500'>Search result for “<span className='text-orange-500'>{searchText}</span>”</span></p>
             
           <button onClick={() => {dispatch(toggleFilterSideBar())}} className='text-orange-500 text-lg font-semibold'><FontAwesomeIcon className='mr-2' icon={faFilter} />Filter</button>
         </div>
