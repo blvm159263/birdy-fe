@@ -41,20 +41,20 @@ export default function NavBar() {
           <SearchBar />
           <ul className="hidden md:flex text-white justify-between pt-2">
             <li>
-              <Link to={`/search/${SearchType.DEFAULT.text}/0`}>
+              <Link to={`/search/${SearchType.ALL_PRODUCT.text}`}>
                 All Products
               </Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.BIRD.text}/0`}>Birds</Link>
+              <Link to={`/search/${SearchType.BIRD.text}`}>Birds</Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.ACCESSORY.text}/0`}>
+              <Link to={`/search/${SearchType.ACCESSORY.text}`}>
                 Accessories
               </Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.FOOD.text}/0`}>Foods</Link>
+              <Link to={`/search/${SearchType.FOOD.text}`}>Foods</Link>
             </li>
           </ul>
         </div>
