@@ -1,7 +1,7 @@
 import React from "react"
 
 function ProductDetails({ product }) {
-  console.log(product)
+
   return (
     <div className="bg-white p-7 lg:w-3/5 sm:w-full rounded-md lg:mb-0 sm: mb-3">
       <h1 className="text-3xl font-bold text-left mb-5">Product Details</h1>

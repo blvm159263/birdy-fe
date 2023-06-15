@@ -21,8 +21,36 @@ import UserInfor from "./components/user/userInfor/UserInfor"
 import UserAddress from "./components/user/userAddress/UserAddress"
 import UserPage from "./pages/UserPage"
 import UserOrder from "./components/user/userOrder/UserOrder"
+import CheckoutPage from "./pages/CheckoutPage"
+import { useEffect, useContext } from "react"
+import storageService from "./api/storage"
+import jwtDecode from "jwt-decode";
+import { LoginContext } from "./context/LoginProvider"
 
 function App() {
+
+  const { isLogin, setIsLogin, setRole } = useContext(LoginContext);
+
+  function convertTimestampToDate(timestamp) {
+    return new Date(timestamp * 1000);
+  }
+
+  useEffect(() => {
+    var token = storageService.getAccessToken();
+    if (token) {
+      token = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (currentTime > token.exp) {
+        storageService.removeAccessToken();
+        setIsLogin(false);
+        setRole("");
+      } else {
+        setIsLogin(true);
+        setRole(token.role);
+      }
+    }
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -39,6 +67,8 @@ function App() {
             <Route index element={<UserInfor />} />
             <Route path="/user/:userid/address" element={<UserAddress />} />
             <Route path="/user/:userid/order" element={<UserOrder />} />
+            <Route index element={<CartPage />} />
+            <Route path="/cart/checkout" element={<CheckoutPage />} />
           </Route>
           <Route path="*" element={<NoPage />} />
         </Route>

@@ -17,12 +17,11 @@ function DetailItemPage() {
       .getProductById(id)
       .then((response) => {
         setProduct(response.data)
-        console.log(response.data)
       })
       .catch((error) => console.log(error))
 
     window.scrollTo(0, 0)
-  }, [])
+  }, [id])
 
   return (
     <div className="bg-gray-200 py-10">
@@ -31,7 +30,7 @@ function DetailItemPage() {
         <ShopInfo />
         <div className="flex lg:flex-row sm: flex-col">
           <ProductDetails product={product} />
-          <Review />
+          <Review product={product} />
         </div>
         <RelatedProduct />
       </div>

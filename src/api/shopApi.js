@@ -14,6 +14,10 @@ const shopApi = {
     getShopProductsByShopIdForShop(id, param) {
         const url = '/shops/' + id + '/products/true';
         return axiosClient.get(url, param);
+    },
+    getShipmentByShopId(id) {
+        const url = '/shops/shipment/' + id;
+        return axiosClient.get(url);
     }
 }
 
