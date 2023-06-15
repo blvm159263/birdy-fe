@@ -4,7 +4,8 @@ import storageService from "./storage";
 let token;
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost/api/v1/",
+  // baseURL: "https://birdy-swp.azurewebsites.net/api/v1/",
+  baseURL: "https://birdy-swp.azurewebsites.net/api/v1/",
 
 });
 

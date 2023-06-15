@@ -1,5 +1,3 @@
-
-
 import {
     Button,
     DatePicker,
@@ -7,7 +5,8 @@ import {
     Input,
     Select,
 } from 'antd';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { NotificationContext } from '../../context/NotificationProvider';
 
 import authApi from '../../api/authApi';
 
@@ -46,6 +45,8 @@ const tailFormItemLayout = {
 
 const SignUpInformation = ({ phoneNumberRegister, passwordRegister, setIsVerified, setIsSignIn }) => {
 
+    const openNotificationWithIcon = useContext(NotificationContext);
+
     const [form] = Form.useForm();
     const onFinish = (values) => {
 
@@ -69,13 +70,13 @@ const SignUpInformation = ({ phoneNumberRegister, passwordRegister, setIsVerifie
         })
             .then(res => {
                 if(res.status === 201){
-                    alert("Create successfully!");
+                    openNotificationWithIcon("Register success!", "Your account registered successfully! Please login to continue!")
                     setIsVerified(false);
                     setIsSignIn(true);
                 }else if(res.status === 400){
-                    alert("Create fail!");
+                    openNotificationWithIcon("Register Fail!", "Your account registered Fail! Please try again!")
                 }else if(res.status === 500){
-                    alert("Backend lỗi rùi! Thử lại sau");
+                    openNotificationWithIcon("Error", "Server error! Please try again!")
                 }
             });
     };

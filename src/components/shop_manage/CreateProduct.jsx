@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect, useContext } from "react"
 import { Select, Modal, Upload, DatePicker } from "antd"
 import { PlusOutlined } from "@ant-design/icons"
 import productApi from "../../api/productApi"
+import { NotificationContext } from "../../context/NotificationProvider"
 
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
@@ -15,6 +16,8 @@ const getBase64 = (file) =>
 
 function CreateProduct() {
 
+    const openNotificationWithIcon = useContext(NotificationContext);
+
     const [error, setError] = useState(null);
     const [errorSub, setErrorSub] = useState(null);
     const [message, setMessage] = useState(null);
@@ -23,7 +26,7 @@ function CreateProduct() {
     const [previewImage, setPreviewImage] = useState('');
     const [subImages, setSubImages] = useState([]);
     const [imageMain, setImageMain] = useState([]);
-    const [gender, setGender] = useState('male');
+    const [gender, setGender] = useState(null);
     const [nameLength, setNameLength] = useState(0);
     const [des, setDes] = useState('');
     const [desLength, setDesLength] = useState(0);
@@ -57,11 +60,11 @@ function CreateProduct() {
     const handleSubImages = ({ fileList: newFileList }) => {
         setError(null);
         for (var i = 0; i < newFileList.length; i++) {
-            if (newFileList[i].type !== 'image/jpeg' && newFileList[i].type !== 'image/png') {
+            if (newFileList[i].type !== 'image/jpeg' && newFileList[i].type !== 'image/png' && newFileList[i].type !== 'image/jpg') {
                 newFileList[i].status = 'error';
                 setErrorSub('Only JPG/PNG file can be uploaded!');
             }
-            else {newFileList[i].status = 'done'; setErrorSub(null);}
+            else { newFileList[i].status = 'done'; setErrorSub(null); }
         }
         setSubImages(newFileList);
     }
@@ -69,11 +72,11 @@ function CreateProduct() {
     const handleImageMain = ({ fileList: newFileList }) => {
         setMessage(null);
         for (var i = 0; i < newFileList.length; i++) {
-            if (newFileList[i].type !== 'image/jpeg' && newFileList[i].type !== 'image/png') {
+            if (newFileList[i].type !== 'image/jpeg' && newFileList[i].type !== 'image/png' && newFileList[i].type !== 'image/jpg') {
                 newFileList[i].status = 'error';
                 setError('Only JPG/PNG file can be uploaded!');
             }
-            else {newFileList[i].status = 'done'; setError(null);}
+            else { newFileList[i].status = 'done'; setError(null); }
         }
         setImageMain(newFileList);
     }
@@ -121,66 +124,102 @@ function CreateProduct() {
 
         const combinedStrings = Object.entries(parsedList).map(([key, values]) => ({
             key,
-            value: values.join('-'),
+            value: values.join('x'),
         }));
 
         return combinedStrings;
+    };
+
+    const getCategoryId = function () {
+        for (let cate of categories) {
+            if (category === cate) {
+                return categories.indexOf(cate) + 1;
+            }
+        }
+    }
+
+    const getGenderId = function () {
+        for (let gen of genders) {
+            if (gender === gen) {
+                return genders.indexOf(gen) === 0 ? null : genders.indexOf(gen);
+            }
+        }
+    }
+
+    const parseDateString = (dateString) => {
+        const [day, month, year] = dateString.split('/');
+        const parsedDate = new Date(`${year}-${month}-${day}`);
+        return parsedDate.toISOString();
     };
 
     const onSubmit = (list) => {
         const values = getValue(list);
 
         for (let item of values) {
-            if (item.value === '' || item.value === '--') {
+            if (item.value === '' || item.value === 'xx') {
                 item.value = null;
             }
         }
+        const date = values.find((item) => item.key === 'expDate')?.value || null;
 
         var productDto = {
             id: null,
-            productName: values.find((item) => item.key === 'name')?.value,
+            productName: values.find((item) => item.key === 'name')?.value || null,
             imageMain: null,
-            subImages: null,
             unitPrice: values.find((item) => item.key === 'price')?.value,
-            salePtc: null,
-            quantity: values.find((item) => item.key === 'quantity')?.value,
+            salePtc: 0,
+            quantity: values.find((item) => item.key === 'quantity')?.value || 0,
             rating: 0,
-            createDate: null,
-            species: values.find((item) => item.key === 'species')?.value,
-            age: values.find((item) => item.key === 'age')?.value,
-            gender: null,
-            color: values.find((item) => item.key === 'color')?.value,
-            expDate: values.find((item) => item.key === 'expDate')?.value,
-            madeIn: values.find((item) => item.key === 'made-in')?.value,
-            weight: values.find((item) => item.key === 'weight')?.value,
-            size: values.find((item) => item.key === 'size')?.value,
-            material: values.find((item) => item.key === 'material')?.value,
-            description: values.find((item) => item.key === 'description')?.value,
-            brandName: values.find((item) => item.key === 'brand')?.value,
+            createDate: new Date().toISOString(),
+            species: values.find((item) => item.key === 'species')?.value || null,
+            age: values.find((item) => item.key === 'age')?.value || null,
+            gender: getGenderId(),
+            color: values.find((item) => item.key === 'color')?.value || null,
+            // expDate: values.find((item) => item.key === 'expDate')?.value || null,
+            expDate: date ? parseDateString(date) : null,
+            madeIn: values.find((item) => item.key === 'made-in')?.value || null,
+            weight: values.find((item) => item.key === 'weight')?.value || null,
+            size: values.find((item) => item.key === 'size')?.value || null,
+            material: values.find((item) => item.key === 'material')?.value || null,
+            description: values.find((item) => item.key === 'description')?.value || null,
+            brandName: values.find((item) => item.key === 'brand')?.value || null,
             state: 1,
-            categoryId: null,
-            shopId: null,
-            shopName: null,
+            categoryId: getCategoryId(),
+            categoryName: category,
+            shopId: 1,
+            shopName: 'shop 1',
         }
 
-        // const params = {
-        //     productDTO: productDto,
-        //     mainImage: imageMain[0],
-        //     subImages: subImages,
-        //     gender: gender.toLowerCase(),
-        // }
+        const listFile = [];
+        for (let subImage of subImages) {
+            listFile.push(subImage.originFileObj);
+        }
+
+        const params = {
+            productDTO: JSON.stringify(productDto),
+            mainImage: imageMain[0].originFileObj,
+            subImages: listFile,
+        }
 
         // productDto.imageMain = params.mainImage === undefined ? null : params.mainImage;
         // productDto.subImages = params.subImages;
-        // productDto.gender = params.gender;
-        console.log(productDto);
-        // productApi.addNewProduct(params).then(res => {
-        //   console.log(res);
-        // });
+        // console.log(productDto.gender);
+        productApi.addNewProduct(params).then((res) => {
+            console.log(res);
+            if(res.status === 201){
+                openNotificationWithIcon('Success', 'Add new product successfully!');
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
     const handleEntailmentRequest = (e) => {
         e.preventDefault();
     }
+
+    // const handleUpload = (value) => {
+    //     console.log(value);
+    // }
 
     return (
         <div className="bg-gray-300 p-10 w-4/5 absolute top-0 right-0">
@@ -189,7 +228,7 @@ function CreateProduct() {
             <div className=" relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div className="p-4 bg-white">
 
-                    <form className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
+                    <form encType="multipart/form-data" className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
                         onSubmit={(e) => {
                             if (imageMain.length === 0) {
                                 handleEntailmentRequest(e);
@@ -201,7 +240,7 @@ function CreateProduct() {
                                 });
                             }
                             else if (error !== null || errorSub !== null) {
-                                handleEntailmentRequest(e);                                
+                                handleEntailmentRequest(e);
 
                                 window.scrollTo({
                                     top: 0,
@@ -259,6 +298,17 @@ function CreateProduct() {
                                 required
                             /> */}
                         </div>
+                        {/* <input type="file" name="file" onChange={(e) => {
+                            const fileList = e.target.files;
+                            for (const file of fileList) {
+                                console.log(file);
+                                productApi.test(file).then((res) => {
+                                    console.log(res);
+                                }).catch((err) => {
+                                    console.log(err);
+                                })
+                            }
+                        }}/> */}
                         <div className="mb-7">
                             <label
                                 htmlFor="mainImage"
@@ -376,7 +426,7 @@ function CreateProduct() {
                                 <Select
                                     size="large"
                                     className="block w-40"
-                                    onChange={(value) => setGender(value === 'M/F' ? null : value)}
+                                    onChange={(value) => setGender(value)}
                                     defaultValue={genders[0]}
                                     options={genders.map((gender) => ({
                                         label: gender,

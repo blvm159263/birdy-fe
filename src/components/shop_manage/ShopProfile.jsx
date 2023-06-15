@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
+import format from "date-fns/format";
 import shopApi from "../../api/shopApi";
 
 const getBase64 = (file) =>
@@ -20,6 +21,7 @@ function ShopProfile() {
   const [error, setError] = useState(null);
   const [shop, setShop] = useState([]);
   const [phone, setPhone] = useState('');
+  const [createDate, setCreateDate] = useState('');
 
 
   const handleCancel = () => setPreviewOpen(false);
@@ -60,8 +62,12 @@ function ShopProfile() {
     shopApi.getShopDetailByShopId(1).then((res) => {
       console.log(res);
       setShop(res.data[0]);
+
       const hidePhone = hidePhoneNumber(res.data[1].phoneNumber);
       setPhone(hidePhone);
+
+      const dateformat = getDate(res.data[0].createDate);
+      setCreateDate(dateformat);
     }).catch((err) => {
       console.log(err);
     })
@@ -78,14 +84,24 @@ function ShopProfile() {
   function hidePhoneNumber(phoneNumber) {
     const visibleDigits = 2; // Number of digits to keep visible at the beginning and end
     const hiddenDigits = phoneNumber.length - (visibleDigits * 2); // Number of digits to hide with asterisks
-  
+
     // Create the masked phone number string
     const maskedPhoneNumber =
       phoneNumber.substr(0, visibleDigits) +
       "*".repeat(hiddenDigits) +
       phoneNumber.substr(-visibleDigits);
-  
+
     return maskedPhoneNumber;
+  }
+
+
+  // const isoString = "2023-05-10T12:30:00.000Z";
+  const getDate = (dateString) => {
+    const isoString = dateString;
+
+    const formattedDate = format(new Date(isoString), 'dd/MM/yyyy');
+
+    return formattedDate;
   }
 
   return (
@@ -116,7 +132,7 @@ function ShopProfile() {
                     <label
                       className="pr-2 block text-sm text-right font-medium text-gray-400"
                     >
-                      User
+                      Account
                     </label>
                   </div>
                   <div className="w-full flex items-center pl-6">
@@ -168,7 +184,7 @@ function ShopProfile() {
                     </label>
                   </div>
                   <div className="w-full pl-6">
-                    <span className="text-sm text-black">23/6/2020</span>
+                    <span className="text-sm text-black">{createDate}</span>
                     {/* <input
                       type="text"
                       id="phone"
@@ -208,7 +224,7 @@ function ShopProfile() {
                     </label>
                   </div>
                   <div className="w-full pl-6">
-                  <span className="text-sm text-black">{shop.address}</span>
+                    <span className="text-sm text-black">{shop.address}</span>
                     {/* <span className="text-sm text-black">73/40, April 30th street, Trung Dung Ward,<br /> Bien Hoa city, Dong Nai province </span> */}
                     {/* <input
                       type="text"

@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { useContext } from "react";
 
 const initialState = {
     // {id: 1, quantity: 9, shopId: 1, selected: true, price: 44}
-    items: [{id: 1, quantity: 9, shopId: 1, selected: true, price: 44}],
-    totalProduct: 1,
-    totalPrice: 44
+    items: [],
+    totalProduct: 0,
+    totalPrice: 0
 }
+
+
+
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -20,6 +24,7 @@ const cartSlice = createSlice({
             }
             state.totalProduct = state.items.filter(item => item.selected === true).reduce((total, {quantity}) => total + quantity, 0);
             state.totalPrice = state.items.filter(item => item.selected === true).reduce((total, {quantity, price}) => total + quantity * price, 0);
+
         },
         incrementQuantity: (state, action) => {
             const item = state.items.find((item) => item.id === action.payload.id);

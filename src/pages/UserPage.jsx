@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import UserSidebar from "../components/user/UserSidebar"
 
-import UserAction from "./UserAction"
 import { Routes, Route } from "react-router-dom"
 import UserInfor from "../components/user/userInfor/UserInfor"
 import UserAddress from "../components/user/userAddress/UserAddress"
@@ -22,7 +21,6 @@ function UserPage() {
       .getUserById(userid)
       .then((response) => {
         dispatch(getAUser(response.data))
-        console.log(userInformation)
       })
       .catch((error) => {
         console.log(error)

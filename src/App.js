@@ -23,8 +23,36 @@ import UserPage from "./pages/UserPage"
 import UserOrder from "./components/user/userOrder/UserOrder"
 import ViewShopPage from "./pages/ViewShopPage";
 import AllShopsPage from "./pages/AllShopsPage";
+import CheckoutPage from "./pages/CheckoutPage"
+import { useEffect, useContext } from "react"
+import storageService from "./api/storage"
+import jwtDecode from "jwt-decode";
+import { LoginContext } from "./context/LoginProvider"
 
 function App() {
+
+  const { isLogin, setIsLogin, setRole } = useContext(LoginContext);
+
+  function convertTimestampToDate(timestamp) {
+    return new Date(timestamp * 1000);
+  }
+
+  useEffect(() => {
+    var token = storageService.getAccessToken();
+    if (token) {
+      token = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (currentTime > token.exp) {
+        storageService.removeAccessToken();
+        setIsLogin(false);
+        setRole("");
+      } else {
+        setIsLogin(true);
+        setRole(token.role);
+      }
+    }
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -37,6 +65,7 @@ function App() {
           <Route path="/detail-item/:id" element={<DetailItemPage />} />
           <Route path="/cart">
             <Route index element={<CartPage />} />
+            <Route path="/cart/checkout" element={<CheckoutPage />} />
           </Route>
           <Route path="/user/:userid" element={<UserPage />}>
             <Route index element={<UserInfor />} />

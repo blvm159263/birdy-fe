@@ -26,6 +26,10 @@ const shopApi = {
     getShopProductsByShopIdAndCategoryId(id, categoryId, params) {
         const url = `/shops/${id}/products/category/${categoryId}`;
         return axiosClient.get(url, {params});
+    },
+    getShipmentByShopId(id) {
+        const url = '/shops/shipment/' + id;
+        return axiosClient.get(url);
     }
 }
 

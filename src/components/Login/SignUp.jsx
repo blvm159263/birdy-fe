@@ -1,14 +1,16 @@
 
 import React from "react"
-import { useState } from "react"
+import { useState, useContext } from "react"
 import validator from 'validator'
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
 import app from "../../config/firebaseConfig"
-
+import { NotificationContext } from "../../context/NotificationProvider"
 import accountApi from "../../api/accountApi"
 
 
 function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumberRegister, setPasswordRegister, setIsVerified}) {
+
+    const openNotificationWithIcon = useContext(NotificationContext);
 
     const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
     const [isValidPassword, setIsValidPassword] = useState(true);
@@ -44,9 +46,10 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                 // SMS sent. Prompt user to type the code from the message, then sign the
                 // user in with confirmationResult.confirm(code).
                 window.confirmationResult = confirmationResult;
-                alert("otp send!")
+                openNotificationWithIcon("Send OTP successfully", "Please check your message !")
             }).catch((error) => {
                 // Error; SMS not sent
+                openNotificationWithIcon("Send OTP fail", "Please check phone number !")
             });
     }
 
@@ -54,12 +57,12 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
 
         window.confirmationResult.confirm(otp).then((result) => {
             // User signed in successfully.
-            alert("valid code");
+            openNotificationWithIcon("OTP valid", "Valid!")
             setIsVerified(true);
 
         }).catch((error) => {
             // User couldn't sign in (bad verification code?)
-            alert("invalid code");
+            openNotificationWithIcon("OTP invalid", "Error! Please check OTP again!")
             setIsValidOtp(false);
         });
     }
@@ -80,9 +83,8 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
             accountApi.checkPhoneExist({ phoneNumber: phoneNumberRegister })
                 .then(res => {
                     if (res.data) {
-                        alert("Phone number is existed!");
+                        openNotificationWithIcon("Existed!", "Phone number is exited! Please try again!")
                     } else {
-                        alert("Phone number valid!");
                         setIsVerifyState(true);
                         verifyPhone();
                     }
@@ -91,7 +93,6 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
             console.log("Invalid")
         }
 
-        console.log("sign up")
     }
 
     const handleEntailmentRequest = (e) => {
