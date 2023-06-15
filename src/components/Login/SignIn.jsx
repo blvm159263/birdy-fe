@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { LoginContext } from "../../context/LoginProvider";
 import storageService from "../../api/storage";
-
+import { NotificationContext } from "../../context/NotificationProvider";
 import jwtDecode from "jwt-decode";
 
 
 function SignIn({ setIsSignIn }) {
 
+  const openNotificationWithIcon = useContext(NotificationContext);
   const { setIsLogin, setRole } = useContext(LoginContext);
 
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
@@ -68,6 +69,9 @@ function SignIn({ setIsSignIn }) {
           } else if (res.status === 403) {
 
           }
+        }).catch(err => {
+          openNotificationWithIcon("error", "Đăng nhập thất bại");
+          console.log(err);
         })
     }
   }

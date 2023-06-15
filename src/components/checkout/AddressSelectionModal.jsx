@@ -19,6 +19,8 @@ function AddressSelectionModal({ user, setAddress, setModalOpen, modalOpen }) {
                 if (res.status === 200) {
                     setAddressList(res.data);
                 }
+            }).catch(err => {
+                console.log(err);
             })
         }
 
