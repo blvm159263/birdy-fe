@@ -1,11 +1,16 @@
-import { faFilter, faMinus, faPlus, faStar, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faFilter, faMinus, faPlus, faStar, faXmark} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { togglePriceFilter, toggleRatingFilter, updatePriceFilter, updateRatingFilter } from '../features/search/searchSlice';
-import { toggleFilterSideBar } from '../features/ui/uiSlice';
-import { Slider } from 'antd';
-import { MAX_FILTER_PRICE } from '../constants/Constants'
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    togglePriceFilter,
+    toggleRatingFilter,
+    updatePriceFilter,
+    updateRatingFilter
+} from '../features/search/searchSlice';
+import {toggleFilterSideBar} from '../features/ui/uiSlice';
+import {Slider} from 'antd';
+import {MAX_FILTER_PRICE} from '../constants/Constants'
 
 export default function FilterSideBar() {
   const isShowing = useSelector(state => state.ui.isShowFilterSideBar);

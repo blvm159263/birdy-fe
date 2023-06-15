@@ -1,34 +1,35 @@
 import {faChevronLeft, faChevronRight, faFilter} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import React, {useEffect, useState} from 'react'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import {useParams} from 'react-router'
-import {Link, useSearchParams} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import productApi from '../api/productApi'
 import ProductCardList from '../components/product/ProductCardList'
 import StoreCard from '../components/store/StoreCard'
 import SearchType from '../constants/SearchType'
 import SortType from '../constants/SortType'
-import {updateSearchType, updateSortType} from '../features/search/searchSlice'
+import {decreasePage, increasePage, setPage, updateSortType} from '../features/search/searchSlice'
 import FilterSideBar from '../components/FilterSideBar'
 import {toggleFilterSideBar} from '../features/ui/uiSlice'
 
 export default function SearchPage() {
-  const [searchParams] = useSearchParams();
-  const searchText = searchParams.get('search') || '';
-  const sortType = searchParams.get('sortType') || SortType.DEFAULT;
-  const rating = searchParams.get('rating');
-  const fromPrice = searchParams.get('fromPrice');
-  const toPrice = searchParams.get('toPrice');
-  const page = searchParams.get('page') || 0;
+  const searchText = useSelector(state => state.search.searchText);
+  const [oldSearchText, setOldSearchText] = useState(undefined);
+  const triggerSearch = useSelector(state => state.search.searchTrigger);
+  const sortType = useSelector(state => state.search.sortType);
+  const rating = useSelector(state => state.search.rating);
+  const fromPrice = useSelector(state => state.search.fromPrice);
+  const toPrice = useSelector(state => state.search.toPrice);
+  const page = useSelector(state => state.search.page);
   const [products, setProducts] = useState([]);
-  const [totalPage, setTotalPage] = useState(undefined);
+  const [totalPage, setTotalPage] = useState(1);
   const { searchType } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     let isStillInPage = true;
-    dispatch(updateSearchType(searchType));
+    setOldSearchText(searchText);
 
     logInfo();
     const categoryId = Object.values(SearchType).filter((type) => type.text === searchType)[0].id;
@@ -76,11 +77,12 @@ export default function SearchPage() {
       })
       .catch((error) => console.log(error));
 
+
+
     return () => {
       isStillInPage = false;
-      dispatch(updateSearchType(SearchType.ALL_PRODUCT.text));
     }
-  }, [page, searchType, sortType, rating, fromPrice, toPrice]);
+  }, [triggerSearch, page, searchType, sortType, rating, fromPrice, toPrice]);
 
   function logInfo() {
     console.log("---------------------------")
@@ -107,8 +109,7 @@ export default function SearchPage() {
 
       <section className='container mx-auto mt-6'>
         <div className='flex justify-between mb-4'>
-            <p className='text-neutral-500'>{searchType} - <span className='text-neutral-500'>Search result for “<span className='text-orange-500'>{searchText}</span>”</span></p>
-            
+          <p className='text-neutral-500'>{searchType} - <span className='text-neutral-500'>Search result for “<span className='text-orange-500'>{oldSearchText}</span>”</span></p>
           <button onClick={() => {dispatch(toggleFilterSideBar())}} className='text-orange-500 text-lg font-semibold'><FontAwesomeIcon className='mr-2' icon={faFilter} />Filter</button>
         </div>
         <div className='sortByMenu flex justify-between items-center bg-gradient-to-r from-sky-500 to-blue-500 p-4 py-0 rounded-sm mb-6 text-xs md:text-base'>
@@ -127,11 +128,11 @@ export default function SearchPage() {
             <div className='ml-4 flex'>
               {page <= 0 ?
                 (<span className="block px-3 py-1 text-center rounded-sm bg-neutral-100 text-neutral-300"><FontAwesomeIcon icon={faChevronLeft}/></span>) :
-                (<Link to={`/search/${searchType}/${page - 1}`} className="block px-3 py-1 text-center rounded-sm bg-neutral-100"><FontAwesomeIcon icon={faChevronLeft}/></Link>)
+                (<button onClick={() => dispatch(decreasePage())} className="block px-3 py-1 text-center rounded-sm bg-neutral-100"><FontAwesomeIcon icon={faChevronLeft}/></button>)
               }
               {page >= totalPage - 1 ?
                 (<span className="block px-3 py-1 text-center rounded-sm bg-neutral-100 text-neutral-300"><FontAwesomeIcon icon={faChevronRight}/></span>) :
-                (<Link to={`/search/${searchType}/${1 + Number(page)}`} className="block px-3 py-1 text-center rounded-sm bg-neutral-100"><FontAwesomeIcon icon={faChevronRight}/></Link>)
+                (<button onClick={() => dispatch(increasePage())} className="block px-3 py-1 text-center rounded-sm bg-neutral-100"><FontAwesomeIcon icon={faChevronRight}/></button>)
               }
             </div>
           </div>
@@ -145,14 +146,14 @@ export default function SearchPage() {
         <div className='flex justify-center items-center gap-2 text-neutral-500 font-semibold py-4'>
           {page <= 0 ?
             (<span className="block px-2 rounded-sm text-neutral-300"><FontAwesomeIcon icon={faChevronLeft}/></span>) :
-            (<Link to={`/search/${searchType}/${page - 1}`} className="block px-2 rounded-sm text-neutral-500"><FontAwesomeIcon icon={faChevronLeft}/></Link>)
+            (<button onClick={() => dispatch(decreasePage())} className="block px-2 rounded-sm text-neutral-500"><FontAwesomeIcon icon={faChevronLeft}/></button>)
           }
           {[...Array(totalPage)].map((x, i) => (
-            <Link to={`/search/${searchType}/${i}`} key={i} className={`block px-2 rounded-sm ${Number(page) === i ? "text-white bg-orange-500" : ""}`}>{i + 1}</Link>
+            <button onClick={() => dispatch(setPage(i))} className={`block px-2 rounded-sm ${Number(page) === i ? "text-white bg-orange-500" : ""}`}>{i + 1}</button>
           ))}
           {page >= totalPage - 1 ?
             (<span className="block px-2 rounded-sm text-neutral-300"><FontAwesomeIcon icon={faChevronRight}/></span>) :
-            (<Link to={`/search/${searchType}/${1 + Number(page)}`} className="block px-2 rounded-sm text-neutral-500"><FontAwesomeIcon icon={faChevronRight}/></Link>)
+            (<button onClick={() => dispatch(increasePage())} className="block px-2 rounded-sm text-neutral-500"><FontAwesomeIcon icon={faChevronRight}/></button>)
           }
         </div>
       </section>

@@ -1,14 +1,12 @@
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, { useState } from "react"
-import {createSearchParams, Link} from "react-router-dom"
+import {faCartShopping} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import React, {useState} from "react"
+import {Link} from "react-router-dom"
 import SearchBar from "../features/search/SearchBar"
 import SearchType from "../constants/SearchType"
-import {useSelector} from "react-redux";
 
 export default function NavBar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const searchText = useSelector((state) => state.search.searchText);
 
   const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu)
 
@@ -29,40 +27,20 @@ export default function NavBar() {
           <SearchBar />
           <ul className="hidden md:flex text-white justify-between pt-2">
             <li>
-              <Link to={{
-                pathname: `/search/${SearchType.ALL_PRODUCT.text}`,
-                search: createSearchParams({
-                  search: searchText
-                }).toString()
-              }}>
+              <Link to={`/search/${SearchType.ALL_PRODUCT.text}`}>
                 All Products
               </Link>
             </li>
             <li>
-              <Link to={{
-                pathname: `/search/${SearchType.BIRD.text}`,
-                search: createSearchParams({
-                  search: searchText
-                }).toString()
-              }}>Birds</Link>
+              <Link to={`/search/${SearchType.BIRD.text}`}>Birds</Link>
             </li>
             <li>
-              <Link to={{
-                pathname: `/search/${SearchType.ACCESSORY.text}`,
-                search: createSearchParams({
-                  search: searchText
-                }).toString()
-              }}>
+              <Link to={`/search/${SearchType.ACCESSORY.text}`}>
                 Accessories
               </Link>
             </li>
             <li>
-              <Link to={{
-                pathname: `/search/${SearchType.FOOD.text}`,
-                search: createSearchParams({
-                  search: searchText
-                }).toString()
-              }}>Foods</Link>
+              <Link to={`/search/${SearchType.FOOD.text}`}>Foods</Link>
             </li>
           </ul>
         </div>
