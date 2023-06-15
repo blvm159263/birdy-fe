@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect, useContext } from "react"
 import { Select, Modal, Upload, DatePicker } from "antd"
 import { PlusOutlined } from "@ant-design/icons"
 import productApi from "../../api/productApi"
+import { NotificationContext } from "../../context/NotificationProvider"
 
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
@@ -14,6 +15,8 @@ const getBase64 = (file) =>
     });
 
 function CreateProduct() {
+
+    const openNotificationWithIcon = useContext(NotificationContext);
 
     const [error, setError] = useState(null);
     const [errorSub, setErrorSub] = useState(null);
@@ -203,6 +206,9 @@ function CreateProduct() {
         // console.log(productDto.gender);
         productApi.addNewProduct(params).then((res) => {
             console.log(res);
+            if(res.status === 201){
+                openNotificationWithIcon('Success', 'Add new product successfully!');
+            }
         }).catch((err) => {
             console.log(err);
         })
