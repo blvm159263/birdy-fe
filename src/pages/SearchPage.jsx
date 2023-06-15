@@ -12,6 +12,8 @@ import SortType from '../constants/SortType'
 import {decreasePage, increasePage, setPage, updateSortType} from '../features/search/searchSlice'
 import FilterSideBar from '../components/FilterSideBar'
 import {toggleFilterSideBar} from '../features/ui/uiSlice'
+import shopApi from "../api/shopApi";
+import StoreCardList from "../components/store/StoreCardList";
 
 export default function SearchPage() {
   const searchText = useSelector(state => state.search.searchText);
@@ -23,6 +25,7 @@ export default function SearchPage() {
   const toPrice = useSelector(state => state.search.toPrice);
   const page = useSelector(state => state.search.page);
   const [products, setProducts] = useState([]);
+  const [shops, setShops] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const { searchType } = useParams();
   const dispatch = useDispatch();
@@ -77,7 +80,15 @@ export default function SearchPage() {
       })
       .catch((error) => console.log(error));
 
-
+    // Call search shop api
+    shopApi.searchShopByName({name: searchText}).then((response) => {
+      if(isStillInPage) {
+        setShops(response.data);
+        console.log(response.data);
+      } else {
+        console.log('Leave page, cancel load shop data');
+      }
+    }).catch((error) => console.log(error));
 
     return () => {
       isStillInPage = false;
@@ -98,15 +109,17 @@ export default function SearchPage() {
   return (
     <div id='searchPage' className='bg-neutral-100 px-2 md:px-0 py-4'>
       <FilterSideBar/>
-      {/* To-do: Add Search shop*/}
-      {false ? (<section className='container mx-auto'>
+
+      {/* Search shop results */}
+      {shops.length > 0 ? (<section className='container mx-auto'>
         <div className='flex justify-between mb-4'>
-          <p className='text-neutral-500'>Shop related to “<span className='text-orange-500'>{searchText}</span>”</p>
+          <p className='text-neutral-500'>Shop related to “<span className='text-orange-500'>{oldSearchText}</span>”</p>
           <Link to="/search" className='text-orange-500 text-lg font-semibold'>See more <FontAwesomeIcon className='ml-1' icon={faChevronRight} size='xs'/></Link>
         </div>
-        <StoreCard/>
+        <StoreCardList shops={shops.slice(0, 2)}/>
       </section>) : ''}
 
+      {/* Search product results */}
       <section className='container mx-auto mt-6'>
         <div className='flex justify-between mb-4'>
           <p className='text-neutral-500'>{searchType} - <span className='text-neutral-500'>Search result for “<span className='text-orange-500'>{oldSearchText}</span>”</span></p>
