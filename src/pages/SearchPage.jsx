@@ -6,7 +6,6 @@ import {useParams} from 'react-router'
 import {Link} from 'react-router-dom'
 import productApi from '../api/productApi'
 import ProductCardList from '../components/product/ProductCardList'
-import StoreCard from '../components/store/StoreCard'
 import SearchType from '../constants/SearchType'
 import SortType from '../constants/SortType'
 import {decreasePage, increasePage, setPage, updateSearchType, updateSortType} from '../features/search/searchSlice'
@@ -115,7 +114,7 @@ export default function SearchPage() {
       {shops.length > 0 ? (<section className='container mx-auto'>
         <div className='flex justify-between mb-4'>
           <p className='text-neutral-500'>Shop related to “<span className='text-orange-500'>{oldSearchText}</span>”</p>
-          <Link to="/search" className='text-orange-500 text-lg font-semibold'>See more <FontAwesomeIcon className='ml-1' icon={faChevronRight} size='xs'/></Link>
+          <Link to="/search/all-shop" className='text-orange-500 text-lg font-semibold'>See more <FontAwesomeIcon className='ml-1' icon={faChevronRight} size='xs'/></Link>
         </div>
         <StoreCardList shops={shops.slice(0, 2)}/>
       </section>) : ''}

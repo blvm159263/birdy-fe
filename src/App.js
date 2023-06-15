@@ -22,6 +22,7 @@ import UserAddress from "./components/user/userAddress/UserAddress"
 import UserPage from "./pages/UserPage"
 import UserOrder from "./components/user/userOrder/UserOrder"
 import ViewShopPage from "./pages/ViewShopPage";
+import AllShopsPage from "./pages/AllShopsPage";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="/search">
+            <Route path="all-shop" element={<AllShopsPage/>} />
             <Route path=":searchType" element={<SearchPage />} />
           </Route>
           <Route path="/detail-item/:id" element={<DetailItemPage />} />
