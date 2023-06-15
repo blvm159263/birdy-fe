@@ -60,7 +60,7 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
                 />
             </div>
             <div className="col-span-2">
-                <span className='font-bold mr-16'>${shipmentPrice}</span>
+                <span className='font-bold mr-16'>${shipmentPrice.toFixed(2)}</span>
             </div>
         </div>
     )

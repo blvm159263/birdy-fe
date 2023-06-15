@@ -21,10 +21,13 @@ function NewAddressModal({ user, setModalOpen, addressList, setAddressList, newA
     const [isCheckDefault, setIsCheckDefault] = useState(false);
     const [address, setAddress] = useState('');
 
+
     const handleProvinceChange = (value) => {
         if (value) {
             setProvince(value);
             setCities(City.getCitiesOfState('VN', provinceData.find((province) => province.name === value).isoCode));
+        }else{
+
         }
 
     };
@@ -41,6 +44,10 @@ function NewAddressModal({ user, setModalOpen, addressList, setAddressList, newA
     };
 
     const onSubmit = () => {
+        if(!province || !city || !address){
+            openNotificationWithIcon("Error", "Please fill in all the fields!")
+            return;
+        }
         var params = {
             address: address + ', ' + city + ', ' + province,
             isDefault: isCheckDefault,
@@ -93,6 +100,7 @@ function NewAddressModal({ user, setModalOpen, addressList, setAddressList, newA
             <div className='font-bold text-lg pb-3 border-b-2'>Thêm địa chỉ mới</div>
             <Space className='mt-6' wrap>
                 <Select
+                
                     style={{
                         width: 225,
                     }}
