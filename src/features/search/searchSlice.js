@@ -1,9 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {MAX_FILTER_PRICE} from '../../constants/Constants'
 import SortType from "../../constants/SortType";
+import SearchType from "../../constants/SearchType";
 
 const initialState = {
     searchText: '',
+    searchType: SearchType.ALL_PRODUCT,
     sortType: SortType.DEFAULT,
     searchTrigger: false,
     rating: undefined,
@@ -18,6 +20,9 @@ export const searchSlice = createSlice({
     reducers: {
         updateSearchText: (state, action) => {
             state.searchText = action.payload;
+        },
+        updateSearchType: (state, action) => {
+            state.searchType = Object.values(SearchType).find(type => type.text === action.payload);
         },
         updateSortType: (state, action) => {
             state.sortType = action.payload;
@@ -63,6 +68,7 @@ export const searchSlice = createSlice({
 });
 
 export const { updateSearchText,
+    updateSearchType,
     updateSortType,
     toggleRatingFilter,
     updateRatingFilter,

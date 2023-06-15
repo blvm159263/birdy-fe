@@ -9,7 +9,7 @@ import ProductCardList from '../components/product/ProductCardList'
 import StoreCard from '../components/store/StoreCard'
 import SearchType from '../constants/SearchType'
 import SortType from '../constants/SortType'
-import {decreasePage, increasePage, setPage, updateSortType} from '../features/search/searchSlice'
+import {decreasePage, increasePage, setPage, updateSearchType, updateSortType} from '../features/search/searchSlice'
 import FilterSideBar from '../components/FilterSideBar'
 import {toggleFilterSideBar} from '../features/ui/uiSlice'
 import shopApi from "../api/shopApi";
@@ -33,6 +33,7 @@ export default function SearchPage() {
   useEffect(() => {
     let isStillInPage = true;
     setOldSearchText(searchText);
+    dispatch(updateSearchType(searchType));
 
     logInfo();
     const categoryId = Object.values(SearchType).filter((type) => type.text === searchType)[0].id;
