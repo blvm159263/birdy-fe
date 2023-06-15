@@ -14,10 +14,10 @@ export default function StoreCard({shop}) {
         </div>
         <div className=''>
           <Link to="/search" className='block bg-gradient-to-r from-blue-500 to-sky-500 text-center rounded-sm py-1 px-2 md:px-8 font-semibold text-white text-xs md:text-sm mb-1'>Chat</Link>
-          <Link to="/search" className='block bg-gradient-to-r from-blue-500 to-sky-500 text-center rounded-sm py-1 px-2 md:px-8 font-semibold text-white text-xs md:text-sm'>View</Link>
+          <Link to={`/view-shop/${shop.id}`} className='block bg-gradient-to-r from-blue-500 to-sky-500 text-center rounded-sm py-1 px-2 md:px-8 font-semibold text-white text-xs md:text-sm'>View</Link>
         </div>
       </div>
-      <div className='border border-neutral-200 mr-2 md:mr-6 hidden lg:block' />
+      <div className='border border-neutral-100 mr-2 md:mr-6 hidden lg:block' />
       <div className='col-span-4 mr-2 md:mr-6'>
         {/* TODO: Store total product */}
         <p className='text-xs md:text-base'><span className='font-semibold'>{'24'}</span> Products</p>
@@ -33,7 +33,7 @@ export default function StoreCard({shop}) {
           <p className="ml-2 text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400">(3)</p>
         </div>
       </div>
-      <div className='border border-neutral-200 mr-2 md:mr-6 hidden lg:block' />
+      <div className='border border-neutral-100 mr-2 md:mr-6 hidden lg:block' />
       <div className='flex items-center'>
         <FontAwesomeIcon className='text-sky-500 pr-2 md:pr-4 w-6 h-6 md:w-8 md:h-8' icon={faLocationDot} size='2x' />
         <p className='text-xs md:text-base'>{shop.address}</p>

@@ -21,6 +21,7 @@ import UserInfor from "./components/user/userInfor/UserInfor"
 import UserAddress from "./components/user/userAddress/UserAddress"
 import UserPage from "./pages/UserPage"
 import UserOrder from "./components/user/userOrder/UserOrder"
+import ViewShopPage from "./pages/ViewShopPage";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path="/user/:userid/address" element={<UserAddress />} />
             <Route path="/user/:userid/order" element={<UserOrder />} />
           </Route>
+          <Route path="view-shop/:id" element={<ViewShopPage/>} />
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />

@@ -18,6 +18,14 @@ const shopApi = {
     searchShopByName(params) {
         const url = '/shops/search';
         return axiosClient.get(url, {params});
+    },
+    getLatestShopProductsByShopId(id, params) {
+        const url = `/shops/${id}/products/latest`;
+        return axiosClient.get(url, {params});
+    },
+    getShopProductsByShopIdAndCategoryId(id, categoryId, params) {
+        const url = `/shops/${id}/products/category/${categoryId}`;
+        return axiosClient.get(url, {params});
     }
 }
 
