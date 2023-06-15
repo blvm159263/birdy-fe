@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {  deleteAllSelected } from '../features/cart/cartSlice';
+import { deleteAllSelected } from '../features/cart/cartSlice';
 import ShopWrapper from '../components/cart/ShopWrapper';
 import { Button } from 'antd';
 import { LoginContext } from '../context/LoginProvider';
@@ -18,7 +18,7 @@ export default function CheckoutPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { isLogin } = useContext(LoginContext);    
+    const { isLogin } = useContext(LoginContext);
     const openNotificationWithIcon = useContext(NotificationContext);
 
     const items = useSelector(state => state.cart.items.filter(item => item.selected === true));
@@ -95,13 +95,13 @@ export default function CheckoutPage() {
         var params = { orderList: orderList, orderDetailList: orderDetailList }
         var code;
         await orderApi.createOrder(params).then(res => {
-            if (res.status === 200) { 
+            if (res.status === 200) {
                 code = res.data;
                 openNotificationWithIcon("Place order successfully!", "Redirecting to payment page...")
             }
         })
-        if(code){
-            await paymentApi.getQRMomo({amount : amount, orderId : code}).then(res => {
+        if (code) {
+            await paymentApi.getQRMomo({ amount: amount, orderId: code }).then(res => {
                 window.location.href = res.data.payUrl;
                 dispatch(deleteAllSelected());
             })
@@ -171,7 +171,7 @@ export default function CheckoutPage() {
                         <span className='font-bold'>${totalPrice.toFixed(2)} + ${totalShipment.toFixed(2)} = ${(totalPrice + totalShipment).toFixed(2)}</span>
                     </div>
                     <div className="col-span-2">
-                        {(totalProduct === 0 || totalShipment === 0 || shipmentIds.length !== shopIds.length || address) ?
+                        {(totalProduct === 0 || totalShipment === 0 || shipmentIds.length !== shopIds.length || address === null) ?
                             (<span to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
                             (<button to="/cart/checkout" onClick={onCheckout} className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</button>)}
                     </div>
