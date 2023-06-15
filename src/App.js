@@ -62,13 +62,12 @@ function App() {
           <Route path="/detail-item/:id" element={<DetailItemPage />} />
           <Route path="/cart">
             <Route index element={<CartPage />} />
+            <Route path="/cart/checkout" element={<CheckoutPage />} />
           </Route>
           <Route path="/user/:userid" element={<UserPage />}>
             <Route index element={<UserInfor />} />
             <Route path="/user/:userid/address" element={<UserAddress />} />
             <Route path="/user/:userid/order" element={<UserOrder />} />
-            <Route index element={<CartPage />} />
-            <Route path="/cart/checkout" element={<CheckoutPage />} />
           </Route>
           <Route path="*" element={<NoPage />} />
         </Route>
