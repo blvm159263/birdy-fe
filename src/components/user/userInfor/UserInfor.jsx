@@ -1,13 +1,11 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-
+import { setGender } from "../../../features/user/userSlice"
 
 function UserInfor() {
   const userInformation = useSelector((state) => state.user.userInformation)
-
+  const dispatch = useDispatch()
   const handleSaveInformation = (e) => [e.preventDefault()]
-
-
 
   return (
     <div className="w-5/6 bg-white">
@@ -72,7 +70,7 @@ function UserInfor() {
                   <input
                     type="radio"
                     name="gender"
-                    checked={userInformation && userInformation.gender === 1}
+                    value="1"
                     id="male"
                     className="mr-3"
                   />{" "}
@@ -83,7 +81,7 @@ function UserInfor() {
                     type="radio"
                     name="gender"
                     className="mr-3"
-                    checked={userInformation && userInformation.gender === 2}
+                    value="2"
                     id="female"
                   />{" "}
                   <label className="mr-4" htmlFor="female">

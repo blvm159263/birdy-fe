@@ -10,5 +10,6 @@ export const store = configureStore({
     ui: uiReducer,
     cart: cartReducer,
     user: userReducer,
+    
   },
 })

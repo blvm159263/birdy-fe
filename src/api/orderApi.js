@@ -1,7 +1,7 @@
 import axiosClient from "./axiosClient"
 
 const orderApi = {
-  getOrderByUserId(id) {
+  getAllOrderByUserId(id) {
     const url = `/order/users/` + id
     return axiosClient.get(url)
   },
