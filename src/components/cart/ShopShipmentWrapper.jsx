@@ -1,9 +1,13 @@
 import { Select } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import shopApi from "../../api/shopApi";
 import orderApi from "../../api/orderApi";
+import { el } from "date-fns/locale";
+import {NotificationContext} from '../../context/NotificationProvider';
 
 function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, address, totalShipment, setTotalShipment }) {
+
+    const openNotificationWithIcon = useContext(NotificationContext);
 
     const [shipmentList, setShipmentList] = useState([]);
     const [shipmentPrice, setShipmentPrice] = useState(0);
@@ -19,30 +23,34 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
 
         }).catch(err => { console.log(err); });
     }, [])
-    
+
     const onSelectedShipment = (value) => {
-        if(prevShipmentId !== 0){
+        if (prevShipmentId !== 0) {
             var index = shipmentIds.indexOf(prevShipmentId);
-            if(index !== -1){
+            if (index !== -1) {
                 //replace prevShipmentId with value
                 shipmentIds[index] = value;
-                setShipmentIds(shipmentIds);      
+                setShipmentIds(shipmentIds);
             }
-        }else{
+        } else {
             setShipmentIds([...shipmentIds, value]);
         }
         setPrevShipmentId(value);
-        
-        orderApi.getShipmentPrice({
-            shopId: shopId,
-            addressId: address.id,
-            shipmentId: value
-        }).then(res => {
-            if(res.status === 200){
-                setShipmentPrice(res.data);
-                setTotalShipment(totalShipment + res.data)
-            }
-        }).catch(err => { console.log(err); });
+        if (address) {
+            orderApi.getShipmentPrice({
+                shopId: shopId,
+                addressId: address.id,
+                shipmentId: value
+            }).then(res => {
+                if (res.status === 200) {
+                    setShipmentPrice(res.data);
+                    setTotalShipment(totalShipment + res.data)
+                }
+            }).catch(err => { console.log(err); });
+        }else{
+            openNotificationWithIcon('Warning','Please select address first')
+        }
+
     };
 
     return (
@@ -51,7 +59,7 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
                 Shipment Type:
                 <Select
                     className="ml-4"
-                    onChange={(value) => {onSelectedShipment(value)}}
+                    onChange={(value) => { onSelectedShipment(value) }}
                     options={shipmentList.map((shipment) => ({
                         label: shipment.shipmentTypeName,
                         value: shipment.id,
@@ -60,7 +68,7 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
                 />
             </div>
             <div className="col-span-2">
-                <span className='font-bold mr-16'>${shipmentPrice.toFixed(2)}</span>
+                <span className='font-bold mr-16'>${shipmentPrice.toFixed(3)}</span>
             </div>
         </div>
     )

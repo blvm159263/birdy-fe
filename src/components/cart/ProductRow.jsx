@@ -26,7 +26,7 @@ export default function ProductRow({id, hideControl}) {
                 <input type='checkbox' checked={selected} onChange={() => dispatch(toggleSelectItem({id: id}))}/>
             </div>
             <Link className="flex col-span-3 items-center gap-4" to={`/detail-item/${id}`}>
-                <img className='aspect-square rounded-sm w-24' src='/assets/images/product-demo.png' alt='product' />
+                <img className='aspect-square rounded-sm w-24' src={product.imageMain} alt='product' />
                 <p className='font-bold'>{product.productName}</p>
             </Link>
             <div className='col-span-1'>

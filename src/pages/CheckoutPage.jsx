@@ -171,7 +171,7 @@ export default function CheckoutPage() {
                         <span className='font-bold'>${totalPrice.toFixed(2)} + ${totalShipment.toFixed(2)} = ${(totalPrice + totalShipment).toFixed(2)}</span>
                     </div>
                     <div className="col-span-2">
-                        {(totalProduct === 0 || totalShipment === 0 || shipmentIds.length !== shopIds.length || address === null) ?
+                        {(totalProduct === 0 || shipmentIds.length !== shopIds.length || address === null) ?
                             (<span to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
                             (<button to="/cart/checkout" onClick={onCheckout} className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</button>)}
                     </div>
