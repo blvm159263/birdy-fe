@@ -21,6 +21,8 @@ import UserInfor from "./components/user/userInfor/UserInfor"
 import UserAddress from "./components/user/userAddress/UserAddress"
 import UserPage from "./pages/UserPage"
 import UserOrder from "./components/user/userOrder/UserOrder"
+import ViewShopPage from "./pages/ViewShopPage";
+import AllShopsPage from "./pages/AllShopsPage";
 import CheckoutPage from "./pages/CheckoutPage"
 import { useEffect, useContext } from "react"
 import storageService from "./api/storage"
@@ -57,7 +59,8 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="/search">
-            <Route path=":searchType/:page" element={<SearchPage />} />
+            <Route path="all-shop" element={<AllShopsPage/>} />
+            <Route path=":searchType" element={<SearchPage />} />
           </Route>
           <Route path="/detail-item/:id" element={<DetailItemPage />} />
           <Route path="/cart">
@@ -69,6 +72,7 @@ function App() {
             <Route path="/user/:userid/address" element={<UserAddress />} />
             <Route path="/user/:userid/order" element={<UserOrder />} />
           </Route>
+          <Route path="view-shop/:id" element={<ViewShopPage/>} />
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
