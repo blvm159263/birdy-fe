@@ -1,8 +1,10 @@
 import React, { useState } from "react"
+import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
 function UserSidebar(isAtPage, handleChangePage) {
   const [isDropDown, setIsDropDown] = useState(false)
+  const userInformation = useSelector((state) => state.user.userInformation)
 
   return (
     <div className="w-1/6 py-3 bg-sky-400 border-gray-200 text-white">
@@ -10,7 +12,7 @@ function UserSidebar(isAtPage, handleChangePage) {
         <div className="h-10 mb-1">
           <img className="h-full" src="/assets/images/shop_avar.png" alt="" />
         </div>
-        <p>Username</p>
+        <p>{userInformation && userInformation.fullName}</p>
       </div>
       <hr />
       <div className="pl-8">

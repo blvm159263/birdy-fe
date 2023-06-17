@@ -44,32 +44,10 @@ const productApi = {
         const url = '/products/create'
         return axiosClient.post(url, data, config);
     },
-    // test(params) {
-    //     const data = new FormData();
-    //     data.append('mainImage', params);
-    //     const config = {
-    //         headers: {
-    //             'Content-type': 'multipart/form-data',
-    //         },
-    //     };
-    //     const url = '/products/test'
-    //     return axiosClient.post(url, data, config);
-    // }
-    test(params) {
-        const data = new FormData();
-        data.append('productDTO', params.productDTO);
-        data.append('mainImage', params.mainImage);
-        params.subImages.forEach((image) => {
-            data.append('subImages', image);
-        });        
-        const config = {
-            headers: {
-                'Content-type': 'multipart/form-data',
-            },
-        };
-        const url = '/products/test'
-        return axiosClient.post(url, data, config);
-    }
+    getProductReview(productId, params) {
+        const url = `/products/review/${productId}`
+        return axiosClient.get(url, { params });
+    },
 
 };
 

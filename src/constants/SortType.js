@@ -1,5 +1,5 @@
 const SortType = {
-    DEFAULT: "default",
+    DEFAULT: "relevant",
     NEWEST: "newest",
     ASC: "asc",
     DESC: "desc",

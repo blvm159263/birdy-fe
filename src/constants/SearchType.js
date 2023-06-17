@@ -1,8 +1,4 @@
 const SearchType = {
-    DEFAULT: {
-        text: "all",
-        id: undefined
-    },
 	ALL_PRODUCT: {
         text: "all-products",
         id: undefined

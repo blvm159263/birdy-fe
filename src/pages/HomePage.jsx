@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import React, {useEffect, useState} from "react"
+import {Link} from "react-router-dom"
 import productApi from "../api/productApi"
 import ImageCarousel from "../components/ImageCarousel"
 import ProductCardList from "../components/product/ProductCardList"
+import {useDispatch} from "react-redux";
+import {resetAllState} from "../features/search/searchSlice";
 
 const imageUrls = [
   "https://i.pinimg.com/736x/b1/92/87/b192870538036f95ffc468da4874164e.jpg",
@@ -11,7 +13,8 @@ const imageUrls = [
 ]
 
 export default function HomePage() {
-  const [products, setProducts] = useState([])
+  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     productApi
@@ -20,7 +23,7 @@ export default function HomePage() {
         setProducts(response.data)
         console.log(response.data)
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error));
   }, [])
 
   return (
@@ -52,8 +55,8 @@ export default function HomePage() {
             </h1>
           </div>
           <ProductCardList products={products} />
-          <Link
-            to="/search/all-products/0"
+          <Link onClick={() => dispatch(resetAllState())}
+            to="/search/all-products"
             className="self-center rounded-sm bg-orange-500 text-white px-4 py-1 block mx-auto my-10"
           >
             SEE MORE

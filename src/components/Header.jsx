@@ -1,14 +1,28 @@
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
 import SearchBar from "../features/search/SearchBar"
 import SearchType from "../constants/SearchType"
+import React, { useState, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import jwtDecode from "jwt-decode";
+import storageService from '../api/storage';
+import { LoginContext } from '../context/LoginProvider';
+
 
 export default function NavBar() {
+
+  const { isLogin, setIsLogin, setRole } = useContext(LoginContext);
+
   const [showMobileMenu, setShowMobileMenu] = useState(false)
 
-  const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu)
+  const onLogout = () => {
+    storageService.removeAccessToken();
+    setIsLogin(false);
+    setRole('');
+    window.location.reload();
+  }
+
+  const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
 
   return (
     <nav className="bg-gradient-to-r from-sky-500 via-blue-500 to-sky-500 border-gray-200">
@@ -27,20 +41,20 @@ export default function NavBar() {
           <SearchBar />
           <ul className="hidden md:flex text-white justify-between pt-2">
             <li>
-              <Link to={`/search/${SearchType.DEFAULT.text}/0`}>
+              <Link to={`/search/${SearchType.ALL_PRODUCT.text}`}>
                 All Products
               </Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.BIRD.text}/0`}>Birds</Link>
+              <Link to={`/search/${SearchType.BIRD.text}`}>Birds</Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.ACCESSORY.text}/0`}>
+              <Link to={`/search/${SearchType.ACCESSORY.text}`}>
                 Accessories
               </Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.FOOD.text}/0`}>Foods</Link>
+              <Link to={`/search/${SearchType.FOOD.text}`}>Foods</Link>
             </li>
           </ul>
         </div>
@@ -112,18 +126,21 @@ export default function NavBar() {
             </li>
           </ul>
         </div>
+        <div className='absolute top-0 right-0 hidden md:flex text-white text-sm xl:text-base'>
 
-        <div className="absolute top-0 right-0 hidden md:flex text-white text-sm xl:text-base">
-          <Link to="/" className="px-2 pt-1 mr-2">
-            SELL PRODUCT
-          </Link>
-          <Link to="/login" className="px-2 pt-1">
-            SIGN IN
-          </Link>
-          <span className="px-2 pt-[0.2rem]">|</span>
-          <Link to="/" className="px-2 pt-1">
-            SIGN UP
-          </Link>
+          {isLogin ?
+            <>
+              <Link to="/" className='px-2 pt-1'>PROFILE</Link>
+              <span className='px-2 pt-[0.2rem]'>|</span>
+              <span onClick={onLogout} className='px-2 pt-[0.2rem]'>Log Out</span>
+            </>
+
+            :
+            <>
+              <Link to="/" className='px-2 pt-1 mr-2'>SELL PRODUCT</Link>
+              <Link to="/login" className='px-2 pt-1'>SIGN IN</Link>
+            </>}
+
         </div>
       </div>
     </nav>
