@@ -1,6 +1,11 @@
 @tailwind base;
+.ant-btn-primary {
+  background-color: #1677ff;
+}
+
 @tailwind components;
 @tailwind utilities;
+
 
 .App {
   text-align: center;

@@ -400,12 +400,12 @@ function CreateProduct() {
                                     Age (optional)
                                 </label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     min={1}
                                     max={100}
                                     id="age"
                                     name="age"
-                                    placeholder="bird age"
+                                    placeholder="bird age (Years | Months | Days)"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
                                 />
                             </div>}
