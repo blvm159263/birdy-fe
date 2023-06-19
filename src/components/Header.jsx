@@ -7,13 +7,15 @@ import { Link } from 'react-router-dom'
 import jwtDecode from "jwt-decode";
 import storageService from '../api/storage';
 import { LoginContext } from '../context/LoginProvider';
+import {useSelector} from "react-redux";
 
 
 export default function NavBar() {
 
   const { isLogin, setIsLogin, setRole } = useContext(LoginContext);
 
-  const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const cartCount = useSelector((state) => state.cart.items.length);
 
   const onLogout = () => {
     storageService.removeAccessToken();
@@ -61,10 +63,11 @@ export default function NavBar() {
         <div className="flex">
           <Link
             to="/cart"
-            className="block p-2.5 mr-1 text-white"
+            className="block p-2.5 mr-1 text-white relative"
             aria-current="page"
           >
             <FontAwesomeIcon icon={faCartShopping} size="1x" />
+            <span className='cart-count absolute bottom-1.5 -right-1.5 text-center text-xs h-4 w-4 rounded-full bg-orange-500'>{cartCount}</span>
           </Link>
           <button
             onClick={toggleMobileMenu}
