@@ -48,7 +48,10 @@ const productApi = {
         const url = `/products/review/${productId}`
         return axiosClient.get(url, { params });
     },
-
+    getAllFeaturedProduct(params) {
+        const url = `/products/view/all`;
+        return axiosClient.get(url, {params});
+    }
 };
 
 export default productApi;

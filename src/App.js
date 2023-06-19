@@ -28,6 +28,7 @@ import { useEffect, useContext } from "react"
 import storageService from "./api/storage"
 import jwtDecode from "jwt-decode";
 import { LoginContext } from "./context/LoginProvider"
+import AllFeaturedPage from "./pages/AllFeaturedPage";
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
+          <Route path='all-featured' element={<AllFeaturedPage/>} />
           <Route path="/search">
             <Route path="all-shop" element={<AllShopsPage/>} />
             <Route path=":searchType" element={<SearchPage />} />
