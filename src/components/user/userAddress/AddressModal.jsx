@@ -29,7 +29,8 @@ function AddressModal({ isModal, setIsModal, fetchAddress }) {
       ...newAddress,
       [name]: value,
     })
-    console.log(newAddress)
+
+    console.log(value, name)
   }
 
   const handleAddAddress = (e) => {
@@ -40,7 +41,8 @@ function AddressModal({ isModal, setIsModal, fetchAddress }) {
     handleResetForm()
 
     setIsModal(false)
-    fetchAddress()
+
+    fetchAddress(userid)
   }
 
   const handleResetForm = () => {
