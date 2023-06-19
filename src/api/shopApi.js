@@ -34,6 +34,10 @@ const shopApi = {
     getShopOrders(id){
         const url = '/shops/' + id + '/orders';
         return axiosClient.get(url); 
+    },
+    searchShopByNameAndStatus(status, params) {
+        const url = `/shops/${status}/view`;
+        return axiosClient.get(url, {params});
     }
 }
 

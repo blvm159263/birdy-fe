@@ -2,20 +2,28 @@ import StoreCardList from "../components/store/StoreCardList";
 import React, {useEffect, useState} from "react";
 import shopApi from "../api/shopApi";
 import {useSelector} from "react-redux";
+import Pagination from "../features/search/Pagination";
 
 export default function AllShopsPage() {
   const searchText = useSelector(state => state.search.searchText);
   const [oldSearchText, setOldSearchText] = useState(undefined);
   const [shops, setShops] = useState([]);
+  const [totalPage, setTotalPage] = useState(1);
+  const page = useSelector(state => state.search.page);
 
   useEffect(() => {
     let isStillInPage = true;
     setOldSearchText(searchText);
 
+    const params = {
+      search: searchText,
+      page: page
+    }
     // Call search shop api
-    shopApi.searchShopByName({name: searchText}).then((response) => {
+    shopApi.searchShopByNameAndStatus(true, params).then((response) => {
       if(isStillInPage) {
-        setShops(response.data);
+        setShops(response.data[0]);
+        setTotalPage(response.data[1]);
         console.log(response.data);
       } else {
         console.log('Leave page, cancel load shop data');
@@ -36,6 +44,9 @@ export default function AllShopsPage() {
         </div>
         <StoreCardList shops={shops}/>
       </section>) : ''}
+
+      {/* Pagination */}
+      <Pagination totalPage={totalPage}/>
     </div>
   )
 }

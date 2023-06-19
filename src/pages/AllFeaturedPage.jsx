@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from "react";
 import ProductCardList from "../components/product/ProductCardList";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faChevronRight} from "@fortawesome/free-solid-svg-icons";
-import {decreasePage, increasePage, setPage} from "../features/search/searchSlice";
 import productApi from "../api/productApi";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
+import Pagination from "../features/search/Pagination";
 
 export default function() {
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const page = useSelector(state => state.search.page);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     let isStillInPage = true;
@@ -54,19 +51,7 @@ export default function() {
         ) : ''}
 
         {/* Pagination */}
-        <div className='flex justify-center items-center gap-2 text-neutral-500 font-semibold py-4'>
-          {page <= 0 ?
-            (<span className="block px-2 rounded-sm text-neutral-300"><FontAwesomeIcon icon={faChevronLeft}/></span>) :
-            (<button onClick={() => dispatch(decreasePage())} className="block px-2 rounded-sm text-neutral-500"><FontAwesomeIcon icon={faChevronLeft}/></button>)
-          }
-          {[...Array(totalPage)].map((x, i) => (
-            <button onClick={() => dispatch(setPage(i))} className={`block px-2 rounded-sm ${Number(page) === i ? "text-white bg-orange-500" : ""}`}>{i + 1}</button>
-          ))}
-          {page >= totalPage - 1 ?
-            (<span className="block px-2 rounded-sm text-neutral-300"><FontAwesomeIcon icon={faChevronRight}/></span>) :
-            (<button onClick={() => dispatch(increasePage())} className="block px-2 rounded-sm text-neutral-500"><FontAwesomeIcon icon={faChevronRight}/></button>)
-          }
-        </div>
+        <Pagination totalPage={totalPage}/>
       </section>
     </div>
   )
