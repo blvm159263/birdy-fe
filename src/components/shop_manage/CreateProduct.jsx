@@ -3,6 +3,10 @@ import { Select, Modal, Upload, DatePicker } from "antd"
 import { PlusOutlined } from "@ant-design/icons"
 import productApi from "../../api/productApi"
 import { NotificationContext } from "../../context/NotificationProvider"
+import ReactQuill from "react-quill"
+import "react-quill/dist/quill.snow.css"
+import { el } from "date-fns/locale"
+import { set } from "date-fns"
 
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
@@ -30,23 +34,76 @@ function CreateProduct() {
     const [nameLength, setNameLength] = useState(0);
     const [des, setDes] = useState('');
     const [desLength, setDesLength] = useState(0);
-    const textAreaRef = useRef(null);
+    // const textAreaRef = useRef(null);
+
+    const modules = {
+        toolbar: [
+            [{ size: [] }],
+            [{ font: [] }],
+            ["bold", "italic", "underline", "strike"],
+            [{ color: [] }, "link"],
+            [{ 'header': 1 }, { 'header': 2 }, "blockquote"], ,
+            [{ align: ["right", "center", "justify"] }],
+            [{ indent: "-1" }, { indent: "+1" }],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["clean"],
+        ]
+    };
+
+    const formats = [
+        "size",
+        "font",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "color",
+        "link",
+        "header",
+        "blockquote",
+        "align",
+        "indent",
+        "list",
+        "bullet",
+    ];
+
+    const quillRef = useRef(null);
+    // const [code, setCode] = useState('');
+    const handleProcedureContentChange = (content) => {
+        // console.log(content);
+        if (quillRef.current) {
+            const quill = quillRef.current.getEditor();
+            const length = quill.getLength() - 1;
+            // const length = text.replace(/\n/g, '').replace(/ /g, '').length;
+            // console.log('Length:', length);
+            setDesLength(length);
+            if (length > 3000) {
+                quill.deleteText(3000, length);
+            }
+            else if (length === 0) {
+                setDes(null);
+            }
+            else {
+                setDes(content);
+            }
+        }
+    };
 
     const onChangeName = (e) => {
         setNameLength(e.target.value.length);
     }
 
-    const resizeTextArea = () => {
-        textAreaRef.current.style.height = "auto";
-        textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
-    };
+    // const resizeTextArea = () => {
+    //     textAreaRef.current.style.height = "auto";
+    //     textAreaRef.current.style.height = textAreaRef.current.scrollHeight + "px";
+    // };
 
-    useEffect(resizeTextArea, [des]);
+    // useEffect(resizeTextArea, [des]);
 
-    const onChangeDes = (e) => {
-        setDesLength(e.target.value.length);
-        setDes(e.target.value);
-    }
+    // const onChangeDes = (e) => {
+    //     setDesLength(e.target.value.length);
+    //     setDes(e.target.value);
+    // }
 
     const handleCancel = () => setPreviewOpen(false);
     const handlePreview = async (file) => {
@@ -181,7 +238,8 @@ function CreateProduct() {
             weight: values.find((item) => item.key === 'weight')?.value || null,
             size: values.find((item) => item.key === 'size')?.value || null,
             material: values.find((item) => item.key === 'material')?.value || null,
-            description: values.find((item) => item.key === 'description')?.value || null,
+            // description: values.find((item) => item.key === 'description')?.value || null,
+            description: des === '' ? null : des,
             brandName: values.find((item) => item.key === 'brand')?.value || null,
             state: 1,
             categoryId: getCategoryId(),
@@ -203,10 +261,10 @@ function CreateProduct() {
 
         // productDto.imageMain = params.mainImage === undefined ? null : params.mainImage;
         // productDto.subImages = params.subImages;
-        // console.log(productDto.gender);
+        // console.log(params);
         productApi.addNewProduct(params).then((res) => {
             console.log(res);
-            if(res.status === 201){
+            if (res.status === 201) {
                 openNotificationWithIcon('Success', 'Add new product successfully!');
             }
         }).catch((err) => {
@@ -298,17 +356,6 @@ function CreateProduct() {
                                 required
                             /> */}
                         </div>
-                        {/* <input type="file" name="file" onChange={(e) => {
-                            const fileList = e.target.files;
-                            for (const file of fileList) {
-                                console.log(file);
-                                productApi.test(file).then((res) => {
-                                    console.log(res);
-                                }).catch((err) => {
-                                    console.log(err);
-                                })
-                            }
-                        }}/> */}
                         <div className="mb-7">
                             <label
                                 htmlFor="mainImage"
@@ -406,12 +453,12 @@ function CreateProduct() {
                                     Age (optional)
                                 </label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     min={1}
                                     max={100}
                                     id="age"
                                     name="age"
-                                    placeholder="bird age"
+                                    placeholder="bird age (Years | Months | Days)"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
                                 />
                             </div>}
@@ -541,7 +588,6 @@ function CreateProduct() {
                                                 min={1}
                                                 id="size"
                                                 name="size"
-                                                step={0.01}
                                                 placeholder="Width"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-r-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
                                             />
@@ -557,7 +603,6 @@ function CreateProduct() {
                                                 min={1}
                                                 id="size"
                                                 name="size"
-                                                step={0.01}
                                                 placeholder="Length"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-r-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
                                             />
@@ -573,7 +618,6 @@ function CreateProduct() {
                                                 min={1}
                                                 id="size"
                                                 name="size"
-                                                step={0.01}
                                                 placeholder="Height"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-r-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
                                             />
@@ -671,7 +715,18 @@ function CreateProduct() {
                             >
                                 Description (optional)
                             </label>
-                            <textarea
+
+                            <ReactQuill
+                                className="text-gray-900 text-sm"
+                                ref={quillRef}
+                                theme="snow"
+                                modules={modules}
+                                formats={formats}
+                                placeholder='Write something about your product...'
+                                onChange={handleProcedureContentChange}
+                            />
+
+                            {/* <textarea
                                 style={{
                                     resize: "none",
                                     overflowY: "hidden",
@@ -684,8 +739,8 @@ function CreateProduct() {
                                 id="description"
                                 name="description"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline w-full h-20 p-2.5"
-                            />
-                            <p className="float-right">{desLength}/1000</p>
+                            /> */}
+                            <p className="float-right">{desLength}/3000</p>
                         </div>
                         <div className="flex justify-center mt-2">
                             <button

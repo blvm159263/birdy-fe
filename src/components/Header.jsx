@@ -139,8 +139,6 @@ export default function NavBar() {
             <>
               <Link to="/" className='px-2 pt-1 mr-2'>SELL PRODUCT</Link>
               <Link to="/login" className='px-2 pt-1'>SIGN IN</Link>
-
-              <Link to="/" className='px-2 pt-1'>SIGN UP</Link>
             </>}
 
         </div>

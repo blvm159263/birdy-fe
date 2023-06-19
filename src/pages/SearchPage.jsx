@@ -10,25 +10,41 @@ import SearchType from '../constants/SearchType'
 import SortType from '../constants/SortType'
 import {decreasePage, increasePage, setPage, updateSearchType, updateSortType} from '../features/search/searchSlice'
 import FilterSideBar from '../components/FilterSideBar'
-import {toggleFilterSideBar} from '../features/ui/uiSlice'
+import { toggleFilterSideBar } from '../features/ui/uiSlice'
 import shopApi from "../api/shopApi";
 import StoreCardList from "../components/store/StoreCardList";
+// import { is } from 'date-fns/locale'
 
 export default function SearchPage() {
-  const searchText = useSelector(state => state.search.searchText);
-  const [oldSearchText, setOldSearchText] = useState(undefined);
-  const triggerSearch = useSelector(state => state.search.searchTrigger);
-  const sortType = useSelector(state => state.search.sortType);
-  const rating = useSelector(state => state.search.rating);
-  const fromPrice = useSelector(state => state.search.fromPrice);
-  const toPrice = useSelector(state => state.search.toPrice);
-  const page = useSelector(state => state.search.page);
-  const [products, setProducts] = useState([]);
-  const [shops, setShops] = useState([]);
-  const [totalPage, setTotalPage] = useState(1);
-  const { searchType } = useParams();
+  const searchText = useSelector((state) => state.search.searchText);
+  // const searchTrigger = useSelector((state) => state.search.searchTrigger);
   const dispatch = useDispatch();
+  // const [sortType, setSortType] = useState(SortType.DEFAULT);
+  const [products, setProducts] = useState([]); 
+  // const [totalPage, setTotalPage] = useState(undefined);
+  // const rating = useSelector(state => state.search.filterRating);
+  // const fromPrice = useSelector(state => state.search.filterFromPrice);
+  // const toPrice = useSelector(state => state.search.filterToPrice);
+  // const { searchType, page } = useParams();
+  // const [searchTypeText, setSearchTypeText] = useState(SearchType.DEFAULT.text.toUpperCase());
+  const isShowing = useSelector(state => state.ui.isShowFilterSideBar);
+   // const searchText = useSelector(state => state.search.searchText);
+   const [oldSearchText, setOldSearchText] = useState(undefined);
+   const triggerSearch = useSelector(state => state.search.searchTrigger);
+   const sortType = useSelector(state => state.search.sortType);
+   const rating = useSelector(state => state.search.rating);
+   const fromPrice = useSelector(state => state.search.fromPrice);
+   const toPrice = useSelector(state => state.search.toPrice);
+   const page = useSelector(state => state.search.page);
+   // const [products, setProducts] = useState([]);
+   const [shops, setShops] = useState([]);
+   const [totalPage, setTotalPage] = useState(1);
+   const { searchType } = useParams();
+   // const dispatch = useDispatch();
 
+ 
+
+  
   useEffect(() => {
     let isStillInPage = true;
     setOldSearchText(searchText);
@@ -49,7 +65,7 @@ export default function SearchPage() {
     };
 
     // Call api based on sortType
-    switch(sortType) {
+    switch (sortType) {
       case SortType.DEFAULT:
         apiPromise = productApi.getAll(params);
         break;
@@ -66,11 +82,11 @@ export default function SearchPage() {
         console.log("SortType not found!");
         return;
     }
-    
+
     // Process api if still in page
     apiPromise
       .then((response) => {
-        if(isStillInPage) {
+        if (isStillInPage) {
           setProducts(response.data[0]);
           setTotalPage(response.data[1]);
           console.log(response.data);
@@ -108,7 +124,9 @@ export default function SearchPage() {
 
   return (
     <div id='searchPage' className='bg-neutral-100 px-2 md:px-0 py-4'>
-      <FilterSideBar/>
+
+      {isShowing && <div className='fixed bg-neutral-800 bg-opacity-60 top-0 left-0 w-full h-screen'></div>}
+      <FilterSideBar />
 
       {/* Search shop results */}
       {shops.length > 0 ? (<section className='container mx-auto'>
@@ -150,10 +168,10 @@ export default function SearchPage() {
             </div>
           </div>
         </div>
-        <ProductCardList products={products}/>
+        <ProductCardList products={products} />
         {products.length === 0 ? (
           <div className='px-8 py-16'>
-            <img className='w-64 h-64 mx-auto' src="/assets/images/No_Product_Found.png" alt='no product'/>
+            <img className='w-64 h-64 mx-auto' src="/assets/images/No_Product_Found.png" alt='no product' />
           </div>
         ) : ''}
         <div className='flex justify-center items-center gap-2 text-neutral-500 font-semibold py-4'>

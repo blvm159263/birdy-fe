@@ -5,7 +5,7 @@ let token;
 
 const axiosClient = axios.create({
   // baseURL: "https://birdy-swp.azurewebsites.net/api/v1/",
-  baseURL: "https://birdy-swp.azurewebsites.net/api/v1/",
+  baseURL: "http://localhost/api/v1/",
 
 });
 

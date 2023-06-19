@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Upload } from 'antd';
+import { Modal, Upload, Avatar } from 'antd';
+import ImgCrop from 'antd-img-crop'
 import format from "date-fns/format";
 import shopApi from "../../api/shopApi";
+
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -22,6 +24,7 @@ function ShopProfile() {
   const [shop, setShop] = useState([]);
   const [phone, setPhone] = useState('');
   const [createDate, setCreateDate] = useState('');
+  const [url, setUrl] = useState('');
 
 
   const handleCancel = () => setPreviewOpen(false);
@@ -33,6 +36,7 @@ function ShopProfile() {
     setPreviewOpen(true);
     setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
   };
+
   const handleChange = ({ fileList: newFileList }) => {
     setError(null);
     for (var i = 0; i < newFileList.length; i++) {
@@ -60,8 +64,18 @@ function ShopProfile() {
 
   useEffect(() => {
     shopApi.getShopDetailByShopId(1).then((res) => {
-      console.log(res);
+      console.log(res.data[0].avatarUrl);
       setShop(res.data[0]);
+
+      // const avar = res.data[0].avatarUrl;
+      setUrl(res.data[0].avatarUrl);
+      console.log(url);
+      setShopAvar([{
+        uid: '-1',
+        name: 'image.png',
+        status: 'done',
+        url: res.data[0].avatarUrl,
+      }]);
 
       const hidePhone = hidePhoneNumber(res.data[1].phoneNumber);
       setPhone(hidePhone);
@@ -136,13 +150,15 @@ function ShopProfile() {
                     </label>
                   </div>
                   <div className="w-full flex items-center pl-6">
-                    <div className="w-7 h-7">
-                      <img
+                    {/* <div className="w-7 h-7"> */}
+                    {/* <img
                         src="../assets/images/shop-avar.png"
+                        src={url}
                         className="w-fit h-fit"
                         alt=""
-                      />
-                    </div>
+                      /> */}
+                    <Avatar className="border" src={<img src={url} alt="avatar" />} size={32} />
+                    {/* </div> */}
                     <span className="pl-2 text-sm text-black">{shop.shopName}</span>
                     {/* <input
                       type="text"
@@ -242,14 +258,16 @@ function ShopProfile() {
                 <div className="h-96 w-full border-l border-gray-300 flex items-center justify-center">
                   <div className="ml-12">
                     <div >
-                      <Upload
-                        listType="picture-circle"
-                        fileList={shopAvar}
-                        onPreview={handlePreview}
-                        onChange={handleChange}
-                      >
-                        {shopAvar.length >= 1 ? null : uploadButton}
-                      </Upload>
+                      <ImgCrop showGrid rotationSlider aspectSlider showReset cropShape="round">
+                        <Upload
+                          listType="picture-circle"
+                          fileList={shopAvar}
+                          onPreview={handlePreview}
+                          onChange={handleChange}
+                        >
+                          {shopAvar.length >= 1 ? null : uploadButton}
+                        </Upload>
+                      </ImgCrop>
                       <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
                         <img
                           alt="example"

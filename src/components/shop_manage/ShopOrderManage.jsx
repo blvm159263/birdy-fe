@@ -1,12 +1,32 @@
 import React, { useState } from "react"
 import ShopOrderModal from "./ShopOrderModal"
+import shopApi from "../../api/shopApi"
+import { useEffect } from "react"
 
 function ShopOrderManage() {
   const [showModal, setShowModal] = useState(false)
+  const [shopOrder, setShopOrder] = useState([])
+  const shopId = 1
+
+  const fetchOrder = async () => {
+    try {
+      await shopApi.getShopOrders(shopId).then(response => setShopOrder(response.data[0]))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  console.log(shopOrder);
+  useEffect(() => {
+    fetchOrder()
+    console.log(shopOrder);
+  }, [])
+
   const handleViewModal = () => {
     setShowModal(!showModal)
     console.log(showModal)
   }
+
+
   return (
     <div className="bg-gray-300 p-10 w-4/5 absolute top-0 h-screen right-0">
       <h1 className="text-2xl text-center font-bold mb-10">Order Manage</h1>
@@ -51,7 +71,7 @@ function ShopOrderManage() {
                 Customer Name
               </th>
               <th scope="col" className="px-6 py-3">
-                Price
+                ToTal Price
               </th>
               <th scope="col" className="px-6 py-3">
                 Status
@@ -62,26 +82,29 @@ function ShopOrderManage() {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                OD0000001
-              </th>
-              <td className="px-6 py-4">John John</td>
-              <td className="px-6 py-4">$2999</td>
-              <td className="px-6 py-4">Wait for ...</td>
-              <td className="px-6 py-4">
-                {/* <!-- Modal toggle --> */}
-                <button
-                  className="font-medium text-blue-600 dark:text-blue-500 "
-                  onClick={handleViewModal}
+            {shopOrder ? shopOrder.map(order => (
+              <tr key={order.id} className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                <td
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  View
-                </button>
-              </td>
-            </tr>
+                  {order.id}
+                </td>
+                <td className="px-6 py-4">{order.customer}</td>
+                <td className="px-6 py-4">{order.total}</td>
+                <td className="px-6 py-4">{order.state}</td>
+                <td className="px-6 py-4">
+                  {/* <!-- Modal toggle --> */}
+                  <button
+                    className="font-medium text-blue-600 dark:text-blue-500 "
+                    onClick={handleViewModal}
+                  >
+                    View
+                  </button>
+                </td>
+              </tr>
+            )) : ""}
+
           </tbody>
         </table>
       </div>
