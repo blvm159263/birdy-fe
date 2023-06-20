@@ -21,34 +21,33 @@ import UserInfor from "./components/user/userInfor/UserInfor"
 import UserAddress from "./components/user/userAddress/UserAddress"
 import UserPage from "./pages/UserPage"
 import UserOrder from "./components/user/userOrder/UserOrder"
-import ViewShopPage from "./pages/ViewShopPage";
-import AllShopsPage from "./pages/AllShopsPage";
+import ViewShopPage from "./pages/ViewShopPage"
+import AllShopsPage from "./pages/AllShopsPage"
 import CheckoutPage from "./pages/CheckoutPage"
 import { useEffect, useContext } from "react"
 import storageService from "./api/storage"
-import jwtDecode from "jwt-decode";
+import jwtDecode from "jwt-decode"
 import { LoginContext } from "./context/LoginProvider"
 
 function App() {
-
-  const { isLogin, setIsLogin, setRole } = useContext(LoginContext);
+  const { isLogin, setIsLogin, setRole } = useContext(LoginContext)
 
   function convertTimestampToDate(timestamp) {
-    return new Date(timestamp * 1000);
+    return new Date(timestamp * 1000)
   }
 
   useEffect(() => {
-    var token = storageService.getAccessToken();
+    var token = storageService.getAccessToken()
     if (token) {
-      token = jwtDecode(token);
-      const currentTime = Math.floor(Date.now() / 1000);
+      token = jwtDecode(token)
+      const currentTime = Math.floor(Date.now() / 1000)
       if (currentTime > token.exp) {
-        storageService.removeAccessToken();
-        setIsLogin(false);
-        setRole("");
+        storageService.removeAccessToken()
+        setIsLogin(false)
+        setRole("")
       } else {
-        setIsLogin(true);
-        setRole(token.role);
+        setIsLogin(true)
+        setRole(token.role)
       }
     }
   }, [])
@@ -59,7 +58,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="/search">
-            <Route path="all-shop" element={<AllShopsPage/>} />
+            <Route path="all-shop" element={<AllShopsPage />} />
             <Route path=":searchType" element={<SearchPage />} />
           </Route>
           <Route path="/detail-item/:id" element={<DetailItemPage />} />
@@ -72,7 +71,7 @@ function App() {
             <Route path="/user/:userid/address" element={<UserAddress />} />
             <Route path="/user/:userid/order" element={<UserOrder />} />
           </Route>
-          <Route path="view-shop/:id" element={<ViewShopPage/>} />
+          <Route path="view-shop/:id" element={<ViewShopPage />} />
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
@@ -83,6 +82,7 @@ function App() {
         </Route>
         <Route path="/shop" element={<ShopLayout />}>
           <Route index element={<ShopProfile />} />
+
           <Route path="/shop/products" element={<ShopProductManage />} />
           <Route path="/shop/orders" element={<ShopOrderManage />} />
           <Route path="/shop/product/new" element={<CreateProduct />} />
