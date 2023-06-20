@@ -8,8 +8,8 @@ export default function CartPage() {
   const items = useSelector(state => state.cart.items);
   const shopIds = items.map(item => item.shopId).filter((shopId, index, shopIds) => shopIds.indexOf(shopId) === index);
   const selected = items.filter(item => item.selected === false).length === 0;
-  const totalProduct = useSelector(state => state.cart.totalProduct);
-  const totalPrice = useSelector(state => state.cart.totalPrice);
+  const totalSelectedProduct = items.filter(item => item.selected === true).reduce((total, {quantity}) => total + quantity, 0);
+  const totalSelectedPrice = items.filter(item => item.selected === true).reduce((total, {quantity, price}) => total + quantity * price, 0);
   const dispatch = useDispatch();
 
   return (
@@ -52,10 +52,10 @@ export default function CartPage() {
             <button onClick={() => dispatch(deleteAllSelected())}>Delete Selected</button>
           </div>
           <div className="col-span-3">
-            Total (<span className='font-bold'>{totalProduct}</span> products): <span className='font-bold'>${totalPrice.toFixed(2)}</span>
+            Total (<span className='font-bold'>{totalSelectedProduct}</span> products): <span className='font-bold'>${totalSelectedPrice.toFixed(2)}</span>
           </div>
           <div className="col-span-2">
-            {totalProduct === 0 ?
+            {totalSelectedProduct === 0 ?
             (<span to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
             (<Link to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</Link>)}
           </div>

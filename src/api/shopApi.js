@@ -11,34 +11,30 @@ const shopApi = {
     return axiosClient.get(url)
   },
 
-  // getShopProductsByShopIdForShop(id, param) {
-  //     const url = '/shops/' + id + '/products/true';
-  //     return axiosClient.get(url, param);
-  // },
-  getShopProductsByShopIdForShop(id) {
-    const url = "/shops/" + id + "/products"
-    return axiosClient.get(url)
-  },
-  searchShopByName(params) {
-    const url = "/shops/search"
-    return axiosClient.get(url, { params })
-  },
-  getLatestShopProductsByShopId(id, params) {
-    const url = `/shops/${id}/products/latest`
-    return axiosClient.get(url, { params })
-  },
-  getShopProductsByShopIdAndCategoryId(id, categoryId, params) {
-    const url = `/shops/${id}/products/category/${categoryId}`
-    return axiosClient.get(url, { params })
-  },
-  getShipmentByShopId(id) {
-    const url = "/shops/shipment/" + id
-    return axiosClient.get(url)
-  },
-  getShopOrders(id) {
-    const url = "/shops/" + id + "/orders"
-    return axiosClient.get(url)
-  },
+    getShopProductsByShopIdForShop(id, param) {
+        const url = '/shops/' + id + '/products/true';
+        return axiosClient.get(url, param);
+    },
+    searchShopByName(params) {
+        const url = '/shops/search';
+        return axiosClient.get(url, {params});
+    },
+    getLatestShopProductsByShopId(id, params) {
+        const url = `/shops/${id}/products/latest`;
+        return axiosClient.get(url, {params});
+    },
+    getShopProductsByShopIdAndCategoryId(id, categoryId, params) {
+        const url = `/shops/${id}/products/category/${categoryId}`;
+        return axiosClient.get(url, {params});
+    },
+    getShipmentByShopId(id) {
+        const url = '/shops/shipment/' + id;
+        return axiosClient.get(url);
+    },
+    getShopOrders(id){
+        const url = '/shops/' + id + '/orders';
+        return axiosClient.get(url); 
+    }
 }
 
 export default shopApi
