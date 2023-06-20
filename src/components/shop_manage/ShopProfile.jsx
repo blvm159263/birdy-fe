@@ -1,52 +1,57 @@
 import React, { useEffect, useState } from "react"
-import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Upload, Avatar } from 'antd';
-import ImgCrop from 'antd-img-crop'
-import format from "date-fns/format";
-import shopApi from "../../api/shopApi";
-
+import { PlusOutlined } from "@ant-design/icons"
+import { Modal, Upload, Avatar } from "antd"
+import ImgCrop from "antd-img-crop"
+import format from "date-fns/format"
+import shopApi from "../../api/shopApi"
+import { useParams } from "react-router-dom"
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
 
 function ShopProfile() {
+  const [previewOpen, setPreviewOpen] = useState(false)
+  const [previewImage, setPreviewImage] = useState("")
+  const [previewTitle, setPreviewTitle] = useState("")
+  const [shopAvar, setShopAvar] = useState([])
+  const [error, setError] = useState(null)
+  const [shop, setShop] = useState([])
+  const [phone, setPhone] = useState("")
+  const [createDate, setCreateDate] = useState("")
+  const [url, setUrl] = useState("")
 
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewTitle, setPreviewTitle] = useState('');
-  const [shopAvar, setShopAvar] = useState([]);
-  const [error, setError] = useState(null);
-  const [shop, setShop] = useState([]);
-  const [phone, setPhone] = useState('');
-  const [createDate, setCreateDate] = useState('');
-  const [url, setUrl] = useState('');
-
-
-  const handleCancel = () => setPreviewOpen(false);
+  const handleCancel = () => setPreviewOpen(false)
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = await getBase64(file.originFileObj)
     }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
-  };
+    setPreviewImage(file.url || file.preview)
+    setPreviewOpen(true)
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    )
+  }
 
   const handleChange = ({ fileList: newFileList }) => {
-    setError(null);
+    setError(null)
     for (var i = 0; i < newFileList.length; i++) {
-      if (newFileList[i].type !== 'image/jpeg' && newFileList[i].type !== 'image/png') {
-        newFileList[i].status = 'error';
-        setError('Only JPG/PNG file can be uploaded!');
+      if (
+        newFileList[i].type !== "image/jpeg" &&
+        newFileList[i].type !== "image/png"
+      ) {
+        newFileList[i].status = "error"
+        setError("Only JPG/PNG file can be uploaded!")
+      } else {
+        newFileList[i].status = "done"
+        setError(null)
       }
-      else { newFileList[i].status = 'done'; setError(null); }
     }
-    setShopAvar(newFileList);
+    setShopAvar(newFileList)
   }
   const uploadButton = (
     <div>
@@ -59,93 +64,88 @@ function ShopProfile() {
         Upload (0/1)
       </div>
     </div>
-  );
-
+  )
 
   useEffect(() => {
-    shopApi.getShopDetailByShopId(1).then((res) => {
-      console.log(res.data[0].avatarUrl);
-      setShop(res.data[0]);
+    shopApi
+      .getShopDetailByShopId(1)
+      .then((res) => {
+        console.log(res.data[0].avatarUrl)
+        setShop(res.data[0])
 
-      // const avar = res.data[0].avatarUrl;
-      setUrl(res.data[0].avatarUrl);
-      console.log(url);
-      setShopAvar([{
-        uid: '-1',
-        name: 'image.png',
-        status: 'done',
-        url: res.data[0].avatarUrl,
-      }]);
+        // const avar = res.data[0].avatarUrl;
+        setUrl(res.data[0].avatarUrl)
+        console.log(url)
+        setShopAvar([
+          {
+            uid: "-1",
+            name: "image.png",
+            status: "done",
+            url: res.data[0].avatarUrl,
+          },
+        ])
 
-      const hidePhone = hidePhoneNumber(res.data[1].phoneNumber);
-      setPhone(hidePhone);
+        const hidePhone = hidePhoneNumber(res.data[1].phoneNumber)
+        setPhone(hidePhone)
 
-      const dateformat = getDate(res.data[0].createDate);
-      setCreateDate(dateformat);
-    }).catch((err) => {
-      console.log(err);
-    })
-  }, []);
+        const dateformat = getDate(res.data[0].createDate)
+        setCreateDate(dateformat)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
 
-  const onSubmit = (data) => {
-
-  }
+  const onSubmit = (data) => {}
 
   const handleEntailmentRequest = (e) => {
-    e.preventDefault();
+    e.preventDefault()
   }
 
   function hidePhoneNumber(phoneNumber) {
-    const visibleDigits = 2; // Number of digits to keep visible at the beginning and end
-    const hiddenDigits = phoneNumber.length - (visibleDigits * 2); // Number of digits to hide with asterisks
+    const visibleDigits = 2 // Number of digits to keep visible at the beginning and end
+    const hiddenDigits = phoneNumber.length - visibleDigits * 2 // Number of digits to hide with asterisks
 
     // Create the masked phone number string
     const maskedPhoneNumber =
       phoneNumber.substr(0, visibleDigits) +
       "*".repeat(hiddenDigits) +
-      phoneNumber.substr(-visibleDigits);
+      phoneNumber.substr(-visibleDigits)
 
-    return maskedPhoneNumber;
+    return maskedPhoneNumber
   }
-
 
   // const isoString = "2023-05-10T12:30:00.000Z";
   const getDate = (dateString) => {
-    const isoString = dateString;
+    const isoString = dateString
 
-    const formattedDate = format(new Date(isoString), 'dd/MM/yyyy');
+    const formattedDate = format(new Date(isoString), "dd/MM/yyyy")
 
-    return formattedDate;
+    return formattedDate
   }
 
   return (
-
     <div className="bg-gray-300 p-10 w-4/5 absolute top-0 right-0 h-screen">
       <h1 className="text-center mb-10 text-2xl font-bold">Shop Profile</h1>
 
       <div className=" relative overflow-x-auto shadow-md sm:rounded-lg">
         <div className="pt-7 pb-16 px-16 bg-white">
-
-          <form className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
+          <form
+            className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
             onSubmit={(e) => {
-
               handleEntailmentRequest(e)
-              var list = [];
+              var list = []
               for (var i = 0; i < e.target.length; i++) {
                 list.push(e.target[i].value)
               }
-              onSubmit(list);
+              onSubmit(list)
             }}
           >
-
             <div className="flex flex-row w-full place-content-between">
               <div className="basis-3/5 align-middle">
-
                 <div className="mt-7 mb-14 flex items-center">
                   <div className="w-1/5">
-                    <label
-                      className="pr-2 block text-sm text-right font-medium text-gray-400"
-                    >
+                    <label className="pr-2 block text-sm text-right font-medium text-gray-400">
                       Account
                     </label>
                   </div>
@@ -157,9 +157,15 @@ function ShopProfile() {
                         className="w-fit h-fit"
                         alt=""
                       /> */}
-                    <Avatar className="border" src={<img src={url} alt="avatar" />} size={32} />
+                    <Avatar
+                      className="border"
+                      src={<img src={url} alt="avatar" />}
+                      size={32}
+                    />
                     {/* </div> */}
-                    <span className="pl-2 text-sm text-black">{shop.shopName}</span>
+                    <span className="pl-2 text-sm text-black">
+                      {shop.shopName}
+                    </span>
                     {/* <input
                       type="text"
                       id="name"
@@ -193,9 +199,7 @@ function ShopProfile() {
 
                 <div className="mb-14 flex items-center">
                   <div className="w-1/5">
-                    <label
-                      className="pr-2 block text-right text-sm font-medium text-gray-400"
-                    >
+                    <label className="pr-2 block text-right text-sm font-medium text-gray-400">
                       Create Date
                     </label>
                   </div>
@@ -213,9 +217,7 @@ function ShopProfile() {
 
                 <div className="mb-14 flex items-center">
                   <div className="w-1/5">
-                    <label
-                      className="pr-2 block text-sm text-right font-medium text-gray-400"
-                    >
+                    <label className="pr-2 block text-sm text-right font-medium text-gray-400">
                       Shop phone
                     </label>
                   </div>
@@ -233,9 +235,7 @@ function ShopProfile() {
 
                 <div className="mb-7 flex items-center">
                   <div className="w-1/5">
-                    <label
-                      className="pr-2 block text-sm text-right font-medium text-gray-400"
-                    >
+                    <label className="pr-2 block text-sm text-right font-medium text-gray-400">
                       Shop address
                     </label>
                   </div>
@@ -251,14 +251,19 @@ function ShopProfile() {
                     /> */}
                   </div>
                 </div>
-
               </div>
 
               <div className="basis-[35%] flex items-center justify-center">
                 <div className="h-96 w-full border-l border-gray-300 flex items-center justify-center">
                   <div className="ml-12">
-                    <div >
-                      <ImgCrop showGrid rotationSlider aspectSlider showReset cropShape="round">
+                    <div>
+                      <ImgCrop
+                        showGrid
+                        rotationSlider
+                        aspectSlider
+                        showReset
+                        cropShape="round"
+                      >
                         <Upload
                           listType="picture-circle"
                           fileList={shopAvar}
@@ -268,27 +273,33 @@ function ShopProfile() {
                           {shopAvar.length >= 1 ? null : uploadButton}
                         </Upload>
                       </ImgCrop>
-                      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+                      <Modal
+                        open={previewOpen}
+                        title={previewTitle}
+                        footer={null}
+                        onCancel={handleCancel}
+                      >
                         <img
                           alt="example"
                           style={{
-                            width: '100%',
+                            width: "100%",
                           }}
                           src={previewImage}
                         />
                       </Modal>
                     </div>
-                    <div className="text-sm text-gray-400 ml-2">Upload type:<br />.JPEG, .PNG</div>
+                    <div className="text-sm text-gray-400 ml-2">
+                      Upload type:
+                      <br />
+                      .JPEG, .PNG
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </form>
-
-
         </div>
       </div>
-
     </div>
   )
 }

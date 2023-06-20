@@ -4,16 +4,16 @@ import ShopProductCard from "./ShopProductCard"
 import { useState } from "react"
 
 import shopApi from "../../../api/shopApi"
+import { useSelector } from "react-redux"
 
 function ShopProductManage() {
-  const [page, setPage] = useState(0)
+  const page = useSelector((state) => state.search.page)
   const [products, setProducts] = useState([])
 
   useEffect(() => {
     shopApi
-      .getShopProductsByShopIdForShop(1)
+      .getShopProductsByShopIdForShop(1, page)
       .then((res) => {
-        console.log(res.data[0])
         setProducts(res.data[0])
       })
       .catch((err) => {
