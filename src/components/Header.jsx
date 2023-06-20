@@ -7,13 +7,17 @@ import { Link } from 'react-router-dom'
 import jwtDecode from "jwt-decode";
 import storageService from '../api/storage';
 import { LoginContext } from '../context/LoginProvider';
+import {useDispatch, useSelector} from "react-redux";
+import {resetAllState} from "../features/search/searchSlice";
 
 
 export default function NavBar() {
 
   const { isLogin, setIsLogin, setRole } = useContext(LoginContext);
 
-  const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const cartCount = useSelector((state) => state.cart.items.length);
+  const dispatch = useDispatch();
 
   const onLogout = () => {
     storageService.removeAccessToken();
@@ -27,7 +31,7 @@ export default function NavBar() {
   return (
     <nav className="bg-gradient-to-r from-sky-500 via-blue-500 to-sky-500 border-gray-200">
       <div className="container flex flex-wrap items-center justify-between mx-auto p-3 md:px-8 md:py-6 lg:py-4 relative">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center" onClick={() => dispatch(resetAllState())}>
           <img
             src="/assets/images/logo-white.png"
             className="h-8 md:h-12 mr-3"
@@ -41,30 +45,31 @@ export default function NavBar() {
           <SearchBar />
           <ul className="hidden md:flex text-white justify-between pt-2">
             <li>
-              <Link to={`/search/${SearchType.ALL_PRODUCT.text}`}>
+              <Link to={`/search/${SearchType.ALL_PRODUCT.text}`} onClick={() => dispatch(resetAllState())}>
                 All Products
               </Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.BIRD.text}`}>Birds</Link>
+              <Link to={`/search/${SearchType.BIRD.text}`} onClick={() => dispatch(resetAllState())}>Birds</Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.ACCESSORY.text}`}>
+              <Link to={`/search/${SearchType.ACCESSORY.text}`} onClick={() => dispatch(resetAllState())}>
                 Accessories
               </Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.FOOD.text}`}>Foods</Link>
+              <Link to={`/search/${SearchType.FOOD.text}`} onClick={() => dispatch(resetAllState())}>Foods</Link>
             </li>
           </ul>
         </div>
         <div className="flex">
           <Link
             to="/cart"
-            className="block p-2.5 mr-1 text-white"
+            className="block p-2.5 mr-1 text-white relative"
             aria-current="page"
           >
             <FontAwesomeIcon icon={faCartShopping} size="1x" />
+            <span className='cart-count absolute bottom-1.5 -right-1.5 text-center text-xs h-4 w-4 rounded-full bg-orange-500'>{cartCount}</span>
           </Link>
           <button
             onClick={toggleMobileMenu}
@@ -99,27 +104,24 @@ export default function NavBar() {
           <SearchBar forMobile />
           <ul className="flex flex-col p-2 mt-4 gap-4 font-semibold text-white uppercase">
             <li>
-              <Link to={`/search/${SearchType.ALL_PRODUCT.text}/0`}>
+              <Link to={`/search/${SearchType.ALL_PRODUCT.text}`} onClick={() => dispatch(resetAllState())}>
                 All Products
               </Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.BIRD.text}/0`}>Birds</Link>
+              <Link to={`/search/${SearchType.BIRD.text}`} onClick={() => dispatch(resetAllState())}>Birds</Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.ACCESSORY.text}/0`}>
+              <Link to={`/search/${SearchType.ACCESSORY.text}`} onClick={() => dispatch(resetAllState())}>
                 Accessories
               </Link>
             </li>
             <li>
-              <Link to={`/search/${SearchType.FOOD.text}/0`}>Foods</Link>
+              <Link to={`/search/${SearchType.FOOD.text}`} onClick={() => dispatch(resetAllState())}>Foods</Link>
             </li>
             <hr />
             <li>
               <Link to="/login">Sign in</Link>
-            </li>
-            <li>
-              <Link to="/login">Sign up</Link>
             </li>
             <li>
               <Link to="/">Sell product</Link>

@@ -24,8 +24,8 @@ export default function CheckoutPage() {
     const items = useSelector(state => state.cart.items.filter(item => item.selected === true));
     console.log(items)
     const shopIds = items.map(item => item.shopId).filter((shopId, index, shopIds) => shopIds.indexOf(shopId) === index);
-    const totalProduct = useSelector(state => state.cart.totalProduct);
-    const totalPrice = useSelector(state => state.cart.totalPrice);
+    const totalSelectedProduct = items.filter(item => item.selected === true).reduce((total, {quantity}) => total + quantity, 0);
+    const totalSelectedPrice = items.filter(item => item.selected === true).reduce((total, {quantity, price}) => total + quantity * price, 0);
     const [address, setAddress] = useState();
     const [user, setUser] = useState();
     const [modalOpen, setModalOpen] = useState(false);
@@ -56,7 +56,7 @@ export default function CheckoutPage() {
     }
 
     const onCheckout = async () => {
-        var amount = ((totalPrice + totalShipment) * 23000).toFixed(0);
+        var amount = ((totalSelectedPrice + totalShipment) * 23000).toFixed(0);
         amount = Math.round(amount / 1000) * 1000;
 
         var orderList = [];
@@ -165,13 +165,13 @@ export default function CheckoutPage() {
 
                 <div className='bg-white rounded-sm mt-4 flex justify-between gap-4 items-center text-center p-2 drop-shadow-sm'>
                     <div className="col-span-3">
-                        Total (<span className='font-bold'>{totalProduct}</span> products):
+                        Total (<span className='font-bold'>{totalSelectedProduct}</span> products):
                     </div>
                     <div className="col-span-6">
-                        <span className='font-bold'>${totalPrice.toFixed(2)} + ${totalShipment.toFixed(2)} = ${(totalPrice + totalShipment).toFixed(2)}</span>
+                        <span className='font-bold'>${totalSelectedPrice.toFixed(2)} + ${totalShipment.toFixed(2)} = ${(totalSelectedPrice + totalShipment).toFixed(2)}</span>
                     </div>
                     <div className="col-span-2">
-                        {(totalProduct === 0 || shipmentIds.length !== shopIds.length || address === null) ?
+                        {(totalSelectedProduct === 0 || shipmentIds.length !== shopIds.length || address === null) ?
                             (<span to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
                             (<button to="/cart/checkout" onClick={onCheckout} className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</button>)}
                     </div>
