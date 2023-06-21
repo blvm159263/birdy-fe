@@ -38,6 +38,10 @@ const shopApi = {
     searchShopByNameAndStatus(status, params) {
         const url = `/shops/${status}/view`;
         return axiosClient.get(url, {params});
+    },
+    getAllShopProducts(id, params) {
+        const url = `/shops/${id}/products`;
+        return axiosClient.get(url, {params});
     }
 }
 

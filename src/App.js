@@ -29,6 +29,8 @@ import storageService from "./api/storage"
 import jwtDecode from "jwt-decode";
 import { LoginContext } from "./context/LoginProvider"
 import AllFeaturedPage from "./pages/AllFeaturedPage";
+import ShopHomeSubPage from "./components/store/ShopHomeSubPage";
+import ShopAllProductsSubPage from "./components/store/ShopAllProductsSubPage";
 
 function App() {
 
@@ -74,7 +76,10 @@ function App() {
             <Route path="/user/:userid/address" element={<UserAddress />} />
             <Route path="/user/:userid/order" element={<UserOrder />} />
           </Route>
-          <Route path="view-shop/:id" element={<ViewShopPage/>} />
+          <Route path="view-shop/:id" element={<ViewShopPage/>} >
+            <Route index element={<ShopHomeSubPage/>} />
+            <Route path="all-products" element={<ShopAllProductsSubPage/>} />
+          </Route>
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
