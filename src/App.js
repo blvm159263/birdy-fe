@@ -29,6 +29,11 @@ import storageService from "./api/storage"
 import jwtDecode from "jwt-decode";
 import { LoginContext } from "./context/LoginProvider"
 import AllFeaturedPage from "./pages/AllFeaturedPage";
+import ShopHomeSubPage from "./components/store/ShopHomeSubPage";
+import ShopAllProductsSubPage from "./components/store/ShopAllProductsSubPage";
+import ViewShopSubPageType from "./constants/ViewShopSubPageType";
+import ShopLatestProductsSubPage from "./components/store/ShopLatestProductsSubPage";
+import ShopProductsByCategorySubPage from "./components/store/ShopProductsByCategorySubPage";
 
 function App() {
 
@@ -74,7 +79,14 @@ function App() {
             <Route path="/user/:userid/address" element={<UserAddress />} />
             <Route path="/user/:userid/order" element={<UserOrder />} />
           </Route>
-          <Route path="view-shop/:id" element={<ViewShopPage/>} />
+          <Route path="view-shop/:id" element={<ViewShopPage/>} >
+            <Route index element={<ShopHomeSubPage/>} />
+            <Route path={ViewShopSubPageType.ALL_PRODUCTS.path} element={<ShopAllProductsSubPage/>} />
+            <Route path={ViewShopSubPageType.LATEST.path} element={<ShopLatestProductsSubPage/>} />
+            <Route path={ViewShopSubPageType.BIRDS.path} element={<ShopProductsByCategorySubPage viewShopSubPageType={ViewShopSubPageType.BIRDS}/>} />
+            <Route path={ViewShopSubPageType.ACCESSORIES.path} element={<ShopProductsByCategorySubPage viewShopSubPageType={ViewShopSubPageType.ACCESSORIES}/>} />
+            <Route path={ViewShopSubPageType.FOODS.path} element={<ShopProductsByCategorySubPage viewShopSubPageType={ViewShopSubPageType.FOODS}/>} />
+          </Route>
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
