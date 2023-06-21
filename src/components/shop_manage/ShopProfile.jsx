@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload, Avatar } from 'antd';
 import ImgCrop from 'antd-img-crop'
@@ -25,6 +25,7 @@ function ShopProfile() {
   const [phone, setPhone] = useState('');
   const [createDate, setCreateDate] = useState('');
   const [url, setUrl] = useState('');
+  const ref = useRef(null);
 
 
   const handleCancel = () => setPreviewOpen(false);
@@ -118,13 +119,25 @@ function ShopProfile() {
     return formattedDate;
   }
 
+  const HandleReset = () => {
+    ref.current?.value !== shop.shopName && (ref.current.value = shop.shopName);
+    shopAvar[0].url !== shop.avatarUrl && (
+      setShopAvar([{
+        uid: '-1',
+        name: 'image.png',
+        status: 'done',
+        url: url,
+      }])
+    );
+  }
+
   return (
 
     <div className="bg-gray-300 p-10 w-4/5 absolute top-0 right-0 h-screen">
       <h1 className="text-center mb-10 text-2xl font-bold">Shop Profile</h1>
 
       <div className=" relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div className="pt-7 pb-16 px-16 bg-white">
+        <div className="pt-7 pb-14 px-16 bg-white">
 
           <form className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
             onSubmit={(e) => {
@@ -160,13 +173,6 @@ function ShopProfile() {
                     <Avatar className="border" src={<img src={url} alt="avatar" />} size={32} />
                     {/* </div> */}
                     <span className="pl-2 text-sm text-black">{shop.shopName}</span>
-                    {/* <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      placeholder="shop name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
-                    /> */}
                   </div>
                 </div>
 
@@ -181,6 +187,7 @@ function ShopProfile() {
                   </div>
                   <div className="w-full pl-6">
                     <input
+                      ref={ref}
                       type="text"
                       id="name"
                       name="name"
@@ -201,13 +208,6 @@ function ShopProfile() {
                   </div>
                   <div className="w-full pl-6">
                     <span className="text-sm text-black">{createDate}</span>
-                    {/* <input
-                      type="text"
-                      id="phone"
-                      name="phone"
-                      placeholder="shop phone"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
-                    /> */}
                   </div>
                 </div>
 
@@ -221,17 +221,10 @@ function ShopProfile() {
                   </div>
                   <div className="w-full pl-6">
                     <span className="text-sm text-black">{phone}</span>
-                    {/* <input
-                      type="text"
-                      id="phone"
-                      name="phone"
-                      placeholder="shop phone"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
-                    /> */}
                   </div>
                 </div>
 
-                <div className="mb-7 flex items-center">
+                <div className="mb-14 flex items-center">
                   <div className="w-1/5">
                     <label
                       className="pr-2 block text-sm text-right font-medium text-gray-400"
@@ -249,6 +242,18 @@ function ShopProfile() {
                       placeholder="shop phone"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
                     /> */}
+                  </div>
+                </div>
+
+                <div className="flex items-center">
+                  <div className="w-1/5"></div>
+                  <div className="w-full pl-6">
+                    <button
+                      // onClick={HandleSave}
+                      className="border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-md">Save</button>
+                    <button
+                      onClick={HandleReset}
+                      className="ml-6 border border-sky-400 bg-transparent text-sky-400 hover:bg-sky-400 hover:text-white font-semibold py-2 px-5 rounded-md">Reset</button>
                   </div>
                 </div>
 

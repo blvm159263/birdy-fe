@@ -10,6 +10,7 @@ const NotificationProvider = ({ children }) => {
             message: mess ,
             description:
                  desc ,
+            placement: 'topRight',
         });
     };
     return (

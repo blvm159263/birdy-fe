@@ -13,16 +13,23 @@ function ShopProductManage() {
   const [page, setPage] = useState(0)
   const [products, setProducts] = useState([])
 
-  useEffect(() => {
+  const fetchProducts = () => {
     shopApi.getShopProductsByShopIdForShop(1, page).then((res) => {
       console.log(res.data[0]);
       setProducts(res.data[0])
     }).catch((err) => {
       console.log(err)
     })
+  }
 
+  useEffect(() => {
+    fetchProducts();
   }, [])
 
+  const handleDeleteSuccess = () => {
+    // When a deletion is successful, re-fetch the products
+    fetchProducts();
+  };
   return (
     <div className="bg-gray-300 h-screen py-10 w-4/5 absolute top-0 right-0">
       <h1 className="text-2xl text-center font-bold mb-10">
@@ -70,22 +77,19 @@ function ShopProductManage() {
       {/* <ShopProductManageFosrm /> */}
       <div className="flex gap-9 flex-wrap justify-center">
         {products.map((product) => {
-          return <ShopProductCard key={product.id} product={product} />
+          return <ShopProductCard
+            key={product.id}
+            product={product}
+            onDeleteSuccess={handleDeleteSuccess}
+          />
         })}
 
         {products.length === 0 &&
           <div className='px-8 py-16'>
-            <img className='w-64 h-64 mx-auto' src="/assets/images/No_Product_Found.png" alt='no product'/>
+            <img className='w-64 h-64 mx-auto' src="/assets/images/No_Product_Found.png" alt='no product' />
           </div>
         }
-        {/* <ShopProductCard />
-        <ShopProductCard />
-        <ShopProductCard />
-        <ShopProductCard />
-        <ShopProductCard />
-        <ShopProductCard />
-        <ShopProductCard />
-        <ShopProductCard /> */}
+
       </div>
     </div>
   )

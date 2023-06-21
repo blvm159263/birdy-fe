@@ -12,7 +12,7 @@ const shopApi = {
     },
 
     getShopProductsByShopIdForShop(id, param) {
-        const url = '/shops/' + id + '/products/true';
+        const url = '/shops/' + id + '/products/management';
         return axiosClient.get(url, param);
     },
     searchShopByName(params) {
@@ -31,9 +31,9 @@ const shopApi = {
         const url = '/shops/shipment/' + id;
         return axiosClient.get(url);
     },
-    getShopOrders(id){
+    getShopOrders(id, params){
         const url = '/shops/' + id + '/orders';
-        return axiosClient.get(url); 
+        return axiosClient.get(url, {params}); 
     }
 }
 
