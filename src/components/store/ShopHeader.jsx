@@ -1,36 +1,37 @@
 import StoreCard from "./StoreCard";
 import {Link} from "react-router-dom";
-import SearchType from "../../constants/SearchType";
 import {useParams} from "react-router";
 import {useEffect, useState} from "react";
 import shopApi from "../../api/shopApi";
+import {useSelector} from "react-redux";
+import ViewShopSubPageType from "../../constants/ViewShopSubPageType";
 
 export default function ShopHeader() {
     const {id} = useParams();
+    const currentViewShopSubPage = useSelector(state => state.ui.currentViewShopSubPage);
     const [shop, setShop] = useState();
-    const {searchType} = useParams();
 
     useEffect(() => {
         shopApi.getShopDetailByShopId(id).then((response) => {
             setShop(response.data[0]);
             console.log("Id: " + id);
-            console.log(response.data[0]);
+            console.log(response.data);
+            console.log("currentViewShopSubPage: " + currentViewShopSubPage);
         }).catch(error => console.log(error));
-    }, []);
-    
+    }, [id, currentViewShopSubPage]);
+
     return (
         <>
-            {shop && <StoreCard shop={shop}/>}
+            {shop && <StoreCard shop={shop} hideView/>}
             <ul className={'bg-white rounded-sm flex justify-between px-24 py-2'}>
-                <li className={'font-bold'}>
-                    <Link to={`/view-store/${id}`}>Home</Link>
-                    {searchType === undefined ? <span className={'block h-1 bg-sky-500 rounded-full'}/> : ''}
-                </li>
-                <li><Link to={`/view-shop/${id}/${SearchType.ALL_PRODUCT.text}`}>All products</Link></li>
-                <li><Link to={`/view-shop/${id}/${SearchType.ALL_PRODUCT.text}`}>Latest</Link></li>
-                <li><Link to={`/view-shop/${id}/${SearchType.BIRD.text}`}>Birds</Link></li>
-                <li><Link to={`/view-shop/${id}/${SearchType.ACCESSORY.text}`}>Accessories</Link></li>
-                <li><Link to={`/view-shop/${id}/${SearchType.FOOD.text}`}>Foods</Link></li>
+                {
+                    Object.values(ViewShopSubPageType).map((subPage) => (
+                      <li className={currentViewShopSubPage === subPage ? 'font-bold' : ''}>
+                          <Link to={`/view-shop/${id}/${subPage.path}`}>{subPage.text}</Link>
+                          {currentViewShopSubPage === subPage ? <span className={'block h-1 bg-sky-500 rounded-full'}/> : ''}
+                      </li>
+                    ))
+                }
             </ul>
         </>
     )
