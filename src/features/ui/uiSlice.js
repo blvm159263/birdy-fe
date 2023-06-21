@@ -4,6 +4,8 @@ import ViewShopSubPageType from "../../constants/ViewShopSubPageType";
 const initialState = {
     isShowFilterSideBar: false,
     currentViewShopSubPage: ViewShopSubPageType.HOME,
+    isShowCartDeleteAllSelectedModal: false,
+    isShowCartDeleteModal: false,
 }
 
 export const uiSlice = createSlice({
@@ -15,11 +17,19 @@ export const uiSlice = createSlice({
         },
         setCurrentViewShopSubPage: (state, action) => {
             state.currentViewShopSubPage = action.payload;
+        },
+        setShowCartDeleteAllSelectedModal: (state, action) => {
+            state.isShowCartDeleteAllSelectedModal = action.payload;
+        },
+        setShowCartDeleteModal: (state, action) => {
+            state.isShowCartDeleteModal = action.payload;
         }
     }
 });
 
 export const {toggleFilterSideBar,
-    setCurrentViewShopSubPage} = uiSlice.actions;
+    setCurrentViewShopSubPage,
+    setShowCartDeleteAllSelectedModal,
+    setShowCartDeleteModal} = uiSlice.actions;
 
 export default uiSlice.reducer;

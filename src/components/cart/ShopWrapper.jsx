@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import shopApi from '../../api/shopApi';
-import { deSelectAllItemsInShop, selectAllItemsInShop } from '../../features/cart/cartSlice';
+import {deSelectAllItemsInShop, selectAllItemsInShop} from '../../features/cart/cartSlice';
 import ProductRow from './ProductRow';
 
 export default function ShopWrapper({shopId, itemsInShop, hideControl}) {
