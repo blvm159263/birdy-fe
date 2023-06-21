@@ -1,12 +1,11 @@
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
-import { useState } from 'react';
+import {faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import React, {useEffect, useState} from 'react'
 import productApi from '../../api/productApi';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { decrementQuantity, incrementQuantity, removeItem, toggleSelectItem } from '../../features/cart/cartSlice';
-import { Link } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {decrementQuantity, incrementQuantity, setDeleteId, toggleSelectItem} from '../../features/cart/cartSlice';
+import {Link} from 'react-router-dom';
+import {setShowCartDeleteModal} from "../../features/ui/uiSlice";
 
 export default function ProductRow({id, hideControl}) {
     const [product, setProduct] = useState({});
@@ -52,7 +51,10 @@ export default function ProductRow({id, hideControl}) {
                 ${(quantity * product.unitPrice * (100 - product.salePtc) / 100).toFixed(2)}
             </div>
             <div className='col-span-1 text-red-500 hover:text-red-700 duration-200' hidden={hideControl}>
-                <button onClick={() => dispatch(removeItem(id))} className='p-2'><FontAwesomeIcon icon={faTrashCan} size='lg' /></button>
+                <button onClick={() => {
+                  dispatch(setShowCartDeleteModal(id));
+                  dispatch(setDeleteId(id));
+                }} className='p-2'><FontAwesomeIcon icon={faTrashCan} size='lg' /></button>
             </div>
         </div>
     )
