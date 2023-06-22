@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-function ShopProductCard({ product }) {
+function ShopProductCard({ product, isEditing, setIsEditing }) {
   return (
     <div className="bg-white rounded-lg h-full shadow-md sm:w-fit lg:w-[18%] flex flex-col items-center">
       <div className="h-52 w-full overflow-hidden">
@@ -28,7 +28,10 @@ function ShopProductCard({ product }) {
         )}
 
         <div className="flex justify-between w-full">
-          <button className=" text-red-500 px-4 py-2  border-grey-100 w-1/2">
+          <button
+            onClick={() => setIsEditing(true)}
+            className=" text-red-500 px-4 py-2  border-grey-100 w-1/2"
+          >
             Edit
           </button>
           <button className=" text-green-500 px-4 py-2 border-l w-1/2 border-grey-100">

@@ -2,13 +2,15 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
   shopProducts: null,
+  isEditing: false,
+  
 }
 
-export const uiSlice = createSlice({
+export const shopSlice = createSlice({
   name: "shop",
   initialState,
   reducers: {
-    getAllProduct: (state, action) => {
+    getAllProductForShopManage: (state, action) => {
       return {
         ...state,
         shopProducts: action.payload,
@@ -17,6 +19,6 @@ export const uiSlice = createSlice({
   },
 })
 
-export const { getAllProduct } = uiSlice.actions
+export const { getAllProductForShopManage } = shopSlice.actions
 
-export default uiSlice.reducer
+export default shopSlice.reducer
