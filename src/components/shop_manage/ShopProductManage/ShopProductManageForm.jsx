@@ -1,6 +1,13 @@
 import React from "react"
+import {useDispatch, useSelector} from "react-redux";
+import {setShowShopProductManageForm} from "../../../features/ui/uiSlice";
 
-function ShopProductManageForm({ isEditing, setIsEditing }) {
+function ShopProductManageForm() {
+  const isVisible = useSelector(state => state.ui.isShowShopProductManageForm);
+  const dispatch = useDispatch();
+
+  if(!isVisible) return;
+
   return (
     <div className="flex justify-center items-center overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 bg-gray-100/[.87]">
       <div className="relative w-auto my-6 mx-auto max-w-3xl">
@@ -11,7 +18,7 @@ function ShopProductManageForm({ isEditing, setIsEditing }) {
             <h3 className="text-3xl font-semibold">Edit Product</h3>
             <button
               className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-              onClick={() => setIsEditing(false)}
+              onClick={() => dispatch(setShowShopProductManageForm(false))}
             >
               <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
                 ×
@@ -20,7 +27,7 @@ function ShopProductManageForm({ isEditing, setIsEditing }) {
           </div>
           {/*body*/}
 
-          <div class="relative overflow-x-auto">
+          <div className="relative overflow-x-auto">
             <form></form>
           </div>
 
@@ -29,7 +36,7 @@ function ShopProductManageForm({ isEditing, setIsEditing }) {
             <button
               className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
               type="button"
-              onClick={() => setIsEditing(false)}
+              onClick={() => dispatch(setShowShopProductManageForm(false))}
             >
               Close
             </button>

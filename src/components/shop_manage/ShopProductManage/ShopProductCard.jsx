@@ -1,8 +1,13 @@
-import React, { useState } from "react"
+import React from "react"
+import {useDispatch} from "react-redux";
+import {setShowShopProductManageForm} from "../../../features/ui/uiSlice";
+import {setEditId} from "../../../features/shops/shopSlice";
 
-function ShopProductCard({ product, isEditing, setIsEditing }) {
+function ShopProductCard({ product }) {
+  const dispatch = useDispatch();
+
   return (
-    <div className="bg-white rounded-lg h-full shadow-md sm:w-fit lg:w-[18%] flex flex-col items-center">
+    <div className="bg-white rounded-lg shadow-md flex flex-col items-center">
       <div className="h-52 w-full overflow-hidden">
         <img
           src="../assets/images/product-demo.png"
@@ -29,7 +34,10 @@ function ShopProductCard({ product, isEditing, setIsEditing }) {
 
         <div className="flex justify-between w-full">
           <button
-            onClick={() => setIsEditing(true)}
+            onClick={() => {
+              dispatch(setEditId(product.id));
+              dispatch(setShowShopProductManageForm(true));
+            }}
             className=" text-red-500 px-4 py-2  border-grey-100 w-1/2"
           >
             Edit
