@@ -1,6 +1,20 @@
-import React from "react"
+import React, { useEffect } from "react"
+import { useParams } from "react-router-dom"
+import orderApi from "../../../api/orderApi"
 
 function UserAllOrder() {
+  const { userid } = useParams()
+  const fetchUserOrder = (userid) => {
+    orderApi
+      .getAllOrderByUserId(userid)
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((e) => console.log(e))
+  }
+  useEffect(() => {
+    fetchUserOrder(userid)
+  }, [])
   return (
     <div>
       <div className="px-6 mt-6 border-b">
