@@ -9,12 +9,14 @@ function getItem(label, key, icon, children, type) {
     children,
     label,
     type,
-  };
+  }
 }
 
-const { SubMenu } = Menu;
+const { SubMenu } = Menu
 const items = [
-  getItem('Shop Profile', '1',
+  getItem(
+    "Shop Profile",
+    "1",
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="w-5 h-5 mr-2"
@@ -28,9 +30,12 @@ const items = [
         strokeLinejoin="round"
         d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
       />
-    </svg>,),
+    </svg>
+  ),
 
-  getItem('Shop Orders', '2',
+  getItem(
+    "Shop Orders",
+    "2",
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="w-5 h-5 mr-2"
@@ -44,9 +49,12 @@ const items = [
         strokeLinejoin="round"
         d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
       />
-    </svg>),
+    </svg>
+  ),
 
-  getItem('Shop Products', 'sub1',
+  getItem(
+    "Shop Products",
+    "sub1",
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="w-5 h-5 mr-2"
@@ -60,12 +68,13 @@ const items = [
         strokeLinejoin="round"
         d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
       />
-    </svg>, [
-    getItem('View List Products', '3'),
-    getItem('Create New Product', '4'),
-  ]),
+    </svg>,
+    [getItem("View List Products", "3"), getItem("Create New Product", "4")]
+  ),
 
-  getItem('Logout', '5',
+  getItem(
+    "Logout",
+    "5",
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="w-5 h-5 mr-2"
@@ -79,23 +88,26 @@ const items = [
         strokeLinejoin="round"
         d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
       />
-    </svg>),
-];
-console.log(items);
-
+    </svg>
+  ),
+]
+console.log(items)
 
 // const getPath = function () {
 //   window.location.pathname.split("/")[2];
 // }
 
 function Sidebar() {
-
   const handlePath = function () {
     switch (window.location.pathname.split("/shop")[1]) {
-      case "": return 1;
-      case "/orders": return 2;
-      case "/products": return 3;
-      case "/product/new": return 4;
+      case "":
+        return 1
+      case "/orders":
+        return 2
+      case "/products":
+        return 3
+      case "/product/new":
+        return 4
     }
   }
 
@@ -123,41 +135,57 @@ function Sidebar() {
             </div>
           </div>
           <div className="flex-1 h-full py-7">
-
-            <div
-              className="w-full h-full bg-white"
-            >
-
+            <div className="w-full h-full bg-white">
               <Menu
                 defaultSelectedKeys={[handlePath().toString()]}
-                defaultOpenKeys={['sub1']}
+                defaultOpenKeys={["sub1"]}
                 mode="inline"
                 theme="light"
               >
-                <Menu.Item className="font-medium text-base text-gray-400" key="1" icon={items[0].icon}>
+                <Menu.Item
+                  className="font-medium text-base text-gray-400"
+                  key="1"
+                  icon={items[0].icon}
+                >
                   {items[0].label}
                   <Link to="/shop" />
                 </Menu.Item>
-                <Menu.Item className="font-medium text-base text-gray-400" key="2" icon={items[0].icon}>
+                <Menu.Item
+                  className="font-medium text-base text-gray-400"
+                  key="2"
+                  icon={items[0].icon}
+                >
                   {items[1].label}
                   <Link to="/shop/orders" />
                 </Menu.Item>
-                <SubMenu className="font-medium text-base text-gray-400" key="sub1" icon={items[2].icon} title={items[2].label}>
+                <SubMenu
+                  className="font-medium text-base text-gray-400"
+                  key="sub1"
+                  icon={items[2].icon}
+                  title={items[2].label}
+                >
                   <Menu.Item className="font-normal text-black" key="3">
-                    <span style={{ marginLeft: "38px" }} >{items[2].children[0].label}</span>
+                    <span style={{ marginLeft: "38px" }}>
+                      {items[2].children[0].label}
+                    </span>
                     <Link to="/shop/products" />
                   </Menu.Item>
                   <Menu.Item className="font-normal text-black" key="4">
-                    <span style={{ marginLeft: "38px" }} >{items[2].children[1].label}</span>
+                    <span style={{ marginLeft: "38px" }}>
+                      {items[2].children[1].label}
+                    </span>
                     <Link to="/shop/product/new" />
                   </Menu.Item>
                 </SubMenu>
-                <Menu.Item className="font-medium text-base text-gray-400" key="5" icon={items[3].icon}>
+                <Menu.Item
+                  className="font-medium text-base text-gray-400"
+                  key="5"
+                  icon={items[3].icon}
+                >
                   {items[3].label}
                   <Link to="/logout" />
                 </Menu.Item>
               </Menu>
-
             </div>
 
             {/* <ul className="pt-2 pb-4 space-y-1 text-sm">
@@ -271,7 +299,6 @@ function Sidebar() {
   //     />
   //   </div>
   // );
-
 }
 
 export default Sidebar

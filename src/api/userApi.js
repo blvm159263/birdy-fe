@@ -14,22 +14,21 @@ const userApi = {
     return axiosClient.post(url, params)
   },
   getUserByPhoneNumber(data) {
-    const url = '/users/phone/' + data;
-    return axiosClient.get(url);
+    const url = "/users/phone/" + data
+    return axiosClient.get(url)
   },
   getDefaultAddress(data) {
-    const url = `/users/${data}/address-default`;
-    return axiosClient.get(url);
+    const url = `/users/${data}/address-default`
+    return axiosClient.get(url)
   },
   getAllAddress(data) {
-    const url = `/users/${data}/addresses`;
-    return axiosClient.get(url);
+    const url = `/users/${data}/addresses`
+    return axiosClient.get(url)
   },
   addAddress(data) {
-    const url = `/users/${data.userId}/addresses`;
-    return axiosClient.post(url, data);
+    const url = `/users/${data.userId}/addresses`
+    return axiosClient.post(url, data)
   },
 }
 
 export default userApi
-
