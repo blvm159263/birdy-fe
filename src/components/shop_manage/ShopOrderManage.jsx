@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useContext } from "react"
 import ShopOrderModal from "./ShopOrderModal"
 import shopApi from "../../api/shopApi"
 import orderApi from "../../api/orderApi";
-import { Table, Tag, Badge, Steps, message, Button } from 'antd';
+import { Table, Tag, Badge, Steps, Button } from 'antd';
+import { NotificationContext } from "../../context/NotificationProvider"
 import { SmileOutlined } from '@ant-design/icons';
 import { set } from "date-fns";
 import { current } from "@reduxjs/toolkit";
 import { de, el } from "date-fns/locale";
 
 function ShopOrderManage() {
+  const openNotificationWithIcon = useContext(NotificationContext);
   const [updateStatus, setUpdateStatus] = useState(false);
   const [stepStatus, setStepStatus] = useState('process');
   const [title1, setTitle1] = useState('Deliver | Cancel');
@@ -22,16 +24,27 @@ function ShopOrderManage() {
   const [orderDetails, setOrderDetails] = useState([])
   const [page, setPage] = useState(1)
   const searchRef = useRef(null)
-  // const [totalOrders, setTotalOrders] = useState(0)
+  const [sort, setSort] = useState('asc')
+  const [totalOrders, setTotalOrders] = useState(0)
+  const [payment, setPayment] = useState(null)
+  const [state, setState] = useState(null)
   const [search, setSearch] = useState("")
-  const shopId = 1
+  const shopId = 1;
 
   const fetchOrder = async () => {
     try {
-      await shopApi.getShopOrders(shopId, { search: search })
+      const formattedPayment = payment !== null ? payment.join(',') : null;
+      const formattedState = state !== null ? state.join(',') : null;
+      await shopApi.getShopOrders(shopId, { 
+        search: search, 
+        sort: sort, 
+        payment: formattedPayment, 
+        state: formattedState, 
+        page: page - 1 
+      })
         .then((response) => {
-          setShopOrders(response.data);
-          // setTotalOrders(response.data[1])
+          setShopOrders(response.data[0]);
+          setTotalOrders(response.data[1])
         })
     } catch (error) {
       console.log(error)
@@ -42,7 +55,7 @@ function ShopOrderManage() {
       setUpdateStatus(false)
     }
     fetchOrder()
-  }, [search, updateStatus])
+  }, [search, sort, payment, state, page, updateStatus])
 
   // const getPage = (current) => {
   //   setPage(current);
@@ -102,7 +115,8 @@ function ShopOrderManage() {
       title: 'Order ID',
       dataIndex: 'id',
       width: 150,
-      sorter: (a, b) => a.id - b.id,
+      // sorter: (a, b) => a.id - b.id,
+      sorter: true,
     },
     {
       title: 'Customer Name',
@@ -131,7 +145,7 @@ function ShopOrderManage() {
           value: 'PAID',
         },
       ],
-      onFilter: (value, record) => record.status.props.children.indexOf(value) === 0,
+      // onFilter: (value) => console.log(value),
     },
     {
       title: 'Shipping',
@@ -155,7 +169,7 @@ function ShopOrderManage() {
           value: 'CANCELED',
         }
       ],
-      onFilter: (value, record) => record.shipping.props.text.indexOf(value) === 0,
+      // onFilter: (value, record) => record.shipping.props.text.indexOf(value) === 0,
     },
     {
       title: 'Details',
@@ -164,21 +178,11 @@ function ShopOrderManage() {
     },
   ];
 
-  const data = shopOrders.map((order, index) => {
-    return {
-      key: index + 1,
-      id: order.id,
-      name: order.customer,
-      total: '$' + order.total,
-      payment: order.paymentMethod.toUpperCase(),
-      status: <Tag color={getColorTag(order.paymentStatus)}>{order.paymentStatus}</Tag>,
-      shipping: <Badge status={getColorBadge(order.state)} text={order.state} />,
-      details: <button className="font-medium text-blue-600 hover:underline text-center" onClick={() => handleViewModal(order.id, order.state)}>View</button>
-    }
-  });
-
   const onChange = (pagination, filters, sorter, extra) => {
     setPage(pagination.current);
+    setSort(sorter.order === 'descend' ? 'desc' : 'asc');
+    filters.status !== null ? setPayment(filters.status) : setPayment(null);
+    filters.shipping !== null ? setState(filters.shipping) : setState(null);
     console.log('params', pagination, filters, sorter, extra);
   };
 
@@ -203,6 +207,19 @@ function ShopOrderManage() {
         return 'error'
     }
   }
+
+  const data = shopOrders.map((order, index) => {
+    return {
+      key: index + 1,
+      id: order.id,
+      name: order.customer,
+      total: '$' + order.total,
+      payment: order.paymentMethod.toUpperCase(),
+      status: <Tag color={getColorTag(order.paymentStatus)}>{order.paymentStatus}</Tag>,
+      shipping: <Badge status={getColorBadge(order.state)} text={order.state} />,
+      details: <button className="font-medium text-blue-600 hover:underline text-center" onClick={() => handleViewModal(order.id, order.state)}>View</button>
+    }
+  });
 
   const handleKeyDown = (e) => {
     const newSearch = e.target.value.trim();
@@ -267,12 +284,14 @@ function ShopOrderManage() {
       .then((response) => {
         if (response.status === 200) {
           setUpdateStatus(true)
-          message.success('Order shipping status is updated successfully!')
+          openNotificationWithIcon('Order shipping status is updated successfully!');
+          // message.success('Order shipping status is updated successfully!')
         }
       }
       ).catch((error) => {
         console.log(error)
-        message.error('Order shipping status is updated failed!')
+        openNotificationWithIcon('Order shipping status is updated failed!');
+        // message.error('Order shipping status is updated failed!')
       })
   }
 
@@ -328,7 +347,7 @@ function ShopOrderManage() {
         <Table
           columns={columns}
           dataSource={data}
-          pagination={{ pageSize: 10, current: page }}
+          pagination={{ pageSize: 10, current: page, total: totalOrders }}
           onChange={onChange}
         />
       </div>

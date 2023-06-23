@@ -7,12 +7,13 @@ const NotificationProvider = ({ children }) => {
     const [api, contextHolder] = notification.useNotification();
     const openNotificationWithIcon = (mess, desc) => {
         api['success']({
-            message: mess ,
+            message: mess,
             description:
-                 desc ,
+                desc,
             placement: 'topRight',
         });
     };
+
     return (
         <>
             {contextHolder}

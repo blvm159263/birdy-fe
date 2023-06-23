@@ -3,7 +3,7 @@
   background-color: #1677ff;
 }
 .anticon {
-  vertical-align : -0.1rem;
+  vertical-align : 0.1rem;
 }
 @tailwind components;
 @tailwind utilities;

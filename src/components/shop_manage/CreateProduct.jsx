@@ -230,7 +230,7 @@ function CreateProduct() {
             createDate: new Date().toISOString(),
             species: values.find((item) => item.key === 'species')?.value || null,
             age: values.find((item) => item.key === 'age')?.value || null,
-            gender: getGenderId(),
+            gender: getGenderId() || null,
             color: values.find((item) => item.key === 'color')?.value || null,
             // expDate: values.find((item) => item.key === 'expDate')?.value || null,
             expDate: date ? parseDateString(date) : null,
@@ -261,7 +261,7 @@ function CreateProduct() {
 
         // productDto.imageMain = params.mainImage === undefined ? null : params.mainImage;
         // productDto.subImages = params.subImages;
-        // console.log(params);
+        console.log(productDto);
         productApi.addNewProduct(params).then((res) => {
             console.log(res);
             if (res.status === 201) {
