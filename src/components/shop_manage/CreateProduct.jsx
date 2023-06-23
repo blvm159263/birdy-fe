@@ -241,7 +241,7 @@ function CreateProduct() {
             // description: values.find((item) => item.key === 'description')?.value || null,
             description: des === '' ? null : des,
             brandName: values.find((item) => item.key === 'brand')?.value || null,
-            state: 1,
+            state: 0,
             categoryId: getCategoryId(),
             categoryName: category,
             shopId: 1,

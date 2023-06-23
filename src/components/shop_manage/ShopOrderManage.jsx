@@ -164,6 +164,19 @@ function ShopOrderManage() {
     },
   ];
 
+  const data = shopOrders.map((order, index) => {
+    return {
+      key: index + 1,
+      id: order.id,
+      name: order.customer,
+      total: '$' + order.total,
+      payment: order.paymentMethod.toUpperCase(),
+      status: <Tag color={getColorTag(order.paymentStatus)}>{order.paymentStatus}</Tag>,
+      shipping: <Badge status={getColorBadge(order.state)} text={order.state} />,
+      details: <button className="font-medium text-blue-600 hover:underline text-center" onClick={() => handleViewModal(order.id, order.state)}>View</button>
+    }
+  });
+
   const onChange = (pagination, filters, sorter, extra) => {
     setPage(pagination.current);
     console.log('params', pagination, filters, sorter, extra);
@@ -224,6 +237,7 @@ function ShopOrderManage() {
       description: des2,
     },
   ];
+
 
   const deliver = () => {
     setCurrent(current + 1);
@@ -313,20 +327,7 @@ function ShopOrderManage() {
 
         <Table
           columns={columns}
-          dataSource={
-            shopOrders.map((order, index) => {
-              return {
-                key: index + 1,
-                id: order.id,
-                name: order.customer,
-                total: '$' + order.total,
-                payment: order.paymentMethod.toUpperCase(),
-                status: <Tag color={getColorTag(order.paymentStatus)}>{order.paymentStatus}</Tag>,
-                shipping: <Badge status={getColorBadge(order.state)} text={order.state} />,
-                details: <button className="font-medium text-blue-600 hover:underline text-center" onClick={() => handleViewModal(order.id, order.state)}>View</button>
-              }
-            })
-          }
+          dataSource={data}
           pagination={{ pageSize: 10, current: page }}
           onChange={onChange}
         />
@@ -346,9 +347,6 @@ function ShopOrderManage() {
                     onClick={() => setShowModal(false)}
                   >
                     &times;
-                    {/* <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      x
-                    </span> */}
                   </button>
                 </div>
                 {/*body*/}
