@@ -16,7 +16,12 @@ export const userSlice = createSlice({
         userInformation: action.payload,
       }
     },
-    getAllOrder: () => {},
+    getAllOrder: (state, action) => {
+      return {
+        ...state,
+        userOrder: action.payload,
+      }
+    },
     getUserAddresses: (state, action) => {
       return {
         ...state,
@@ -32,7 +37,7 @@ export const userSlice = createSlice({
   },
 })
 
-export const { getAUser, getUserAddresses, addNewAddressSlice } =
+export const { getAUser, getUserAddresses, addNewAddressSlice, getAllOrder } =
   userSlice.actions
 
 export default userSlice.reducer

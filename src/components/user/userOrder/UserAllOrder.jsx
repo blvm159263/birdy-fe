@@ -1,23 +1,15 @@
 import React, { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import orderApi from "../../../api/orderApi"
+import UserOrderList from "./UserOrderList"
+import UserOrderDetail from "./UserOrderDetail"
 
 function UserAllOrder() {
-  const { userid } = useParams()
-  const fetchUserOrder = (userid) => {
-    orderApi
-      .getAllOrderByUserId(userid)
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((e) => console.log(e))
-  }
-  useEffect(() => {
-    fetchUserOrder(userid)
-  }, [])
   return (
     <div>
-      <div className="px-6 mt-6 border-b">
+      <UserOrderList />
+      <UserOrderDetail />
+      {/* <div className="px-6 mt-6 border-b">
         <div className="flex justify-between border-b py-2">
           <div className="flex items-center">
             <h2 className="font-bold mr-2">ShopName</h2>
@@ -58,7 +50,7 @@ function UserAllOrder() {
             Buy Again
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

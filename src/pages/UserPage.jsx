@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import UserSidebar from "../components/user/UserSidebar"
 
 import { Routes, Route } from "react-router-dom"
@@ -13,6 +13,7 @@ import { getAUser } from "../features/user/userSlice"
 
 function UserPage() {
   const userInformation = useSelector((state) => state.user.userInformation)
+  const [isLoading, setIsLoading] = useState(true)
 
   const dispatch = useDispatch()
   const { userid } = useParams()
@@ -21,6 +22,7 @@ function UserPage() {
       .getUserById(userid)
       .then((response) => {
         dispatch(getAUser(response.data))
+        setIsLoading(false)
       })
       .catch((error) => {
         console.log(error)
@@ -31,11 +33,16 @@ function UserPage() {
     fetchUser(userid)
   }, [])
   return (
-    <div className="flex bg-gray-200 px-16 py-10">
+    <div className="flex h-full bg-gray-200 px-16 py-10">
       <UserSidebar />
       {/* <UserAction /> */}
       <Routes>
-        <Route index element={<UserInfor />} />
+        <Route
+          index
+          element={
+            <UserInfor isLoading={isLoading} setIsLoading={setIsLoading} />
+          }
+        />
         <Route path="/address" element={<UserAddress />} />
         <Route path="/order" element={<UserOrder />} />
       </Routes>
