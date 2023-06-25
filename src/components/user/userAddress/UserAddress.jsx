@@ -9,10 +9,10 @@ function UserAddress() {
   const { userid } = useParams()
 
   const [isModal, setIsModal] = useState(false)
-
   const userAddresses = useSelector((state) => state.user.userAddress)
-  const dispatch = useDispatch()
   console.log(userAddresses)
+  const dispatch = useDispatch()
+  // console.log(userAddresses)
 
   const fetchAddress = (userid) => {
     userApi
