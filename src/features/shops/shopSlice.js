@@ -1,24 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  shopProducts: null,
-  isEditing: false,
-  
+  editId: undefined,
 }
 
 export const shopSlice = createSlice({
   name: "shop",
   initialState,
   reducers: {
-    getAllProductForShopManage: (state, action) => {
-      return {
-        ...state,
-        shopProducts: action.payload,
-      }
-    },
+    setEditId: (state, action) => {
+      state.editId = action.payload;
+    }
   },
 })
 
-export const { getAllProductForShopManage } = shopSlice.actions
+export const { setEditId } = shopSlice.actions
 
 export default shopSlice.reducer

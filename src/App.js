@@ -21,35 +21,42 @@ import UserInfor from "./components/user/userInfor/UserInfor"
 import UserAddress from "./components/user/userAddress/UserAddress"
 import UserPage from "./pages/UserPage"
 import UserOrder from "./components/user/userOrder/UserOrder"
-import ViewShopPage from "./pages/ViewShopPage"
-import AllShopsPage from "./pages/AllShopsPage"
+import ViewShopPage from "./pages/ViewShopPage";
+import AllShopsPage from "./pages/AllShopsPage";
 import CheckoutPage from "./pages/CheckoutPage"
 import { useEffect, useContext } from "react"
 import storageService from "./api/storage"
-import jwtDecode from "jwt-decode"
+import jwtDecode from "jwt-decode";
 import { LoginContext } from "./context/LoginProvider"
+import AllFeaturedPage from "./pages/AllFeaturedPage";
+import ShopHomeSubPage from "./components/store/ShopHomeSubPage";
+import ShopAllProductsSubPage from "./components/store/ShopAllProductsSubPage";
+import ViewShopSubPageType from "./constants/ViewShopSubPageType";
+import ShopLatestProductsSubPage from "./components/store/ShopLatestProductsSubPage";
+import ShopProductsByCategorySubPage from "./components/store/ShopProductsByCategorySubPage";
 import AllFeaturedPage from "./pages/AllFeaturedPage"
 import ShopLoginPage from "./pages/ShopLoginPage"
 
 function App() {
-  const { isLogin, setIsLogin, setRole } = useContext(LoginContext)
+
+  const { isLogin, setIsLogin, setRole } = useContext(LoginContext);
 
   function convertTimestampToDate(timestamp) {
-    return new Date(timestamp * 1000)
+    return new Date(timestamp * 1000);
   }
 
   useEffect(() => {
-    var token = storageService.getAccessToken()
+    var token = storageService.getAccessToken();
     if (token) {
-      token = jwtDecode(token)
-      const currentTime = Math.floor(Date.now() / 1000)
+      token = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
       if (currentTime > token.exp) {
-        storageService.removeAccessToken()
-        setIsLogin(false)
-        setRole("")
+        storageService.removeAccessToken();
+        setIsLogin(false);
+        setRole("");
       } else {
-        setIsLogin(true)
-        setRole(token.role)
+        setIsLogin(true);
+        setRole(token.role);
       }
     }
   }, [])
@@ -59,9 +66,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="all-featured" element={<AllFeaturedPage />} />
+          <Route path='all-featured' element={<AllFeaturedPage/>} />
           <Route path="/search">
-            <Route path="all-shop" element={<AllShopsPage />} />
+            <Route path="all-shop" element={<AllShopsPage/>} />
             <Route path=":searchType" element={<SearchPage />} />
           </Route>
           <Route path="/detail-item/:id" element={<DetailItemPage />} />
@@ -74,7 +81,14 @@ function App() {
             <Route path="/user/:userid/address" element={<UserAddress />} />
             <Route path="/user/:userid/order" element={<UserOrder />} />
           </Route>
-          <Route path="view-shop/:id" element={<ViewShopPage />} />
+          <Route path="view-shop/:id" element={<ViewShopPage/>} >
+            <Route index element={<ShopHomeSubPage/>} />
+            <Route path={ViewShopSubPageType.ALL_PRODUCTS.path} element={<ShopAllProductsSubPage/>} />
+            <Route path={ViewShopSubPageType.LATEST.path} element={<ShopLatestProductsSubPage/>} />
+            <Route path={ViewShopSubPageType.BIRDS.path} element={<ShopProductsByCategorySubPage viewShopSubPageType={ViewShopSubPageType.BIRDS}/>} />
+            <Route path={ViewShopSubPageType.ACCESSORIES.path} element={<ShopProductsByCategorySubPage viewShopSubPageType={ViewShopSubPageType.ACCESSORIES}/>} />
+            <Route path={ViewShopSubPageType.FOODS.path} element={<ShopProductsByCategorySubPage viewShopSubPageType={ViewShopSubPageType.FOODS}/>} />
+          </Route>
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
