@@ -1,7 +1,7 @@
 import React from "react"
 import {useDispatch} from "react-redux";
-import {setShowShopProductManageForm} from "../../../features/ui/uiSlice";
-import {setEditId} from "../../../features/shops/shopSlice";
+import {fetchProductFormValues, setEditId} from "../../../features/shops/shopSlice";
+import {setShowShopProductEditModal} from "../../../features/ui/uiSlice";
 
 function ShopProductCard({ product }) {
   const dispatch = useDispatch();
@@ -36,7 +36,8 @@ function ShopProductCard({ product }) {
           <button
             onClick={() => {
               dispatch(setEditId(product.id));
-              dispatch(setShowShopProductManageForm(true));
+              dispatch(fetchProductFormValues(product.id));
+              dispatch(setShowShopProductEditModal(true));
             }}
             className=" text-red-500 px-4 py-2  border-grey-100 w-1/2"
           >
