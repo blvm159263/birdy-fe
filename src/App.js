@@ -29,6 +29,7 @@ import storageService from "./api/storage"
 import jwtDecode from "jwt-decode"
 import { LoginContext } from "./context/LoginProvider"
 import AllFeaturedPage from "./pages/AllFeaturedPage"
+import ShopLoginPage from "./pages/ShopLoginPage"
 
 function App() {
   const { isLogin, setIsLogin, setRole } = useContext(LoginContext)
@@ -77,6 +78,7 @@ function App() {
           <Route path="*" element={<NoPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/shop-login" element={<ShopLoginPage />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminProductManage />} />
           <Route path="/admin/user-manage-ad" element={<AdminUserManage />} />

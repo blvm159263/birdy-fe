@@ -1,91 +1,85 @@
 import React from "react"
 import { useState } from "react"
-import validator from 'validator'
-import authApi from "../../api/authApi";
-import { useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
-import { LoginContext } from "../../context/LoginProvider";
-import storageService from "../../api/storage";
-import { NotificationContext } from "../../context/NotificationProvider";
-import jwtDecode from "jwt-decode";
-
+import validator from "validator"
+import authApi from "../../api/authApi"
+import { useNavigate } from "react-router-dom"
+import { useContext, useEffect } from "react"
+import { LoginContext } from "../../context/LoginProvider"
+import storageService from "../../api/storage"
+import { NotificationContext } from "../../context/NotificationProvider"
+import jwtDecode from "jwt-decode"
 
 function SignIn({ setIsSignIn }) {
+  const openNotificationWithIcon = useContext(NotificationContext)
+  const { setIsLogin, setRole } = useContext(LoginContext)
 
-  const openNotificationWithIcon = useContext(NotificationContext);
-  const { setIsLogin, setRole } = useContext(LoginContext);
-
-  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true)
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [password, setPassword] = useState("")
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const token = storageService.getAccessToken();
-    let tokenDecode;
+    const token = storageService.getAccessToken()
+    let tokenDecode
     if (token) {
-      tokenDecode = jwtDecode(token);
-      const currentTime = Math.floor(Date.now() / 1000);
+      tokenDecode = jwtDecode(token)
+      const currentTime = Math.floor(Date.now() / 1000)
       if (currentTime < tokenDecode.exp) {
-        console.log(tokenDecode);
+        console.log(tokenDecode)
         console.log("token hợp lệ")
-        setIsLogin(true);
-        setRole(tokenDecode.role);
-        navigate('/');
+        setIsLogin(true)
+        setRole(tokenDecode.role)
+        navigate("/")
       }
     }
-
   }, [])
 
-
   const validationPhoneNumber = () => {
-    setIsValidPhoneNumber(validator.isMobilePhone(phoneNumber, 'vi-VN'));
+    setIsValidPhoneNumber(validator.isMobilePhone(phoneNumber, "vi-VN"))
   }
 
   const formatPhoneNumber = (number) => {
-
     if (phoneNumber.startsWith("+84")) {
-      number = "0" + number.substr(3);
+      number = "0" + number.substr(3)
     }
-    return number;
+    return number
   }
 
   const onSignIn = () => {
-    validationPhoneNumber();
+    validationPhoneNumber()
     if (isValidPhoneNumber) {
-      authApi.login({
-        phoneNumber: formatPhoneNumber(phoneNumber),
-        password: password
-      })
-        .then(res => {
+      authApi
+        .login({
+          phoneNumber: formatPhoneNumber(phoneNumber),
+          password: password,
+        })
+        .then((res) => {
           if (res.status === 200) {
             // alert("login thành công")
-            let token = jwtDecode(res.data.token);
-            const date = new Date();
-            storageService.setAccessToken(res.data.token);
-            setRole(token.role);
+            let token = jwtDecode(res.data.token)
+            const date = new Date()
+            storageService.setAccessToken(res.data.token)
+            setRole(token.role)
             setIsLogin(true)
-            navigate('/')
+            navigate("/")
           } else if (res.status === 403) {
-
           }
-        }).catch(err => {
-          openNotificationWithIcon("error", "Đăng nhập thất bại");
-          console.log(err);
+        })
+        .catch((err) => {
+          openNotificationWithIcon("error", "Đăng nhập thất bại")
+          console.log(err)
         })
     }
   }
 
   const handleEntailmentRequest = (e) => {
-    e.preventDefault();
+    e.preventDefault()
   }
 
   return (
-    <div className="lg:w-1/2 sm:w-full p-5 sm:mx-auto">
+    <div className="lg:w-1/2 sm: w-full p-5 sm:mx-auto">
       <form className="lg:w-1/2 sm:w-full bg-white p-10 rounded-md">
-        <h1 className="text-3xl mb-4">
-          Sign In
-        </h1>
+        <h1 className="text-3xl mb-4">Sign In</h1>
         <div className="mb-4">
           <input
             type="text"
@@ -95,7 +89,11 @@ function SignIn({ setIsSignIn }) {
             className="w-full border-gray-300 border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
-          {isValidPhoneNumber ? "" : <div className="text-rose-600">Invalid Phone Number !</div>}
+          {isValidPhoneNumber ? (
+            ""
+          ) : (
+            <div className="text-rose-600">Invalid Phone Number !</div>
+          )}
         </div>
         <div className="mb-4">
           <input
@@ -111,8 +109,8 @@ function SignIn({ setIsSignIn }) {
           type="submit"
           className="bg-orange-400	w-full my-2 text-white px-4 py-2 rounded hover:bg-white hover:text-orange-400 hover:border-orange-400 hover:outline outline-1 focus:outline-none focus:bg-blue-600"
           onClick={(e) => {
-            handleEntailmentRequest(e);
-            onSignIn();
+            handleEntailmentRequest(e)
+            onSignIn()
           }}
         >
           Sign In
@@ -145,4 +143,4 @@ function SignIn({ setIsSignIn }) {
   )
 }
 
-export default SignIn;
+export default SignIn
