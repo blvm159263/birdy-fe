@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setShowShopProductEditModal} from "../../../../features/ui/uiSlice";
 import CategoryField from "./field/CategoryField";
@@ -24,11 +24,18 @@ import SubImagesField from "./field/SubImagesField";
 export default function EditProductForm() {
   const dispatch = useDispatch();
   const formValues = useSelector(state => state.shop.productFormValues);
+  const [mainImage, setMainImage] = useState(formValues.imageMain);
+  const [subImages, setSubImages] = useState([])
 
   useEffect(() => {
+    console.clear();
     console.log("Current form values:");
     console.log(formValues);
-  }, [formValues])
+    console.log("Current mainImage:");
+    console.log(mainImage);
+    console.log("Current subImages:");
+    console.log(subImages);
+  }, [formValues, mainImage, subImages])
 
   function handleFormSubmit(e) {
     e.preventDefault();
@@ -36,7 +43,7 @@ export default function EditProductForm() {
     const productDTO = {
       id: formValues.id,
       productName: formValues.productName,
-      imageMain: formValues.imageMain,
+      imageMain: '',
       unitPrice: formValues.unitPrice,
       salePtc: formValues.salePtc,
       quantity: formValues.quantity,
@@ -62,8 +69,8 @@ export default function EditProductForm() {
 
     const params = {
       productDTO: JSON.stringify(productDTO),
-      mainImage: productDTO.imageMain,
-      subImages: formValues.subImages,
+      mainImage: mainImage,
+      subImages: subImages,
     }
 
     console.log("Submitted form! With below data:");
@@ -82,8 +89,8 @@ export default function EditProductForm() {
           className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
           onSubmit={(e) => handleFormSubmit(e)}>
       <NameField/>
-      <MainImageField/>
-      <SubImagesField/>
+      <MainImageField setMainImage={setMainImage}/>
+      <SubImagesField setSubImages={setSubImages}/>
       <CategoryField/>
       <div className='grid grid-cols-5 gap-3'>
         {formValues.categoryId === 1 && <SpeciesField/>}

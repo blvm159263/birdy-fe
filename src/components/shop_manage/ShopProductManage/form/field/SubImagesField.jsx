@@ -1,7 +1,6 @@
 import {Modal, Upload} from "antd";
 import React, {useState} from "react";
 import {PlusOutlined} from "@ant-design/icons";
-import {useDispatch} from "react-redux";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -11,12 +10,11 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error)
   })
 
-export default function SubImagesField() {
+export default function SubImagesField({setSubImages}) {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState("")
   const [error, setError] = useState(null)
   const [fileList, setFileList] = useState([]);
-  const dispatch = useDispatch();
 
   const handlePreview = async (file) => {
     if (!file.preview) {
@@ -42,6 +40,7 @@ export default function SubImagesField() {
       }
     }
     setFileList(newFileList);
+    setSubImages(newFileList.map(fileList => fileList.originFileObj));
   }
 
   return (

@@ -1,8 +1,7 @@
 import {Modal, Upload} from "antd";
 import React, {useState} from "react";
 import {PlusOutlined} from "@ant-design/icons";
-import {useDispatch, useSelector} from "react-redux";
-import {updateProductFormValues} from "../../../../../features/shops/shopSlice";
+import {useSelector} from "react-redux";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -12,7 +11,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error)
 })
 
-export default function MainImageField() {
+export default function MainImageField({setMainImage}) {
   const imageMain = useSelector(state => state.shop.productFormValues.imageMain);
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState("")
@@ -23,7 +22,6 @@ export default function MainImageField() {
       url: imageMain,
     }
   ]);
-  const dispatch = useDispatch();
 
   const handlePreview = async (file) => {
     if (!file.preview) {
@@ -51,11 +49,9 @@ export default function MainImageField() {
     setFileList(newFileList);
 
     if(newFileList[0]) {
-      getBase64(newFileList[0].originFileObj).then((base64result) => {
-        dispatch(updateProductFormValues({imageMain: base64result}))
-      })
+      setMainImage(newFileList[0].originFileObj);
     } else {
-      dispatch(updateProductFormValues({imageMain: ''}))
+      setMainImage('');
     }
   }
 

@@ -28,7 +28,6 @@ const initialState = {
     categoryName: undefined,
     shopId: undefined,
     shopName: undefined,
-    subImages: [],
   },
 }
 
@@ -64,7 +63,7 @@ export const shopSlice = createSlice({
         ...action.payload
       }
     })
-  }
+  },
 })
 
 export const { setEditId ,
