@@ -20,7 +20,7 @@ export default function PriceField() {
         <input
           type="number"
           min={0.01}
-          step={"0.01"}
+          step={0.01}
           id="price"
           name="price"
           value={unitPrice}

@@ -7,18 +7,18 @@ const initialState = {
     id:	undefined,
     productName: '',
     imageMain: undefined,
-    unitPrice: undefined,
+    unitPrice: 1,
     salePtc: undefined,
-    quantity: undefined,
+    quantity: 1,
     rating: undefined,
     createDate: undefined,
     species: '',
     age: undefined,
     gender: undefined,
-    color: undefined,
+    color: '',
     expDate: undefined,
     madeIn: undefined,
-    weight: undefined,
+    weight: '',
     size: undefined,
     material: undefined,
     description: '',
@@ -55,10 +55,7 @@ export const shopSlice = createSlice({
         ...action.payload
       }
     },
-    setSubImages: (state, action) => {
-      state.productFormValues.subImages = action.payload;
-    },
-    resetAllState: (state, action) => initialState
+    resetAllState: () => initialState
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProductFormValues.fulfilled, (state, action) => {
@@ -72,7 +69,6 @@ export const shopSlice = createSlice({
 
 export const { setEditId ,
   updateProductFormValues,
-  setSubImages,
   resetAllState} = shopSlice.actions
 
 export default shopSlice.reducer

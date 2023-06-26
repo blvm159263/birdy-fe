@@ -51,6 +51,15 @@ const productApi = {
     getAllFeaturedProduct(params) {
         const url = `/products/view/all`;
         return axiosClient.get(url, {params});
+    },
+    updateProductById(id, params) {
+        const url = `/products/update/${id}`;
+        return axiosClient.put(url, {params}, {
+            method: "put",
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
     }
 };
 

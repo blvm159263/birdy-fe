@@ -14,7 +14,8 @@ export default function WeightField() {
       <div className="flex flex-wrap items-stretch w-full relative">
         <input
           type="number"
-          min={1}
+          min={0.1}
+          step={0.1}
           required
           id="weight"
           name="weight"

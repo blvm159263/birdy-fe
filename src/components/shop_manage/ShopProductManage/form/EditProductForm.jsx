@@ -17,6 +17,8 @@ import PriceField from "./field/PriceField";
 import QuantityField from "./field/QuantityField";
 import DescriptionField from "./field/DescriptionField";
 import MaterialField from "./field/MaterialField";
+import productApi from "../../../../api/productApi";
+import MainImageField from "./field/MainImageField";
 
 export default function EditProductForm() {
   const dispatch = useDispatch();
@@ -28,19 +30,55 @@ export default function EditProductForm() {
 
   function handleFormSubmit(e) {
     e.preventDefault();
-    console.log("Form submitted");
+
+    const productDTO = {
+      id: formValues.id,
+      productName: formValues.productName,
+      imageMain: formValues.imageMain,
+      unitPrice: formValues.unitPrice,
+      salePtc: formValues.salePtc,
+      quantity: formValues.quantity,
+      rating: formValues.rating,
+      createDate: formValues.createDate,
+      species: formValues.species,
+      age: formValues.age,
+      gender: formValues.gender,
+      color: formValues.color,
+      expDate: formValues.expDate,
+      madeIn: formValues.madeIn,
+      weight: formValues.weight,
+      size: formValues.size,
+      material: formValues.material,
+      description: formValues.description,
+      brandName: formValues.brandName,
+      state: formValues.state,
+      categoryId: formValues.categoryId,
+      categoryName: formValues.categoryName,
+      shopId: formValues.shopId,
+      shopName: formValues.shopName,
+    }
+
+    const params = {
+      productDTO: JSON.stringify(productDTO),
+      mainImage: productDTO.imageMain,
+      subImages: [],
+    }
+
+    console.log("Submit form!");
+    console.log(params);
+
+    productApi.updateProductById(productDTO.id, params).then((response) => {
+      console.log(response);
+    })
   }
 
   return (
-    <form id='EditProductForm' encType="multipart/form-data"
+    <form id='EditProductForm'
           className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
           onSubmit={(e) => handleFormSubmit(e)}>
       <NameField/>
-
-      {/* TODO: Add image upload */}
-
+      <MainImageField/>
       <CategoryField/>
-
       <div className='grid grid-cols-5 gap-3'>
         {formValues.categoryId === 1 && <SpeciesField/>}
         {formValues.categoryId === 1 && <AgeField/>}
@@ -53,7 +91,6 @@ export default function EditProductForm() {
         {formValues.categoryId === 2 && <SizeField/>}
         {(formValues.categoryId === 2 || formValues.categoryId === 3) && <ExpiredDateField/>}
       </div>
-
       <div className='grid grid-cols-2 gap-3'>
         <PriceField/>
         <QuantityField/>
