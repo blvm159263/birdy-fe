@@ -14,7 +14,8 @@ function getItem(label, key, icon, children, type) {
 
 const { SubMenu } = Menu;
 const items = [
-  getItem('Shop Profile', '1',
+
+  getItem('Dashboard', '1',
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="w-5 h-5 mr-2"
@@ -26,11 +27,27 @@ const items = [
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+        d="M4 6h16M4 12h8m-8 6h16"
       />
     </svg>,),
 
-  getItem('Shop Orders', '2',
+  getItem('Shop Profile', '2',
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-5 h-5 mr-2"
+      fill="none"
+      viewBox="0 0 30 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+      />
+    </svg>,),
+
+  getItem('Shop Orders', '3',
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="w-5 h-5 mr-2"
@@ -61,11 +78,11 @@ const items = [
         d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
       />
     </svg>, [
-    getItem('View List Products', '3'),
-    getItem('Create New Product', '4'),
+    getItem('View List Products', '4'),
+    getItem('Create New Product', '5'),
   ]),
 
-  getItem('Logout', '5',
+  getItem('Logout', '6',
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="w-5 h-5 mr-2"
@@ -93,9 +110,12 @@ function Sidebar() {
   const handlePath = function () {
     switch (window.location.pathname.split("/shop")[1]) {
       case "": return 1;
-      case "/orders": return 2;
-      case "/products": return 3;
-      case "/product/new": return 4;
+      case "/": return 1;
+      case "/dashboard": return 1;
+      case "/profile": return 2;
+      case "/orders": return 3;
+      case "/products": return 4;
+      case "/product/new": return 5;
     }
   }
 
@@ -136,24 +156,28 @@ function Sidebar() {
               >
                 <Menu.Item className="font-medium text-base text-gray-400" key="1" icon={items[0].icon}>
                   {items[0].label}
-                  <Link to="/shop" />
+                  <Link to="/shop/dashboard" />
                 </Menu.Item>
-                <Menu.Item className="font-medium text-base text-gray-400" key="2" icon={items[0].icon}>
+                <Menu.Item className="font-medium text-base text-gray-400" key="2" icon={items[1].icon}>
                   {items[1].label}
+                  <Link to="/shop/profile" />
+                </Menu.Item>
+                <Menu.Item className="font-medium text-base text-gray-400" key="3" icon={items[2].icon}>
+                  {items[2].label}
                   <Link to="/shop/orders" />
                 </Menu.Item>
-                <SubMenu className="font-medium text-base text-gray-400" key="sub1" icon={items[2].icon} title={items[2].label}>
-                  <Menu.Item className="font-normal text-black" key="3">
-                    <span style={{ marginLeft: "38px" }} >{items[2].children[0].label}</span>
+                <SubMenu className="font-medium text-base text-gray-400" key="sub1" icon={items[3].icon} title={items[3].label}>
+                  <Menu.Item className="font-normal text-black" key="4">
+                    <span style={{ marginLeft: "38px" }} >{items[3].children[0].label}</span>
                     <Link to="/shop/products" />
                   </Menu.Item>
-                  <Menu.Item className="font-normal text-black" key="4">
-                    <span style={{ marginLeft: "38px" }} >{items[2].children[1].label}</span>
+                  <Menu.Item className="font-normal text-black" key="5">
+                    <span style={{ marginLeft: "38px" }} >{items[3].children[1].label}</span>
                     <Link to="/shop/product/new" />
                   </Menu.Item>
                 </SubMenu>
-                <Menu.Item className="font-medium text-base text-gray-400" key="5" icon={items[3].icon}>
-                  {items[3].label}
+                <Menu.Item className="font-medium text-base text-gray-400" key="6" icon={items[4].icon}>
+                  {items[4].label}
                   <Link to="/logout" />
                 </Menu.Item>
               </Menu>
