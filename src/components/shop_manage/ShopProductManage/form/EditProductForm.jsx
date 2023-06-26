@@ -19,12 +19,14 @@ import DescriptionField from "./field/DescriptionField";
 import MaterialField from "./field/MaterialField";
 import productApi from "../../../../api/productApi";
 import MainImageField from "./field/MainImageField";
+import SubImagesField from "./field/SubImagesField";
 
 export default function EditProductForm() {
   const dispatch = useDispatch();
   const formValues = useSelector(state => state.shop.productFormValues);
 
   useEffect(() => {
+    console.log("Current form values:");
     console.log(formValues);
   }, [formValues])
 
@@ -59,16 +61,19 @@ export default function EditProductForm() {
     }
 
     const params = {
-      productDTO: JSON.stringify(productDTO),
+      productDTO: productDTO,
       mainImage: productDTO.imageMain,
-      subImages: [],
+      subImages: formValues.subImages,
     }
 
-    console.log("Submit form!");
+    console.log("Submitted form! With below data:");
     console.log(params);
 
     productApi.updateProductById(productDTO.id, params).then((response) => {
       console.log(response);
+    }).catch((error) => {
+      console.log("Error while update product!");
+      console.log(error);
     })
   }
 
@@ -78,6 +83,7 @@ export default function EditProductForm() {
           onSubmit={(e) => handleFormSubmit(e)}>
       <NameField/>
       <MainImageField/>
+      <SubImagesField/>
       <CategoryField/>
       <div className='grid grid-cols-5 gap-3'>
         {formValues.categoryId === 1 && <SpeciesField/>}

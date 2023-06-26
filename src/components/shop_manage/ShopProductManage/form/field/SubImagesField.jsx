@@ -1,8 +1,7 @@
 import {Modal, Upload} from "antd";
 import React, {useState} from "react";
 import {PlusOutlined} from "@ant-design/icons";
-import {useDispatch, useSelector} from "react-redux";
-import {updateProductFormValues} from "../../../../../features/shops/shopSlice";
+import {useDispatch} from "react-redux";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -10,19 +9,13 @@ const getBase64 = (file) =>
     reader.readAsDataURL(file)
     reader.onload = () => resolve(reader.result)
     reader.onerror = (error) => reject(error)
-})
+  })
 
-export default function MainImageField() {
-  const imageMain = useSelector(state => state.shop.productFormValues.imageMain);
+export default function SubImagesField() {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState("")
   const [error, setError] = useState(null)
-  const [message, setMessage] = useState(null);
-  const [fileList, setFileList] = useState([
-    {
-      url: imageMain,
-    }
-  ]);
+  const [fileList, setFileList] = useState([]);
   const dispatch = useDispatch();
 
   const handlePreview = async (file) => {
@@ -34,7 +27,7 @@ export default function MainImageField() {
   }
 
   const handleChange = ({ fileList: newFileList }) => {
-    setMessage(null)
+    setError(null)
     for (let i = 0; i < newFileList.length; i++) {
       if (
         newFileList[i].type !== "image/jpeg" &&
@@ -49,38 +42,31 @@ export default function MainImageField() {
       }
     }
     setFileList(newFileList);
-
-    if(newFileList[0]) {
-      getBase64(newFileList[0].originFileObj).then((base64result) => {
-        dispatch(updateProductFormValues({imageMain: base64result}))
-      })
-    } else {
-      dispatch(updateProductFormValues({imageMain: ''}))
-    }
   }
 
   return (
-    <div className="mb-4">
-      <label htmlFor="mainImage" className="block mb-2 text-sm font-medium text-gray-900" >
-        <p className="text-red-500 inline-block">*</p> Main Image
-        <p className="text-red-500">{message || error}</p>
+    <div className="mb-7">
+      <label htmlFor="subImages" className="block mb-2 text-sm font-medium text-gray-900" >
+        Sub Images (optional)
+        <p className="text-red-500">{error}</p>
       </label>
       <Upload
-        id="mainImage"
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
       >
-        {fileList.length > 0 ? null :
-        <div>
-          <PlusOutlined />
-          <div style={{
-              marginTop: 8,
-            }} >
-            Upload (0/1)
-          </div>
-        </div>}
+        {fileList.length >= 8 ? null :
+          <div>
+            <PlusOutlined />
+            <div
+              style={{
+                marginTop: 8,
+              }}
+            >
+              Upload ({fileList.length}/9)
+            </div>
+          </div>}
       </Upload>
       <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
         <img

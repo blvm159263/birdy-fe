@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateProductFormValues} from "../../../../../features/shops/shopSlice";
 
 export default function BrandField() {
-  const brand = useSelector(state => state.shop.productFormValues.brand);
+  const brandName = useSelector(state => state.shop.productFormValues.brandName);
   const dispatch = useDispatch();
 
   return (
@@ -15,7 +15,7 @@ export default function BrandField() {
         type="text"
         id="brand"
         name="brand"
-        value={brand}
+        value={brandName}
         onChange={e => dispatch(updateProductFormValues({brand: e.target.value}))}
         placeholder="brand name"
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
