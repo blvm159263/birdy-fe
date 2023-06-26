@@ -61,7 +61,7 @@ export default function EditProductForm() {
     }
 
     const params = {
-      productDTO: productDTO,
+      productDTO: JSON.stringify(productDTO),
       mainImage: productDTO.imageMain,
       subImages: formValues.subImages,
     }
