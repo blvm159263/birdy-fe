@@ -32,11 +32,7 @@ function UserPage() {
   }
 
   useEffect(() => {
-    var token = jwtDecode(storageService.getToken())
-    var userId;
-    if (token) {
-      
-    }
+
     fetchUser(userid)
   }, [])
   return (
