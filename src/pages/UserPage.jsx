@@ -10,13 +10,15 @@ import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import userApi from "../api/userApi"
 import { getAUser } from "../features/user/userSlice"
-
+import jwtDecode from "jwt-decode"
+import storageService from "../api/storage"
 function UserPage() {
   const userInformation = useSelector((state) => state.user.userInformation)
   const [isLoading, setIsLoading] = useState(true)
 
   const dispatch = useDispatch()
   const { userid } = useParams()
+
   const fetchUser = (userid) => {
     userApi
       .getUserById(userid)
@@ -30,6 +32,11 @@ function UserPage() {
   }
 
   useEffect(() => {
+    var token = jwtDecode(storageService.getToken())
+    var userId;
+    if (token) {
+      
+    }
     fetchUser(userid)
   }, [])
   return (

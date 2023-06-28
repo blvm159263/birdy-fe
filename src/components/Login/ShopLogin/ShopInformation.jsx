@@ -1,24 +1,154 @@
-import React from "react"
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+} from 'antd';
+import { useState, useContext } from 'react';
+import { NotificationContext } from '../../../context/NotificationProvider';
 
-function ShopInformation() {
+import authApi from '../../../api/authApi';
+
+
+const formItemLayout = {
+  labelCol: {
+      xs: {
+          span: 24,
+      },
+      sm: {
+          span: 8,
+      },
+  },
+  wrapperCol: {
+      xs: {
+          span: 24,
+      },
+      sm: {
+          span: 16,
+      },
+  },
+};
+const tailFormItemLayout = {
+  wrapperCol: {
+      xs: {
+          span: 24,
+          offset: 0,
+      },
+      sm: {
+          span: 16,
+          offset: 8,
+      },
+  },
+};
+
+const ShopInformation = ({ phoneNumberRegister, passwordRegister, setIsVerified, setIsSignIn }) => {
+
+  const openNotificationWithIcon = useContext(NotificationContext);
+
+  const [form] = Form.useForm();
+  const onFinish = (values) => {
+
+      authApi.registerShop({
+          email: values.email,
+          shopName: values.shopName,
+          address: values.address,
+          phoneNumber: phoneNumberRegister,
+          password: passwordRegister,
+      })
+          .then(res => {
+              if(res.status === 201){
+                  openNotificationWithIcon("Register success!", "Your account registered successfully! Please login to continue!")
+                  setIsVerified(false);
+                  setIsSignIn(true);
+              }else if(res.status === 400){
+                  openNotificationWithIcon("Register Fail!", "Your account registered Fail! Please try again!")
+              }else if(res.status === 500){
+                  openNotificationWithIcon("Error", "Server error! Please try again!")
+              }
+          });
+  };
+
   return (
-    <div className="w-1/2 px-20 py-5">
-      <form className="bg-white p-5 flex flex-col items-center rounded-md">
-        <h2 className="text-2xl font-bold text-center mb-4">
-          Shop Information
-        </h2>
-        <input
-          type="text"
-          className="w-4/5 p-2 border rounded-md border-gray-200"
-          placeholder="Shop Name"
-        />
+      <div className="lg:w-1/2 sm:w-full p-5 sm:mx-auto">
 
-        <button className="w-4/5 bg-orange-400 border mb-2 py-2 rounded-md text-white hover:bg-white hover:text-orange-400 hover:border-orange-400">
-          Save
-        </button>
-      </form>
-    </div>
-  )
-}
+          <Form
+              {...formItemLayout}
+              form={form}
+              name="register"
+              className="lg:w-full sm:w-full bg-white p-10 rounded-md"
+              onFinish={onFinish}
+              initialValues={{
+                  residence: ['zhejiang', 'hangzhou', 'xihu'],
+                  prefix: '86',
+              }}
+              style={{
+                  maxWidth: 500,
+              }}
+              scrollToFirstError
+          >
+              <h1 className="text-3xl mb-4">
+                  Information
+              </h1>
+              <Form.Item
+                  name="email"
+                  label="E-mail"
+                  rules={[
+                      {
+                          type: 'email',
+                          message: 'The input is not valid E-mail!',
+                      },
+                      {
+                          required: true,
+                          message: 'Please input your E-mail!',
+                      },
+                  ]}
+              >
+                  <Input />
+              </Form.Item>
 
-export default ShopInformation
+              <Form.Item
+                  name="shopName"
+                  label="Shop Name"
+                  rules={[
+                      {
+                          required: true,
+                          message: 'Please input your shop name!',
+                          whitespace: true,
+                      },
+                  ]}
+              >
+                  <Input />
+              </Form.Item>
+
+              <Form.Item
+                  name="address"
+                  label="Address"
+                  rules={[
+                      {
+                          required: true,
+                          message: 'Please input your address!',
+                          whitespace: true,
+                      },
+                  ]}
+              >
+                  <Input />
+              </Form.Item>
+
+              
+
+              <Form.Item {...tailFormItemLayout}>
+                  <Button type="primary"
+                      style={{
+                          backgroundColor: "#00BFFF",
+                      }}
+                      htmlType="submit"
+                  >
+                      Register
+                  </Button>
+              </Form.Item>
+          </Form>
+      </div>
+  );
+};
+export default ShopInformation;

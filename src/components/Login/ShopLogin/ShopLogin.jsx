@@ -7,6 +7,13 @@ import ShopInformation from "./ShopInformation"
 
 function ShopLogin() {
   const [isSignIn, setIsSignIn] = useState(true)
+  const [phoneNumberRegister, setPhoneNumberRegister] = useState("")
+  const [passwordRegister, setPasswordRegister] = useState("")
+  const [isVerified, setIsVerified] = useState(false)
+
+  const handleChangeSignState = () => {
+    setIsSignIn(!isSignIn)
+  }
 
   return (
     <div className=" py-8 bg-gradient-to-r from-sky-500 via-blue-500 to-sky-500 border-gray-200 ">
@@ -23,12 +30,30 @@ function ShopLogin() {
             We are the best platform to <br /> sell bird related products !
           </h1>
         </div>
-        {/* {isSignIn ? (
-          <ShopSignIn isSignIn={isSignIn} setIsSignIn={setIsSignIn} />
+        {!isVerified ? (
+          <>
+            {!isSignIn ? (
+              <ShopSignUp
+                setIsSignIn={setIsSignIn}
+                setPhoneNumberRegister={setPhoneNumberRegister}
+                setIsVerified={setIsVerified}
+                setPasswordRegister={setPasswordRegister}
+                phoneNumberRegister={phoneNumberRegister}
+                passwordRegister={passwordRegister}
+              />
+            ) : (
+              <ShopSignIn setIsSignIn={setIsSignIn} />
+            )}
+          </>
         ) : (
-          <ShopSignUp isSignIn={isSignIn} setIsSignIn={setIsSignIn} />
-        )} */}
-        <ShopInformation />
+          <ShopInformation
+            phoneNumberRegister={phoneNumberRegister}
+            passwordRegister={passwordRegister}
+            setIsVerified={setIsVerified}
+            setIsSignIn={setIsSignIn}
+          />
+        )}
+
       </div>
     </div>
   )

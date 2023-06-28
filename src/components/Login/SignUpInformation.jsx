@@ -51,16 +51,7 @@ const SignUpInformation = ({ phoneNumberRegister, passwordRegister, setIsVerifie
     const onFinish = (values) => {
 
         const dob = document.getElementById("register_date-picker").value;
-        const param = {
-            email: values.email,
-            fullName: values.fullName,
-            dob: dob,
-            gender: values.gender,
-            phoneNumber: phoneNumberRegister,
-            password: passwordRegister,
-        }
-        console.log(param)
-        authApi.register({
+        authApi.registerUser({
             email: values.email,
             fullName: values.fullName,
             dob: dob,
