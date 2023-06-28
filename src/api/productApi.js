@@ -48,6 +48,10 @@ const productApi = {
         const url = `/products/review/${productId}`
         return axiosClient.get(url, { params });
     },
+    deleteProduct(productId) {
+        const url = `/products/delete/${productId}`
+        return axiosClient.delete(url);
+    },
     getAllFeaturedProduct(params) {
         const url = `/products/view/all`;
         return axiosClient.get(url, {params});

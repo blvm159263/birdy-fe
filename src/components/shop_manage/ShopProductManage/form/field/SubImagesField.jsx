@@ -1,6 +1,7 @@
 import {Modal, Upload} from "antd";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {PlusOutlined} from "@ant-design/icons";
+import {useSelector} from "react-redux";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -11,10 +12,15 @@ const getBase64 = (file) =>
   })
 
 export default function SubImagesField({setSubImages}) {
+  const subImagesFetched = useSelector(state => state.shop.subImages);
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState("")
   const [error, setError] = useState(null)
   const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    console.log(subImagesFetched);
+  },[subImagesFetched]);
 
   const handlePreview = async (file) => {
     if (!file.preview) {

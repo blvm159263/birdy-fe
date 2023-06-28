@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
 import productApi from "../../api/productApi";
+import productImagesApi from "../../api/productImagesApi";
 
 const initialState = {
   editId: undefined,
@@ -29,6 +30,7 @@ const initialState = {
     shopId: undefined,
     shopName: undefined,
   },
+  subImages: undefined
 }
 
 // Async Thunk
@@ -36,6 +38,15 @@ export const fetchProductFormValues = createAsyncThunk(
   'shop/fetchProductFormValues',
   async (id) => {
     const response = await productApi.getProductById(id);
+    return response.data;
+  }
+)
+
+export const fetchProductSubImages = createAsyncThunk(
+  'shop/fetchProductSubImages',
+  async (id) => {
+    const response = await productImagesApi.getProductImagesByProductId(id);
+    console.log("fetchProductSubImages response.data:");
     console.log(response.data);
     return response.data;
   }
@@ -57,12 +68,16 @@ export const shopSlice = createSlice({
     resetAllState: () => initialState
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchProductFormValues.fulfilled, (state, action) => {
-      state.productFormValues = {
-        ...state.productFormValues,
-        ...action.payload
-      }
-    })
+    builder
+      .addCase(fetchProductFormValues.fulfilled, (state, action) => {
+        state.productFormValues = {
+          ...state.productFormValues,
+          ...action.payload
+        }
+      })
+      .addCase(fetchProductSubImages.fulfilled, (state, action) => {
+        state.subImages = action.payload;
+      })
   },
 })
 
