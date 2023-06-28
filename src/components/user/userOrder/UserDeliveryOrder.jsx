@@ -52,7 +52,7 @@ function UserDeliveryOrder() {
                   Chat
                 </button>
                 <Link
-                  to={`/view-shop/${orderDetailProduct[0].shopId}`}
+                  to={`/view-shop/${order.shopId}`}
                   className="px-2 py-1 border rounded-md text-white bg-sky-300"
                 >
                   View Shop

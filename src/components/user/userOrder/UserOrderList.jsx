@@ -36,6 +36,7 @@ function UserOrderList({ orderid }) {
     // onGetTotal(totalPrice)
     // console.log(totalPrice)
     // console.log(orderDetail)
+
     // console.log(total)
   }, [])
 

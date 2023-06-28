@@ -14,7 +14,7 @@ function UserAllOrder() {
 
   // const [userOrder, setUserOrder] = useState()
   const [total, setTotal] = useState([])
-
+  const [shopId, setShopId] = useState("")
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
     await orderApi
@@ -22,13 +22,13 @@ function UserAllOrder() {
       .then((response) => {
         dispatch(getAllOrder(response.data))
         // setUserOrder(response.data)
-        // console.log(userOrder)
       })
       .catch((e) => console.log(e))
   }
-  console.log(orderDetailProduct)
+  // console.log(orderDetailProduct)
   useEffect(() => {
     fetchUserOrder(userid)
+
     // setTotal(totalPrice)
   }, [])
 
@@ -45,7 +45,7 @@ function UserAllOrder() {
                   Chat
                 </button>
                 <Link
-                  to={`/view-shop/${orderDetailProduct[0].shopId}`}
+                  to={`/view-shop/${order.shopId}`}
                   className="px-2 py-1 border rounded-md text-white bg-sky-300"
                 >
                   View Shop
