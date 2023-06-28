@@ -28,7 +28,7 @@ export default function EditProductForm() {
   const [subImages, setSubImages] = useState([])
 
   useEffect(() => {
-    console.clear();
+    console.log("---------------------")
     console.log("Current form values:");
     console.log(formValues);
     console.log("Current mainImage:");
@@ -43,7 +43,7 @@ export default function EditProductForm() {
     const productDTO = {
       id: formValues.id,
       productName: formValues.productName,
-      imageMain: '',
+      imageMain: null,
       unitPrice: formValues.unitPrice,
       salePtc: formValues.salePtc,
       quantity: formValues.quantity,

@@ -1,5 +1,5 @@
 import {Modal, Upload} from "antd";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {PlusOutlined} from "@ant-design/icons";
 import {useSelector} from "react-redux";
 
@@ -17,17 +17,26 @@ export default function MainImageField({setMainImage}) {
   const [previewImage, setPreviewImage] = useState("")
   const [error, setError] = useState(null)
   const [message, setMessage] = useState(null);
-  const [fileList, setFileList] = useState([
-    {
-      url: imageMain,
-    }
-  ]);
+  const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    setFileList([
+      {
+        uid: '-1',
+        name: 'image.png',
+        url: imageMain,
+        status: "done",
+      }
+    ])
+  },[imageMain]);
 
   const handlePreview = async (file) => {
-    if (!file.preview) {
+    if (file.url) {
+      setPreviewImage(file.url);
+    } else {
       file.preview = await getBase64(file.originFileObj)
+      setPreviewImage(file.preview)
     }
-    setPreviewImage(file.preview)
     setPreviewOpen(true)
   }
 
@@ -51,7 +60,7 @@ export default function MainImageField({setMainImage}) {
     if(newFileList[0]) {
       setMainImage(newFileList[0].originFileObj);
     } else {
-      setMainImage('');
+      setMainImage(undefined);
     }
   }
 

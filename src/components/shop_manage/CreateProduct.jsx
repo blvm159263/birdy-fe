@@ -269,18 +269,18 @@ function CreateProduct() {
 
     // productDto.imageMain = params.mainImage === undefined ? null : params.mainImage;
     // productDto.subImages = params.subImages;
-    console.log(productDto)
-    // productApi
-    //   .addNewProduct(params)
-    //   .then((res) => {
-    //     console.log(res)
-    //     if (res.status === 201) {
-    //       openNotificationWithIcon("Success", "Add new product successfully!")
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   })
+    // console.log(productDto)
+    productApi
+      .addNewProduct(params)
+      .then((res) => {
+        console.log(res)
+        if (res.status === 201) {
+          openNotificationWithIcon("Success", "Add new product successfully!")
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
   const handleEntailmentRequest = (e) => {
     e.preventDefault()

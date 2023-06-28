@@ -10,7 +10,7 @@ function ShopProductCard({ product }) {
     <div className="bg-white rounded-lg shadow-md flex flex-col items-center">
       <div className="h-52 w-full overflow-hidden">
         <img
-          src="../assets/images/product-demo.png"
+          src={product.imageMain}
           alt="Card Image"
           className="h-full w-full object-cover object-center rounded-lg rounded-b-none"
         />

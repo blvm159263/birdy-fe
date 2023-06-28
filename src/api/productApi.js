@@ -53,9 +53,12 @@ const productApi = {
         return axiosClient.get(url, {params});
     },
     updateProductById(id, params) {
+        const data = new FormData();
+        data.append('productDTO', params.productDTO);
+        data.append('mainImage', params.mainImage);
         const url = `/products/update/${id}`;
-        return axiosClient.put(url, {params}, {
-            method: "put",
+        data.append('subImages', params.subImages);
+        return axiosClient.put(url, data, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
