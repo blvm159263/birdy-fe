@@ -6,7 +6,7 @@ import UserOrderDetail from "./UserOrderDetail"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllOrder } from "../../../features/user/userSlice"
 
-function UserCompletedOrder() {
+function UserOrderCancel() {
   const { userid } = useParams()
   const userOrder = useSelector((state) => state.user.userOrder)
   const totalPrice = useSelector((state) => state.user.totalPriceList)
@@ -29,19 +29,17 @@ function UserCompletedOrder() {
 
   useEffect(() => {
     fetchUserOrder(userid)
-    setTotal(totalPrice)
   }, [])
-
-  const completedOrder =
-    userOrder &&
-    userOrder.filter(
-      (order) => order.state === "DONE" && order.paymentStatus === "PAID"
-    )
+  useEffect(() => {
+    setTotal(totalPrice)
+  }, [totalPrice])
+  const cancelOrder =
+    userOrder && userOrder.filter((order) => order.state === "CANCELED")
 
   return (
     <div>
       {userOrder &&
-        completedOrder.map((order) => (
+        cancelOrder.map((order) => (
           <div key={order.id} className="px-6 mt-6 border-b border-b-gray-600">
             <div className="flex justify-between border-b py-2">
               <div className="flex items-center">
@@ -91,4 +89,4 @@ function UserCompletedOrder() {
   )
 }
 
-export default UserCompletedOrder
+export default UserOrderCancel

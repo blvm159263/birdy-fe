@@ -1,57 +1,55 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import orderApi from "../../../api/orderApi"
+import productApi from "../../../api/productApi"
+import { Link } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import {
+  getOrderDetail,
+  getOrderTotalPrice,
+} from "../../../features/user/userSlice"
 
-function UserOrderDetail({ orderid }) {
-  console.log(orderid)
-  const fetchOrderDetail = () => {
-    orderApi
-      .getOrderDetailByOrderId(orderid)
-      .then((response) => console.log(response.data))
+function UserOrderDetail({ detail, orderid }) {
+  const [product, setProducts] = useState([])
+  const dispatch = useDispatch()
+  const fetchProduct = () => {
+    productApi.getProductById(detail.productId).then((response) => {
+      setProducts(response.data)
+      dispatch(
+        getOrderDetail({
+          id: orderid,
+          price: response.data.unitPrice * detail.quantity,
+          shopId: response.data.shopId,
+        })
+      )
+      // console.log(product)
+    })
   }
+
   useEffect(() => {
-    fetchOrderDetail()
+    fetchProduct()
   }, [])
+
   return (
-    <div className="px-6 mt-6 border-b">
-      <div className="flex justify-between border-b py-2">
-        <div className="flex items-center">
-          <h2 className="font-bold mr-2">ShopName</h2>
-          <button className="mr-2 px-2 py-1 border rounded-md text-white bg-sky-300">
-            Chat
-          </button>
-          <button className="px-2 py-1 border rounded-md text-white bg-sky-300">
-            View Shop
-          </button>
-        </div>
-        <div className="flex">
-          <p className="text-orange-400">Deliveried !!!</p>
-          <div className="mx-2 w-[1px]  h-4/5 bg-gray-200"></div>
-          <p className="text-sky-400">Completed!</p>
-        </div>
+    <>
+      <Link to={`/detail-item/${detail.productId}`} className="h-20">
+        <img
+          className="h-full"
+          src={product.id === detail.productId ? product.imageMain : ""}
+          alt=""
+        />
+      </Link>
+      <div>
+        <p>{product.id === detail.productId ? product.productName : ""}</p>
+        <p className="text-gray-400">
+          Category:{" "}
+          {product.id === detail.productId ? product.categoryName : ""}{" "}
+        </p>
+        <p>Quantity: x{detail.quantity}</p>
       </div>
-      <div className="flex justify-between py-2 border-b">
-        <div className="h-20">
-          <img
-            className="h-full"
-            src="/assets/images/product-demo.png"
-            alt=""
-          />
-        </div>
-        <div>
-          <p>Product Name</p>
-          <p className="text-gray-400">Category: bird</p>
-          <p>x1</p>
-        </div>
-        <div>4.000.000đ</div>
+      <div className="text-md">
+        ${(product.unitPrice * detail.quantity).toFixed(3)}
       </div>
-      <div className="flex justify-end py-2 border-b">
-        <p>Total Price: 4.000.000đ</p>
-      </div>
-      <div className="py-2 flex justify-end">
-        <button className="px-2 py-1 border rounded-md">Feedback</button>
-        <button className="px-2 py-1 border rounded-md ml-2">Buy Again</button>
-      </div>
-    </div>
+    </>
   )
 }
 

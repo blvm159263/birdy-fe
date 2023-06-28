@@ -1,78 +1,99 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import orderApi from "../../../api/orderApi"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllOrder } from "../../../features/user/userSlice"
+import {
+  getAllOrder,
+  getOrderDetail,
+  getOrderTotalPrice,
+} from "../../../features/user/userSlice"
 import UserOrderDetail from "./UserOrderDetail"
 
-function UserOrderList() {
-  const { userid } = useParams()
-  const userOrder = useSelector((state) => state.user.userOrder)
-  console.log(userOrder)
+function UserOrderList({ orderid }) {
   const dispatch = useDispatch()
-  const fetchUserOrder = (userid) => {
-    orderApi
-      .getAllOrderByUserId(userid)
-      .then((response) => {
-        dispatch(getAllOrder(response.data))
-      })
-      .catch((e) => console.log(e))
+  const [product, setProduct] = useState([])
+  const [orderDetail, setOrderDetail] = useState([])
+  const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
+
+  const [totalPrice, setTotalPrice] = useState(0)
+  const fetchOrderDetail = async () => {
+    await orderApi.getOrderDetailByOrderId(orderid).then((response) => {
+      // const order = {
+      //   id: orderid,
+      //   data: response.data,
+      // }
+      setOrderDetail(response.data)
+
+      // dispatch(getOrderDetail(order))
+      // console.log(orderDetail)
+    })
   }
 
+  // console.log(totalPrice(product, orderid))
   useEffect(() => {
-    fetchUserOrder(userid)
+    fetchOrderDetail()
+
+    // onGetTotal(totalPrice)
+    // console.log(totalPrice)
+    // console.log(orderDetail)
+    // console.log(total)
   }, [])
+
+  useEffect(() => {
+    let total = 0
+    orderDetailProduct.forEach((item) => {
+      if (item.id === orderid) {
+        total += item.price
+      }
+    })
+    dispatch(getOrderTotalPrice({ id: orderid, price: total }))
+    // setTotalPrice(total)
+    // console.log(total)
+  }, [orderDetailProduct, orderid])
 
   return (
     <div>
-      {userOrder &&
-        userOrder.map((item) => (
-          // <div className="px-6 mt-6 border-b">
-          //   <div className="flex justify-between border-b py-2">
-          //     <div className="flex items-center">
-          //       <h2 className="font-bold mr-2">ShopName</h2>
-          //       <button className="mr-2 px-2 py-1 border rounded-md text-white bg-sky-300">
-          //         Chat
-          //       </button>
-          //       <button className="px-2 py-1 border rounded-md text-white bg-sky-300">
-          //         View Shop
-          //       </button>
-          //     </div>
-          //     <div className="flex">
-          //       <p className="text-orange-400">Deliveried !!!</p>
-          //       <div className="mx-2 w-[1px]  h-4/5 bg-gray-200"></div>
-          //       <p className="text-sky-400">Completed!</p>
-          //     </div>
-          //   </div>
-          //   <div className="flex justify-between py-2 border-b">
-          //     <div className="h-20">
-          //       <img
-          //         className="h-full"
-          //         src="/assets/images/product-demo.png"
-          //         alt=""
-          //       />
-          //     </div>
-          //     <div>
-          //       <p>Product Name</p>
-          //       <p className="text-gray-400">Category: bird</p>
-          //       <p>x1</p>
-          //     </div>
-          //     <div>4.000.000đ</div>
-          //   </div>
-          //   <div className="flex justify-end py-2 border-b">
-          //     <p>Total Price: 4.000.000đ</p>
-          //   </div>
-          //   <div className="py-2 flex justify-end">
-          //     <button className="px-2 py-1 border rounded-md">Feedback</button>
-          //     <button className="px-2 py-1 border rounded-md ml-2">
-          //       Buy Again
-          //     </button>
-          //   </div>
-          // </div>
-          <UserOrderDetail key={item.id} orderid={item.id} />
+      {orderDetail &&
+        orderDetail.map((detail) => (
+          <div key={detail.id} className="flex justify-between py-2 border-b">
+            <UserOrderDetail orderid={orderid} detail={detail} />
+          </div>
         ))}
     </div>
   )
 }
+// function UserOrderList({ orderid }) {
+//   const dispatch = useDispatch()
+//   const orderDetail = useSelector((state) => state.user.userOrderDetail)
+
+//   const fetchOrderDetail = async () => {
+//     await orderApi.getOrderDetailByOrderId(orderid).then((response) => {
+//       const order = {
+//         id: orderid,
+//         data: response.data,
+//       }
+//       dispatch(getOrderDetail(order))
+//     })
+//   }
+
+//   useEffect(() => {
+//     fetchOrderDetail()
+//   }, [])
+
+//   return (
+//     <div>
+//       {orderDetail &&
+//       orderDetail.detail &&
+//       Array.isArray(orderDetail.detail) &&
+//       orderDetail.id === orderid
+//         ? orderDetail.detail.map((detail) => (
+//             <div key={detail.id} className="flex justify-between py-2 border-b">
+//               <UserOrderDetail orderid={orderid} detail={detail} />
+//             </div>
+//           ))
+//         : ""}
+//     </div>
+//   )
+// }
 
 export default UserOrderList
