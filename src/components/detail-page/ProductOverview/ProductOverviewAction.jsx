@@ -1,17 +1,15 @@
 import React, { useState, useContext } from "react"
 import { useDispatch } from "react-redux"
-import { addToCart } from '../../../features/cart/cartSlice'
-import { useNavigate } from "react-router-dom";
-import { NotificationContext } from "../../../context/NotificationProvider";
+import { addToCart } from "../../../features/cart/cartSlice"
+import { useNavigate } from "react-router-dom"
+import { NotificationContext } from "../../../context/NotificationProvider"
 
 function ProductOverviewAction({ product }) {
-
-  const openNotificationWithIcon  = useContext(NotificationContext);
-
+  const openNotificationWithIcon = useContext(NotificationContext)
 
   const [quantity, setQuantity] = useState(1)
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const onUpdateQuantity = (value) => {
     setQuantity(quantity + value)
   }
@@ -21,7 +19,7 @@ function ProductOverviewAction({ product }) {
       <h1 className="text-2xl font-bold">{product.productName}</h1>
       <div className="my-4 text-lg">
         <p className="text-lg font-bold text-orange-500 py-2">
-          {product.price}
+          ${product.unitPrice}
         </p>
       </div>
       <div className="flex my-4">
@@ -29,8 +27,9 @@ function ProductOverviewAction({ product }) {
           <svg
             key={i}
             aria-hidden="true"
-            className={`w-5 h-5 ${i < product.rating ? "text-yellow-400" : "text-gray-300"
-              }`}
+            className={`w-5 h-5 ${
+              i < product.rating ? "text-yellow-400" : "text-gray-300"
+            }`}
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -72,10 +71,23 @@ function ProductOverviewAction({ product }) {
       </div>
       <div className="action my-4">
         <div className="w-full flex items-center my-3 ">
-          <button onClick={() => {
-            dispatch(addToCart({ id: product.id, quantity: quantity, shopId: product.shopId, price: (product.unitPrice * (100 - product.salePtc) / 100) }));
-            openNotificationWithIcon("Add to Cart", "Add to Cart Successfully!");
-          }} className="border-2 border-white bg-sky-100 hover:bg-white  hover:border-sky-300 py-4 w-5/6 mr-3 font-bold rounded-md">
+          <button
+            onClick={() => {
+              dispatch(
+                addToCart({
+                  id: product.id,
+                  quantity: quantity,
+                  shopId: product.shopId,
+                  price: (product.unitPrice * (100 - product.salePtc)) / 100,
+                })
+              )
+              openNotificationWithIcon(
+                "Add to Cart",
+                "Add to Cart Successfully!"
+              )
+            }}
+            className="border-2 border-white bg-sky-100 hover:bg-white  hover:border-sky-300 py-4 w-5/6 mr-3 font-bold rounded-md"
+          >
             ADD TO CART
           </button>
           <button className=" h-14 w-14 flex items-center justify-center border-2 border-blue-100 hover:bg-sky-200 hover:border-white rounded-md">
@@ -86,10 +98,20 @@ function ProductOverviewAction({ product }) {
             />
           </button>
         </div>
-        <button onClick={() => {
-          dispatch(addToCart({ id: product.id, quantity: quantity, shopId: product.shopId, price: (product.unitPrice * (100 - product.salePtc) / 100) }));
-          navigate('/cart');
-        }} className="py-4 bg-sky-400 border-2 text-white font-bold border-white w-5/6 rounded-md hover:bg-white  hover:border-sky-300 hover:text-sky-400">
+        <button
+          onClick={() => {
+            dispatch(
+              addToCart({
+                id: product.id,
+                quantity: quantity,
+                shopId: product.shopId,
+                price: (product.unitPrice * (100 - product.salePtc)) / 100,
+              })
+            )
+            navigate("/cart")
+          }}
+          className="py-4 bg-sky-400 border-2 text-white font-bold border-white w-5/6 rounded-md hover:bg-white  hover:border-sky-300 hover:text-sky-400"
+        >
           BUY NOW
         </button>
       </div>

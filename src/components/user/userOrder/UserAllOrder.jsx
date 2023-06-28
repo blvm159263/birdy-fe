@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import orderApi from "../../../api/orderApi"
 import UserOrderList from "./UserOrderList"
 import UserOrderDetail from "./UserOrderDetail"
@@ -8,26 +8,28 @@ import { getAllOrder } from "../../../features/user/userSlice"
 
 function UserAllOrder() {
   const { userid } = useParams()
-  // const userOrder = useSelector((state) => state.user.userOrder)
-  const [userOrder, setUserOrder] = useState()
-  const [total, setTotal] = useState(0)
+  const userOrder = useSelector((state) => state.user.userOrder)
+  const totalPrice = useSelector((state) => state.user.totalPriceList)
+  const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
+
+  // const [userOrder, setUserOrder] = useState()
+  const [total, setTotal] = useState([])
+
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
     await orderApi
       .getAllOrderByUserId(userid)
       .then((response) => {
-        // dispatch(getAllOrder(response.data))
-        setUserOrder(response.data)
+        dispatch(getAllOrder(response.data))
+        // setUserOrder(response.data)
+        // console.log(userOrder)
       })
       .catch((e) => console.log(e))
   }
-  const handleGetTotal = (data) => {
-    setTotal(data)
-  }
-
+  console.log(orderDetailProduct)
   useEffect(() => {
     fetchUserOrder(userid)
-    console.log(total)
+    // setTotal(totalPrice)
   }, [])
 
   return (
@@ -42,9 +44,12 @@ function UserAllOrder() {
                 <button className="mr-2 px-2 py-1 border rounded-md text-white bg-sky-300">
                   Chat
                 </button>
-                <button className="px-2 py-1 border rounded-md text-white bg-sky-300">
+                <Link
+                  to={`/view-shop/${orderDetailProduct[0].shopId}`}
+                  className="px-2 py-1 border rounded-md text-white bg-sky-300"
+                >
                   View Shop
-                </button>
+                </Link>
               </div>
               <div className="flex">
                 <p className="text-orange-400">
@@ -58,16 +63,15 @@ function UserAllOrder() {
                 </p>
               </div>
             </div>
-            <UserOrderList
-              onGetTotal={handleGetTotal}
-              orderid={order.id}
-              setTotal={setTotal}
-            />
+            <UserOrderList key={order.id} orderid={order.id} />
             <div className="flex justify-between py-3 border-b">
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
               </p>
-              <p>Total Price: {total}</p>
+              <p>
+                Total Price: $
+                {totalPrice.find((item) => item.id === order.id)?.price}
+              </p>
             </div>
             <div className="py-2 flex justify-end">
               <button className="px-2 py-1 border rounded-md">Feedback</button>

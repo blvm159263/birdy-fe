@@ -5,6 +5,7 @@ const initialState = {
   userAddress: null,
   userOrder: null,
   userOrderDetail: [],
+  totalPriceList: [],
 }
 
 export const userSlice = createSlice({
@@ -17,20 +18,35 @@ export const userSlice = createSlice({
         userInformation: action.payload,
       }
     },
+
     getAllOrder: (state, action) => {
-      return {
-        ...state,
-        userOrder: action.payload,
-      }
-    },
-    getOrderDetail: (state, action) => {
-      const newDetailList = [...state.userOrderDetail, action.payload]
-      return {
-        ...state,
-        userOrderDetail: newDetailList,
-      }
+      state.userOrder = action.payload
     },
 
+    getOrderDetail: (state, action) => {
+      state.userOrderDetail = [...state.userOrderDetail, action.payload]
+    },
+
+    getOrderTotalPrice: (state, action) => {
+      // state.totalPriceList = [...state.totalPriceList, action.payload]
+      // const existingIndex = state.totalPriceList.findIndex(
+      //   (item) => item.id === action.payload.id
+      // )
+      // if (existingIndex !== -1) {
+      //   state.totalPriceList[existingIndex] = action.payload
+      // } else {
+      //   state.totalPriceList.push(action.payload)
+      // }
+      const existingIndex = state.totalPriceList.findIndex(
+        (item) => item.id === action.payload.id
+      )
+
+      if (existingIndex !== -1) {
+        state.totalPriceList.splice(existingIndex, 1, action.payload)
+      } else {
+        state.totalPriceList.push(action.payload)
+      }
+    },
     getUserAddresses: (state, action) => {
       return {
         ...state,
@@ -51,6 +67,7 @@ export const {
   getUserAddresses,
   addNewAddressSlice,
   getAllOrder,
+  getOrderTotalPrice,
   getOrderDetail,
 } = userSlice.actions
 

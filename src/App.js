@@ -36,6 +36,11 @@ import ShopLatestProductsSubPage from "./components/store/ShopLatestProductsSubP
 import ShopProductsByCategorySubPage from "./components/store/ShopProductsByCategorySubPage"
 
 import ShopLoginPage from "./pages/ShopLoginPage"
+import UserPendingOrder from "./components/user/userOrder/UserPendingOrder"
+import UserDeliveryOrder from "./components/user/userOrder/UserDeliveryOrder"
+import UserCompletedOrder from "./components/user/userOrder/UserCompletedOrder"
+import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
+import UserAllOrder from "./components/user/userOrder/UserAllOrder"
 
 function App() {
   const { isLogin, setIsLogin, setRole } = useContext(LoginContext)
@@ -76,9 +81,27 @@ function App() {
             <Route path="/cart/checkout" element={<CheckoutPage />} />
           </Route>
           <Route path="/user/:userid" element={<UserPage />}>
-            <Route index element={<UserInfor />} />
+            <Route path="/user/:userid" element={<UserInfor />} />
             <Route path="/user/:userid/address" element={<UserAddress />} />
-            <Route path="/user/:userid/order" element={<UserOrder />} />
+            <Route path="/user/:userid/order" element={<UserOrder />}>
+              <Route index element={<UserAllOrder />} />
+              <Route
+                path="/user/:userid/order/pending"
+                element={<UserPendingOrder />}
+              />
+              <Route
+                path="/user/:userid/order/delivery"
+                element={<UserDeliveryOrder />}
+              />
+              <Route
+                path="/user/:userid/order/completed"
+                element={<UserCompletedOrder />}
+              />
+              <Route
+                path="/user/:userid/order/canceled"
+                element={<UserOrderCancel />}
+              />
+            </Route>
           </Route>
           <Route path="view-shop/:id" element={<ViewShopPage />}>
             <Route index element={<ShopHomeSubPage />} />
