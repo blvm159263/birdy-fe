@@ -19,14 +19,7 @@ function ShopDashboard() {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="flex justify-between mt-10">
-                        <div className="flex items-center">
-                            <EChart />
-                        </div>
-                        <div className="flex items-center">
-                            <LineChart />
-                        </div>
-                    </div> */}
+
                     <div className="mt-10">
                         <EChart />
                     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react"
 import ShopOrderModal from "./ShopOrderModal"
 import shopApi from "../../api/shopApi"
 import orderApi from "../../api/orderApi";
-import { Table, Tag, Badge, Steps, Button } from 'antd';
+import { Table, Tag, Badge, Steps, Button, Modal, Radio, Space } from 'antd';
 import { NotificationContext } from "../../context/NotificationProvider"
 import { SmileOutlined } from '@ant-design/icons';
 import { set } from "date-fns";
@@ -11,6 +11,8 @@ import { de, el } from "date-fns/locale";
 
 function ShopOrderManage() {
   const openNotificationWithIcon = useContext(NotificationContext);
+  const [value, setValue] = useState('Đơn hàng đã hết khả dụng');
+  const [loading, setLoading] = useState(false);
   const [updateStatus, setUpdateStatus] = useState(false);
   const [stepStatus, setStepStatus] = useState('process');
   const [title1, setTitle1] = useState('Deliver | Cancel');
@@ -28,21 +30,26 @@ function ShopOrderManage() {
   const [totalOrders, setTotalOrders] = useState(0)
   const [payment, setPayment] = useState(null)
   const [state, setState] = useState(null)
+  const [comment, setComment] = useState(null)
+  const [commentModel, setCommentModel] = useState(false)
   const [search, setSearch] = useState("")
   const shopId = 1;
 
   const fetchOrder = async () => {
     try {
+      setLoading(true);
       const formattedPayment = payment !== null ? payment.join(',') : null;
       const formattedState = state !== null ? state.join(',') : null;
-      await shopApi.getShopOrders(shopId, { 
-        search: search, 
-        sort: sort, 
-        payment: formattedPayment, 
-        state: formattedState, 
-        page: page - 1 
+      await shopApi.getShopOrders(shopId, {
+        search: search,
+        sort: sort,
+        payment: formattedPayment,
+        state: formattedState,
+        page: page - 1
       })
         .then((response) => {
+          setLoading(false);
+          console.log(response.data);
           setShopOrders(response.data[0]);
           setTotalOrders(response.data[1])
         })
@@ -62,7 +69,7 @@ function ShopOrderManage() {
   //   console.log(current);
   // }
 
-  const handleViewModal = (id, state) => {
+  const handleViewModal = (id, state, comment) => {
     setCurrent(0);
     setStepStatus('process');
     setTitle1('Deliver | Cancel');
@@ -90,6 +97,7 @@ function ShopOrderManage() {
         setTitle2('Canceled');
         setDes2('Order is canceled.');
         setStepStatus('error');
+        setComment(comment);
         break;
     }
     console.log(current);
@@ -217,7 +225,7 @@ function ShopOrderManage() {
       payment: order.paymentMethod.toUpperCase(),
       status: <Tag color={getColorTag(order.paymentStatus)}>{order.paymentStatus}</Tag>,
       shipping: <Badge status={getColorBadge(order.state)} text={order.state} />,
-      details: <button className="font-medium text-blue-600 hover:underline text-center" onClick={() => handleViewModal(order.id, order.state)}>View</button>
+      details: <button className="font-medium text-blue-600 hover:underline text-center" onClick={() => handleViewModal(order.id, order.state, order.comment)}>View</button>
     }
   });
 
@@ -269,18 +277,20 @@ function ShopOrderManage() {
     setTitle2('Canceled');
     setDes2('Order is canceled.');
     setStepStatus('error');
+    setCommentModel(false);
   };
 
-  const next = (status) => {
+  const next = (status, cmt) => {
     switch (status) {
       case 'DELIVERING':
         deliver();
         break;
       case 'CANCELED':
         cancel();
+        setComment(cmt);
         break;
     }
-    orderApi.editOrderState(orderId, status)
+    orderApi.editOrderState(orderId, status, cmt)
       .then((response) => {
         if (response.status === 200) {
           setUpdateStatus(true)
@@ -293,6 +303,14 @@ function ShopOrderManage() {
         openNotificationWithIcon('Order shipping status is updated failed!');
         // message.error('Order shipping status is updated failed!')
       })
+    value !== 'Đơn hàng đã hết khả dụng' && setValue('Đơn hàng đã hết khả dụng');
+  }
+
+
+  const onComment = (e) => {
+    console.log('radio checked', e.target.value);
+    setValue(e.target.value);
+    // next('CANCELED', value);
   }
 
   return (
@@ -345,12 +363,40 @@ function ShopOrderManage() {
         </div>
 
         <Table
+          loading={loading}
           columns={columns}
           dataSource={data}
           pagination={{ pageSize: 10, current: page, total: totalOrders }}
           onChange={onChange}
         />
       </div>
+
+      <Modal
+        title="Canceling Order"
+        centered
+        open={commentModel}
+        onOk={() => next('CANCELED', value)}
+        onCancel={() => setCommentModel(false)}
+      >
+        <Radio.Group onChange={onComment} value={value}>
+          <Space direction="vertical" className="mt-2">
+            <Radio value={'Đơn hàng đã hết khả dụng'}>Đơn hàng đã hết khả dụng</Radio>
+            <Radio value={'Đơn hàng có sản phẩm đã hết hàng'}>Đơn hàng có sản phẩm đã hết hàng</Radio>
+            <Radio value={'Đơn hàng không được công nhận bởi Shop'}>Đơn hàng không được công nhận bởi Shop</Radio>
+            {/* <Radio value={4}>
+              Khác...
+              {value === 4 ? (
+                <Input
+                  style={{
+                    width: 100,
+                    marginLeft: 10,
+                  }}
+                />
+              ) : null}
+            </Radio> */}
+          </Space>
+        </Radio.Group>
+      </Modal>
 
       {showModal && (
         <>
@@ -385,15 +431,22 @@ function ShopOrderManage() {
                         <div className="mt-2">
                           <Button
                             className="mr-2"
-                            type="primary" onClick={() => next('DELIVERING')}>
+                            type="primary" onClick={() => next('DELIVERING', null)}>
                             Deliver
                           </Button>
 
-                          <Button type="primary" danger onClick={() => next('CANCELED')}>
+                          <Button type="primary" danger onClick={() => setCommentModel(true)}>
                             Cancel
                           </Button>
                         </div>
                       )}
+
+                      {stepStatus === 'error' && comment !== '' && (
+                        <div className="my-2">
+                          <span className="text-red-500 text-sm italic">{comment}.</span>
+                        </div>
+                      )}
+
                     </>
                   </div>
 

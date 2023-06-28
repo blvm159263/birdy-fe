@@ -1,8 +1,9 @@
 const eChart = {
+
   series: [
     {
-      name: "Sales",
-      data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
+      name: "On page",
+      data: [450, 200, 100, 220, 500, 100, 400, 230, 500, 200, 300, 400],
       color: "#fff",
     },
   ],
@@ -39,6 +40,7 @@ const eChart = {
     },
     xaxis: {
       categories: [
+        "Jan",
         "Feb",
         "Mar",
         "Apr",
@@ -48,6 +50,8 @@ const eChart = {
         "Aug",
         "Sep",
         "Oct",
+        "Nov",
+        "Dec"
       ],
       labels: {
         show: true,
@@ -66,6 +70,8 @@ const eChart = {
             "#fff",
             "#fff",
             "#fff",
+            "#fff",
+            "#fff"
           ],
         },
       },
@@ -88,6 +94,8 @@ const eChart = {
             "#fff",
             "#fff",
             "#fff",
+            "#fff",
+            "#fff"
           ],
         },
       },
@@ -96,7 +104,19 @@ const eChart = {
     tooltip: {
       y: {
         formatter: function (val) {
-          return "$ " + val + " thousands";
+          if (val >= 1000000000) {
+            // Convert to billions (e.g., 1.2b)
+            return (val / 1000000000).toFixed(1) + "b products";
+          } else if (val >= 1000000) {
+            // Convert to millions (e.g., 1.2m)
+            return (val / 1000000).toFixed(1) + "m products";
+          } else if (val >= 1000) {
+            // Convert to thousands (e.g., 1.2k)
+            return (val / 1000).toFixed(1) + "k products";
+          } else {
+            return val + ' products';
+          }
+          // return number + " products";
         },
       },
     },

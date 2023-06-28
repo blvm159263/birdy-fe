@@ -1,4 +1,3 @@
-import { el } from "date-fns/locale";
 import axiosClient from "./axiosClient";
 
 const shopApi = {
@@ -36,6 +35,19 @@ const shopApi = {
         const url = '/shops/' + id + '/orders';
         return axiosClient.get(url, { params });
     },
+    editProfile(id, params) {
+        const data = new FormData();
+        data.append('shopName', params.shopName);
+        data.append('shopImage', params.shopImage);
+        const url = '/shops/' + id + "/update";
+        const config = {
+            headers: {
+                'Content-type': 'multipart/form-data',
+            },
+        };
+        return axiosClient.patch(url, data, config);
+    }
+
 }
 
 export default shopApi;

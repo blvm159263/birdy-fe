@@ -14,11 +14,11 @@ const orderApi = {
         return axiosClient.get(url)
     },
     getAllOrderDetailsByOrderId(id) {
-        const url = `orders/order-detail/` + id
+        const url = `/orders/order-detail/` + id
         return axiosClient.get(url)
     },
-    editOrderState(id, state) {
-        const url = `/orders/edit/${id}?state=${state}`
+    editOrderState(id, state, comment) {
+        const url = `/orders/edit/${id}?state=${state}&comment=${comment}`
         return axiosClient.patch(url)
     }
 };

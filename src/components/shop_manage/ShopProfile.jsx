@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef, useContext } from "react"
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload, Avatar } from 'antd';
 import ImgCrop from 'antd-img-crop'
 import format from "date-fns/format";
 import shopApi from "../../api/shopApi";
+import { NotificationContext } from "../../context/NotificationProvider";
+import { set } from "date-fns";
 
 
 const getBase64 = (file) =>
@@ -16,6 +18,8 @@ const getBase64 = (file) =>
 
 function ShopProfile() {
 
+  const [updateStatus, setUpdateStatus] = useState(false);
+  const openNotificationWithIcon = useContext(NotificationContext);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
@@ -64,18 +68,20 @@ function ShopProfile() {
 
 
   useEffect(() => {
+    updateStatus && setUpdateStatus(false);
     shopApi.getShopDetailByShopId(1).then((res) => {
       console.log(res.data[0].avatarUrl);
       setShop(res.data[0]);
 
+      const NullAva = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png';
       // const avar = res.data[0].avatarUrl;
-      setUrl(res.data[0].avatarUrl);
+      setUrl(res.data[0].avatarUrl !== '' ? res.data[0].avatarUrl : NullAva || NullAva);
       console.log(url);
       setShopAvar([{
         uid: '-1',
         name: 'image.png',
         status: 'done',
-        url: res.data[0].avatarUrl,
+        url: res.data[0].avatarUrl !== '' ? res.data[0].avatarUrl : NullAva || NullAva,
       }]);
 
       const hidePhone = hidePhoneNumber(res.data[1].phoneNumber);
@@ -86,10 +92,25 @@ function ShopProfile() {
     }).catch((err) => {
       console.log(err);
     })
-  }, []);
+  }, [updateStatus]);
 
   const onSubmit = (data) => {
-
+    // console.log(data);
+    const params = {
+      shopName: data[0],
+      shopImage: shopAvar[0]?.originFileObj || null,
+    }
+    console.log(params);
+    shopApi.editProfile(1, params).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        // alert('Update success!');
+        setUpdateStatus(true);
+        openNotificationWithIcon('Success!', 'Update Shop Profile successfully!');
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
   }
 
   const handleEntailmentRequest = (e) => {
@@ -121,7 +142,7 @@ function ShopProfile() {
 
   const HandleReset = () => {
     ref.current?.value !== shop.shopName && (ref.current.value = shop.shopName);
-    shopAvar[0].url !== shop.avatarUrl && (
+    shopAvar[0]?.url !== shop.avatarUrl && (
       setShopAvar([{
         uid: '-1',
         name: 'image.png',
@@ -142,12 +163,19 @@ function ShopProfile() {
           <form className="w-full p-3 text-sm text-left text-gray-500 bg-white-700 dark:text-gray-400"
             onSubmit={(e) => {
 
-              handleEntailmentRequest(e)
-              var list = [];
-              for (var i = 0; i < e.target.length; i++) {
-                list.push(e.target[i].value)
+              if (shopAvar.length === 0) {
+                handleEntailmentRequest(e);
+                setError('Please upload your shop avatar!');
               }
-              onSubmit(list);
+              else {
+
+                handleEntailmentRequest(e)
+                var list = [];
+                for (var i = 0; i < e.target.length; i++) {
+                  list.push(e.target[i].value)
+                }
+                onSubmit(list);
+              }
             }}
           >
 
@@ -188,6 +216,8 @@ function ShopProfile() {
                   <div className="w-full pl-6">
                     <input
                       ref={ref}
+                      required
+                      maxLength={50}
                       type="text"
                       id="name"
                       name="name"
@@ -250,9 +280,11 @@ function ShopProfile() {
                   <div className="w-full pl-6">
                     <button
                       // onClick={HandleSave}
+                      type="submit"
                       className="border border-blue-500 bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-md">Save</button>
                     <button
                       onClick={HandleReset}
+                      type="reset"
                       className="ml-6 border border-sky-400 bg-transparent text-sky-400 hover:bg-sky-400 hover:text-white font-semibold py-2 px-5 rounded-md">Reset</button>
                   </div>
                 </div>
@@ -261,9 +293,14 @@ function ShopProfile() {
 
               <div className="basis-[35%] flex items-center justify-center">
                 <div className="h-96 w-full border-l border-gray-300 flex items-center justify-center">
-                  <div className="ml-12">
+                  <div className="ml-12 flex flex-col items-center">
+                    <label
+                      className="pr-2 block text-sm text-center font-medium mb-3"
+                    >
+                      <p className="text-red-500">{error}</p>
+                    </label>
                     <div >
-                      <ImgCrop showGrid rotationSlider aspectSlider showReset cropShape="round">
+                      <ImgCrop showGrid rotationSlider showReset cropShape="round">
                         <Upload
                           listType="picture-circle"
                           fileList={shopAvar}
