@@ -4,12 +4,14 @@ import SignUp from "../SignUp"
 import ShopSignIn from "./ShopSignIn"
 import ShopSignUp from "./ShopSignUp"
 import ShopInformation from "./ShopInformation"
+import ForgotPasswordShop from "./ForgotPasswordShop"
 
 function ShopLogin() {
   const [isSignIn, setIsSignIn] = useState(true)
   const [phoneNumberRegister, setPhoneNumberRegister] = useState("")
   const [passwordRegister, setPasswordRegister] = useState("")
   const [isVerified, setIsVerified] = useState(false)
+  const [isForgotPassword, setIsForgotPassword] = useState(false)
 
   const handleChangeSignState = () => {
     setIsSignIn(!isSignIn)
@@ -30,29 +32,43 @@ function ShopLogin() {
             We are the best platform to <br /> sell bird related products !
           </h1>
         </div>
-        {!isVerified ? (
+        {!isForgotPassword ?
           <>
-            {!isSignIn ? (
-              <ShopSignUp
-                setIsSignIn={setIsSignIn}
-                setPhoneNumberRegister={setPhoneNumberRegister}
-                setIsVerified={setIsVerified}
-                setPasswordRegister={setPasswordRegister}
+            {!isVerified ? (
+              <>
+                {!isSignIn ? (
+                  <ShopSignUp
+                    setIsSignIn={setIsSignIn}
+                    setPhoneNumberRegister={setPhoneNumberRegister}
+                    setIsVerified={setIsVerified}
+                    setPasswordRegister={setPasswordRegister}
+                    phoneNumberRegister={phoneNumberRegister}
+                    passwordRegister={passwordRegister}
+                  />
+                ) : (
+                  <ShopSignIn setIsSignIn={setIsSignIn} setIsForgotPassword={setIsForgotPassword} />
+                )}
+              </>
+            ) : (
+              <ShopInformation
                 phoneNumberRegister={phoneNumberRegister}
                 passwordRegister={passwordRegister}
+                setIsVerified={setIsVerified}
+                setIsSignIn={setIsSignIn}
               />
-            ) : (
-              <ShopSignIn setIsSignIn={setIsSignIn} />
             )}
           </>
-        ) : (
-          <ShopInformation
-            phoneNumberRegister={phoneNumberRegister}
-            passwordRegister={passwordRegister}
-            setIsVerified={setIsVerified}
+          :
+          <ForgotPasswordShop
             setIsSignIn={setIsSignIn}
+            setPhoneNumberRegister={setPhoneNumberRegister}
+            setIsVerified={setIsVerified}
+            phoneNumberRegister={phoneNumberRegister}
+            setPasswordRegister={setPasswordRegister}
+            passwordRegister={passwordRegister}
+            setIsForgotPassword={setIsForgotPassword}
           />
-        )}
+        }
 
       </div>
     </div>

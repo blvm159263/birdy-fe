@@ -49,7 +49,7 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                 openNotificationWithIcon("Send OTP successfully", "Please check your message !")
             }).catch((error) => {
                 // Error; SMS not sent
-                openNotificationWithIcon("Send OTP fail", "Please check phone number !")
+
             });
     }
 
@@ -68,17 +68,21 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
     }
 
     const validationPhoneNumber = () => {
-        setIsValidPhoneNumber(validator.isMobilePhone(phoneNumberRegister, 'vi-VN'));
+        const isValid = validator.isMobilePhone(phoneNumberRegister, 'vi-VN')
+        setIsValidPhoneNumber(isValid);
+        console.log("phone :" + isValid);
+        return isValid;
     }
 
     const validationPassword = () => {
-        setIsValidPassword(validator.isStrongPassword(passwordRegister));
+        const isValid = validator.isStrongPassword(passwordRegister);
+        setIsValidPassword(isValid);
+        console.log("pass :" +isValid);
+        return isValid
     }
 
     const onSignUp = () => {
-        validationPhoneNumber();
-        validationPassword();
-        if (isValidPhoneNumber && isValidPassword) {
+        if (validationPhoneNumber() && validationPassword()) {
             console.log("Valid");
             accountApi.checkPhoneExist({ phoneNumber: phoneNumberRegister })
                 .then(res => {
@@ -102,7 +106,7 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
 
     return (
         <div className="lg:w-1/2 sm:w-full p-5 sm:mx-auto">
-            <form className="lg:w-1/2 sm:w-full bg-white p-10 rounded-md">
+            <form className="lg:w-2/3 sm:w-full bg-white p-10 rounded-md">
                 {isVerifyState ? "" :
                     <div>
                         <h1 className="text-3xl mb-4">

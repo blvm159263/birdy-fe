@@ -9,7 +9,7 @@ import storageService from "../../../api/storage"
 import { NotificationContext } from "../../../context/NotificationProvider"
 import jwtDecode from "jwt-decode"
 
-function ShopSignIn({ isSignIn, setIsSignIn }) {
+function ShopSignIn({ setIsSignIn, setIsForgotPassword }) {
 
   const openNotificationWithIcon = useContext(NotificationContext)
   const { setIsLogin, setRole } = useContext(LoginContext)
@@ -36,7 +36,9 @@ function ShopSignIn({ isSignIn, setIsSignIn }) {
   }, [])
 
   const validationPhoneNumber = () => {
-    setIsValidPhoneNumber(validator.isMobilePhone(phoneNumber, "vi-VN"))
+    const isValid = validator.isMobilePhone(phoneNumber, "vi-VN");
+    setIsValidPhoneNumber(isValid);
+    return isValid;
   }
 
   const formatPhoneNumber = (number) => {
@@ -47,8 +49,7 @@ function ShopSignIn({ isSignIn, setIsSignIn }) {
   }
 
   const onSignIn = () => {
-    validationPhoneNumber()
-    if (isValidPhoneNumber) {
+    if (validationPhoneNumber()) {
       authApi
         .login({
           phoneNumber: formatPhoneNumber(phoneNumber),
@@ -58,7 +59,10 @@ function ShopSignIn({ isSignIn, setIsSignIn }) {
           if (res.status === 200) {
             // alert("login thành công")
             let token = jwtDecode(res.data.token)
-            const date = new Date()
+            if(token.role !== "SHOP"){
+              openNotificationWithIcon("error", "Bạn không phải chủ shop")
+              return
+            }
             storageService.setAccessToken(res.data.token)
             setRole(token.role)
             setIsLogin(true)
@@ -117,7 +121,11 @@ function ShopSignIn({ isSignIn, setIsSignIn }) {
           Sign In
         </button>
         <div className="flex justify-between items-center mb-4">
-          <a href="#" className="text-blue-500 text-sm hover:underline">
+          <a href="#" onClick={() => {
+            setIsForgotPassword(true)
+            setIsSignIn(false)
+          }}
+            className="text-blue-500 text-sm hover:underline">
             Forgot Password?
           </a>
         </div>

@@ -4,12 +4,14 @@ import { useState } from "react"
 import SignIn from "./SignIn"
 import SignUp from "./SignUp"
 import SignUpInformation from "./SignUpInformation"
+import ForgotPassword from "./ForgotPassword"
 
 function MainLogin() {
   const [isSignIn, setIsSignIn] = useState(true)
   const [phoneNumberRegister, setPhoneNumberRegister] = useState("")
   const [passwordRegister, setPasswordRegister] = useState("")
   const [isVerified, setIsVerified] = useState(false)
+  const [isForgotPassword, setIsForgotPassword] = useState(false)
 
   const handleChangeSignState = () => {
     setIsSignIn(!isSignIn)
@@ -31,30 +33,45 @@ function MainLogin() {
             <br /> A bird trading platform
           </h1>
         </div>
-
-        {!isVerified ? (
+        {!isForgotPassword ?
           <>
-            {!isSignIn ? (
-              <SignUp
-                setIsSignIn={setIsSignIn}
-                setPhoneNumberRegister={setPhoneNumberRegister}
-                setIsVerified={setIsVerified}
-                setPasswordRegister={setPasswordRegister}
+            {!isVerified ? (
+              <>
+                {!isSignIn ? (
+                  <SignUp
+                    setIsSignIn={setIsSignIn}
+                    setPhoneNumberRegister={setPhoneNumberRegister}
+                    setIsVerified={setIsVerified}
+                    setPasswordRegister={setPasswordRegister}
+                    phoneNumberRegister={phoneNumberRegister}
+                    passwordRegister={passwordRegister}
+                  />
+                ) : (
+                  <SignIn setIsSignIn={setIsSignIn} setIsForgotPassword={setIsForgotPassword} />
+                )}
+              </>
+            ) : (
+              <SignUpInformation
                 phoneNumberRegister={phoneNumberRegister}
                 passwordRegister={passwordRegister}
+                setIsVerified={setIsVerified}
+                setIsSignIn={setIsSignIn}
               />
-            ) : (
-              <SignIn setIsSignIn={setIsSignIn} />
             )}
           </>
-        ) : (
-          <SignUpInformation
-            phoneNumberRegister={phoneNumberRegister}
-            passwordRegister={passwordRegister}
-            setIsVerified={setIsVerified}
+          :
+          <ForgotPassword
             setIsSignIn={setIsSignIn}
+            setPhoneNumberRegister={setPhoneNumberRegister}
+            setIsVerified={setIsVerified}
+            phoneNumberRegister={phoneNumberRegister}
+            setPasswordRegister={setPasswordRegister}
+            passwordRegister={passwordRegister}
+            setIsForgotPassword={setIsForgotPassword}
           />
-        )}
+        }
+
+
       </div>
     </div>
   )

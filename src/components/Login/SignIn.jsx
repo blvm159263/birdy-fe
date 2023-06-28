@@ -9,7 +9,7 @@ import storageService from "../../api/storage"
 import { NotificationContext } from "../../context/NotificationProvider"
 import jwtDecode from "jwt-decode"
 
-function SignIn({ setIsSignIn }) {
+function SignIn({ setIsSignIn, setIsForgotPassword }) {
   const openNotificationWithIcon = useContext(NotificationContext)
   const { setIsLogin, setRole } = useContext(LoginContext)
 
@@ -35,7 +35,9 @@ function SignIn({ setIsSignIn }) {
   }, [])
 
   const validationPhoneNumber = () => {
-    setIsValidPhoneNumber(validator.isMobilePhone(phoneNumber, "vi-VN"))
+    const isValid = validator.isMobilePhone(phoneNumber, "vi-VN");
+    setIsValidPhoneNumber(isValid);
+    return isValid;
   }
 
   const formatPhoneNumber = (number) => {
@@ -46,8 +48,8 @@ function SignIn({ setIsSignIn }) {
   }
 
   const onSignIn = () => {
-    validationPhoneNumber()
-    if (isValidPhoneNumber) {
+
+    if (validationPhoneNumber()) {
       authApi
         .login({
           phoneNumber: formatPhoneNumber(phoneNumber),
@@ -57,6 +59,10 @@ function SignIn({ setIsSignIn }) {
           if (res.status === 200) {
             // alert("login thành công")
             let token = jwtDecode(res.data.token)
+            if(token.role !== "USER"){
+              openNotificationWithIcon("Error", "Số điện thoại được đăng kí là chủ shop!")
+              return
+            }
             const date = new Date()
             storageService.setAccessToken(res.data.token)
             setRole(token.role)
@@ -78,7 +84,7 @@ function SignIn({ setIsSignIn }) {
 
   return (
     <div className="lg:w-1/2 sm: w-full p-5 sm:mx-auto">
-      <form className="lg:w-1/2 sm:w-full bg-white p-10 rounded-md">
+      <form className="lg:w-2/3 sm:w-full bg-white p-10 rounded-md">
         <h1 className="text-3xl mb-4">Sign In</h1>
         <div className="mb-4">
           <input
@@ -116,7 +122,11 @@ function SignIn({ setIsSignIn }) {
           Sign In
         </button>
         <div className="flex justify-between items-center mb-4">
-          <a href="#" className="text-blue-500 text-sm hover:underline">
+          <a href="#" onClick={() => {
+            setIsForgotPassword(true)
+            setIsSignIn(false)
+          }}
+            className="text-blue-500 text-sm hover:underline">
             Forgot Password?
           </a>
         </div>

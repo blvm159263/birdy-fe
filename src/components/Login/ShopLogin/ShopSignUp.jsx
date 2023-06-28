@@ -66,17 +66,19 @@ function ShopSignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneN
   }
 
   const validationPhoneNumber = () => {
-      setIsValidPhoneNumber(validator.isMobilePhone(phoneNumberRegister, 'vi-VN'));
+    const isValid = validator.isMobilePhone(phoneNumberRegister, "vi-VN");
+      setIsValidPhoneNumber(isValid);
+      return isValid;
   }
 
   const validationPassword = () => {
-      setIsValidPassword(validator.isStrongPassword(passwordRegister));
+    const isValid = validator.isStrongPassword(passwordRegister);
+      setIsValidPassword(isValid);
+      return isValid;
   }
 
   const onSignUp = () => {
-      validationPhoneNumber();
-      validationPassword();
-      if (isValidPhoneNumber && isValidPassword) {
+      if (validationPhoneNumber() && validationPassword()) {
           console.log("Valid");
           accountApi.checkPhoneExist({ phoneNumber: phoneNumberRegister })
               .then(res => {
