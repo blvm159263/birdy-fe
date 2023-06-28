@@ -11,8 +11,8 @@ import {
 function UserOrderDetail({ detail, orderid }) {
   const [product, setProducts] = useState([])
   const dispatch = useDispatch()
-  const fetchProduct = () => {
-    productApi.getProductById(detail.productId).then((response) => {
+  const fetchProduct = async () => {
+    await productApi.getProductById(detail.productId).then((response) => {
       setProducts(response.data)
       dispatch(
         getOrderDetail({
