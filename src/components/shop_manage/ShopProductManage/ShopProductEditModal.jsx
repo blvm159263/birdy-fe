@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setShowShopProductEditModal} from "../../../features/ui/uiSlice";
 import EditProductForm from "./form/EditProductForm";
 
-export default function ShopProductEditModal() {
+export default function ShopProductEditModal({onEditSuccess}) {
   const isVisible = useSelector(state => state.ui.isShowShopProductEditModal);
   const dispatch = useDispatch();
 
@@ -22,7 +22,7 @@ export default function ShopProductEditModal() {
         </div>
 
         {/* Form */}
-        <EditProductForm/>
+        <EditProductForm onEditSuccess={onEditSuccess}/>
       </div>
     </div>
   )

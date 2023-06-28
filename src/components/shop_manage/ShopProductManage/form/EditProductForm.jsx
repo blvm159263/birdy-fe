@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setShowShopProductEditModal} from "../../../../features/ui/uiSlice";
 import CategoryField from "./field/CategoryField";
@@ -20,8 +20,10 @@ import MaterialField from "./field/MaterialField";
 import productApi from "../../../../api/productApi";
 import MainImageField from "./field/MainImageField";
 import SubImagesField from "./field/SubImagesField";
+import {NotificationContext} from "../../../../context/NotificationProvider";
 
-export default function EditProductForm() {
+export default function EditProductForm({onEditSuccess}) {
+  const openNotificationWithIcon = useContext(NotificationContext);
   const dispatch = useDispatch();
   const formValues = useSelector(state => state.shop.productFormValues);
   const [mainImage, setMainImage] = useState(formValues.imageMain);
@@ -78,8 +80,13 @@ export default function EditProductForm() {
 
     productApi.updateProductById(productDTO.id, params).then((response) => {
       console.log(response);
+      if (response.status === 200) {
+        openNotificationWithIcon('Success', 'Edit product successfully!');
+        dispatch(setShowShopProductEditModal(false));
+        onEditSuccess();
+      }
     }).catch((error) => {
-      console.log("Error while update product!");
+      openNotificationWithIcon('Error', 'Error while edit product!');
       console.log(error);
     })
   }
