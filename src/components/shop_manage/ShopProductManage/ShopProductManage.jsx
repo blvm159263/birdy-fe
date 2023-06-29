@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import ShopProductCard from "./ShopProductCard"
 import ShopProductEditModal from "./ShopProductEditModal";
 import ShopManageProductSearchBar from "../../../features/search/ShopManageProductSearchBar";
@@ -6,19 +6,21 @@ import Pagination from "../../../features/search/Pagination";
 import {useDispatch, useSelector} from "react-redux"
 import shopManageApi from "../../../api/shopManageApi"
 import {setShowShopProductEditModal} from "../../../features/ui/uiSlice";
+import { LoginContext } from "../../../context/LoginProvider";
 
 function ShopProductManage() {
   const [totalPage, setTotalPage] = useState(1);
   const [shopProducts, setShopProducts] = useState([]);
   const [oldSearchText, setOldSearchText] = useState('');
   const searchState = useSelector(state => state.search);
+  const { shopId } = useContext(LoginContext);
   const dispatch = useDispatch();
 
   const fetchProductForShop = () => {
     setOldSearchText(searchState.searchText);
 
     shopManageApi
-      .getShopProductsByShopIdForShopManage(1, { page: searchState.page, search: searchState.searchText })
+      .getShopProductsByShopIdForShopManage(shopId, { page: searchState.page, search: searchState.searchText })
       .then((response) => {
         console.log(response.data);
         setShopProducts(response.data[0]);

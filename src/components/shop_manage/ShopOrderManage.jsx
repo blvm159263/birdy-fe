@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from "react"
-import ShopOrderModal from "./ShopOrderModal"
 import shopApi from "../../api/shopApi"
 import orderApi from "../../api/orderApi";
 import { Table, Tag, Badge, Steps, Button, Modal, Radio, Space } from 'antd';
 import { NotificationContext } from "../../context/NotificationProvider"
-import { SmileOutlined } from '@ant-design/icons';
+import { LoginContext } from "../../context/LoginProvider";
 import { set } from "date-fns";
-import { current } from "@reduxjs/toolkit";
-import { de, el } from "date-fns/locale";
 
 function ShopOrderManage() {
   const openNotificationWithIcon = useContext(NotificationContext);
@@ -33,7 +30,7 @@ function ShopOrderManage() {
   const [comment, setComment] = useState(null)
   const [commentModel, setCommentModel] = useState(false)
   const [search, setSearch] = useState("")
-  const shopId = 1;
+  const { shopId } = useContext(LoginContext)
 
   const fetchOrder = async () => {
     try {
@@ -55,6 +52,7 @@ function ShopOrderManage() {
         })
     } catch (error) {
       console.log(error)
+      setLoading(false);
     }
   }
   useEffect(() => {

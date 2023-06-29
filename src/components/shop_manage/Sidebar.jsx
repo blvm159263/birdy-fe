@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { Button, Menu } from "antd"
 import storageService from "../../api/storage"
 import { LoginContext } from "../../context/LoginProvider"
+import shopApi from "../../api/shopApi"
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -109,7 +110,8 @@ console.log(items);
 
 function Sidebar() {
 
-  const { setIsLogin, setRole } = useContext(LoginContext)
+  const { setIsLogin, setRole, shopId } = useContext(LoginContext)
+  const [shop, setShop] = useState()
 
   const navigate = useNavigate()
   const onLogout = () => {
@@ -118,6 +120,21 @@ function Sidebar() {
     setRole(null);
     navigate("/");
   }
+
+  const fetchShop = async () => {
+    await shopApi.getShopInformationByShopId(shopId)
+      .then((res) => {
+        console.log(res);
+        setShop(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
+  useEffect(() => {
+    fetchShop();
+  }, [shopId])
 
 
   const handlePath = function () {
@@ -137,12 +154,12 @@ function Sidebar() {
       <div className="flex flex-col h-screen py-10 bg-white shadow w-full">
         <div className="space-y-3">
           <div className="flex flex-col items-center justify-center">
-            <h2 className="text-xl font-bold">Dashboard</h2>
-            <p className="mt-2 mb-3">"Shopname"</p>
+            <h2 className="text-xl font-bold">Shop Manage</h2>
+            <p className="mt-2 mb-3">{shop?.shopName}</p>
             <div className="w-10 h-10">
               <img
-                src="../assets/images/shop-avar.png"
-                className="w-fit h-fit"
+                src={shop?.avatarUrl}
+                className="w-fit h-fit rounded-full"
                 alt=""
               />
             </div>

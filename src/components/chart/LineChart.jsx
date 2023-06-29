@@ -1,20 +1,22 @@
 import ReactApexChart from "react-apexcharts";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Typography } from "antd";
 import { MinusOutlined } from "@ant-design/icons";
 import lineChart from "./configs/lineChart";
 import chartApi from "../../api/chartApi";
 import { Select } from "antd";
+import { LoginContext } from "../../context/LoginProvider";
 
 function LineChart() {
-  const { Title, Paragraph } = Typography;
+  const { shopId } = useContext(LoginContext);
+  const { Paragraph } = Typography;
   const [allYears, setAllYears] = useState([]);
   const [currentYear, setCurrentYear] = useState(null);
   const [series, setSeries] = useState([]);
 
   const fetchYear = async () => {
     try {
-      await chartApi.getAllYearsOrder(1)
+      await chartApi.getAllYearsOrder(shopId)
         .then((res) => {
           setAllYears(res.data);
           setCurrentYear(res.data[0]);
@@ -32,7 +34,7 @@ function LineChart() {
 
   const fetchData = async () => {
     try {
-      await chartApi.getChartOrder(1, currentYear)
+      await chartApi.getChartOrder(shopId, currentYear)
         .then((res) => {
           console.log(res);
 

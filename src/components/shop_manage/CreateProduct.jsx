@@ -3,11 +3,9 @@ import { Select, Modal, Upload, DatePicker } from "antd"
 import { PlusOutlined } from "@ant-design/icons"
 import productApi from "../../api/productApi"
 import { NotificationContext } from "../../context/NotificationProvider"
+import { LoginContext } from "../../context/LoginProvider"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
-import { el } from "date-fns/locale"
-import { set } from "date-fns"
-import { updateProductFormValues } from "../../features/shops/shopSlice";
 
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
@@ -21,6 +19,7 @@ const getBase64 = (file) =>
 
 function CreateProduct() {
     const openNotificationWithIcon = useContext(NotificationContext)
+    const { shopId } = useContext(LoginContext)
 
     const [error, setError] = useState(null)
     const [errorSub, setErrorSub] = useState(null)
@@ -241,7 +240,7 @@ function CreateProduct() {
             state: 1,
             categoryId: getCategoryId(),
             categoryName: category,
-            shopId: 1,
+            shopId: shopId,
             shopName: "shop 1",
         }
 

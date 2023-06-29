@@ -79,17 +79,17 @@ export default function EditProductForm({onEditSuccess}) {
     console.log("Submitted form! With below data:");
     console.log(params);
 
-    productApi.updateProductById(productDTO.id, params).then((response) => {
-      console.log(response);
-      if (response.status === 200) {
-        openNotificationWithIcon('Success', 'Edit product successfully!');
-        dispatch(setShowShopProductEditModal(false));
-        onEditSuccess();
-      }
-    }).catch((error) => {
-      openNotificationWithIcon('Error', 'Error while edit product!');
-      console.log(error);
-    })
+    // productApi.updateProductById(productDTO.id, params).then((response) => {
+    //   console.log(response);
+    //   if (response.status === 200) {
+    //     openNotificationWithIcon('Success', 'Edit product successfully!');
+    //     dispatch(setShowShopProductEditModal(false));
+    //     onEditSuccess();
+    //   }
+    // }).catch((error) => {
+    //   openNotificationWithIcon('Error', 'Error while edit product!');
+    //   console.log(error);
+    // })
   }
 
   return (

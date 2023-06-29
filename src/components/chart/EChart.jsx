@@ -3,11 +3,12 @@ import { Row, Col, Typography } from "antd";
 import eChart from "./configs/eChart";
 import chartApi from "../../api/chartApi";
 import { Select } from "antd";
-import React, { useEffect, useState } from "react";
-import { set } from "date-fns";
+import React, { useEffect, useState, useContext } from "react";
+import { LoginContext } from "../../context/LoginProvider";
 
 
 function EChart() {
+  const { shopId } = useContext(LoginContext);
   const { Paragraph } = Typography;
   const [all, setAll] = useState(0);
   const [bird, setBird] = useState(0);
@@ -19,7 +20,7 @@ function EChart() {
 
   const fetchYear = async () => {
     try {
-      await chartApi.getAllYearsProduct(1)
+      await chartApi.getAllYearsProduct(shopId)
       .then((res) => {
         // console.log('hi');
         setAllYears(res.data);
@@ -38,7 +39,7 @@ function EChart() {
 
   const fetchData = async () => {
     try {
-      await chartApi.getChartProduct(1, currentYear)
+      await chartApi.getChartProduct(shopId, currentYear)
         .then((res) => {
           console.log(res);
           setAll(res.data.allInYear);

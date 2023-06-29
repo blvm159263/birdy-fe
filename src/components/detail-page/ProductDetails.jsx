@@ -1,4 +1,5 @@
 import React from "react"
+import { useState } from "react"
 
 function ProductDetails({ product }) {
   return (
@@ -50,10 +51,10 @@ function ProductDetails({ product }) {
       ) : (
         <div></div>
       )}
-      <p id="description" className="mb-10">
+      <p id="description" className="mb-3">
         <span className="font-bold">Description: </span>
       </p>
-        {product.description}
+      <div dangerouslySetInnerHTML={{ __html: product.description }} />
     </div>
   )
 }

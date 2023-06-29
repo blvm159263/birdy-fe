@@ -3,10 +3,8 @@ import { useDispatch } from "react-redux";
 import { Popconfirm } from "antd";
 import { NotificationContext } from "../../../context/NotificationProvider";
 import productApi from "../../../api/productApi";
-import { setShowShopProductManageForm } from "../../../features/ui/uiSlice";
-import { setEditId } from "../../../features/shops/shopSlice";
-
-import {useDispatch} from "react-redux";
+// import { setShowShopProductManageForm } from "../../../features/ui/uiSlice";
+// import { setEditId } from "../../../features/shops/shopSlice";
 import {fetchProductFormValues, fetchProductSubImages, setEditId} from "../../../features/shops/shopSlice";
 import {setShowShopProductEditModal} from "../../../features/ui/uiSlice";
 
