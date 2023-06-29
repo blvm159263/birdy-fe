@@ -11,7 +11,7 @@ function UpdateAddressModal({
   fetchAddress,
   address,
   // userAddresses,
-  updated,
+
   setUpdated,
 }) {
   const { userid } = useParams()
@@ -134,7 +134,10 @@ function UpdateAddressModal({
           </button>
           <button
             className="ml-4 text-red-500 hover:text-red-300"
-            onClick={() => setIsUpdate(false)}
+            onClick={() => {
+              setIsUpdate(false)
+              setUpdated(false)
+            }}
           >
             Close
           </button>

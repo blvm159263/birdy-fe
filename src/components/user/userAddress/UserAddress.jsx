@@ -36,7 +36,10 @@ function UserAddress() {
       <div className="flex justify-between items-center py-4 px-10">
         <h1 className=" text-center text-2xl font-bold">Address</h1>
         <button
-          onClick={() => setIsAddNew(!isAddNew)}
+          onClick={() => {
+            setIsAddNew(!isAddNew)
+            setUpdated(false)
+          }}
           className="rounded-md py-3 px-2 text-white bg-sky-400"
         >
           + Add new Address
@@ -90,6 +93,9 @@ function UserAddress() {
       {isAddNew && (
         <AddressModal
           isAddNew={isAddNew}
+          updated={updated}
+          // userAddresses={userAddresses}
+          setUpdated={setUpdated}
           setIsAddNew={setIsAddNew}
           fetchAddress={fetchAddress}
         />
