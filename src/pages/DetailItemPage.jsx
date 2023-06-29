@@ -7,7 +7,6 @@ import RelatedProduct from "../components/detail-page/RelatedProduct"
 import productApi from "../api/productApi"
 import { useParams } from "react-router"
 
-
 function DetailItemPage() {
   const [product, setProduct] = useState({})
   const { id } = useParams()
@@ -27,12 +26,12 @@ function DetailItemPage() {
     <div className="bg-gray-200 py-10">
       <div className="flex flex-col justify-center items-center lg:mx-20 sm: mx-5">
         <ProductOverview product={product} />
-        <ShopInfo />
-        <div className="flex lg:flex-row sm: flex-col">
+        <ShopInfo product={product}/>
+        <div className="flex w-full h-100 lg:flex-row sm: flex-col">
           <ProductDetails product={product} />
           <Review product={product} />
         </div>
-        <RelatedProduct />
+        <RelatedProduct product={product} />
       </div>
     </div>
   )

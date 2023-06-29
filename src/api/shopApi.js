@@ -5,7 +5,10 @@ const shopApi = {
         const url = '/shops/' + id;
         return axiosClient.get(url);
     },
-
+    getShopInformationByPhoneNumber(phoneNumber) {
+        const url = '/shops/phone-number/' + phoneNumber;
+        return axiosClient.get(url);
+    },
     getShopDetailByShopId(id) {
         const url = '/shops/detail/' + id;
         return axiosClient.get(url);

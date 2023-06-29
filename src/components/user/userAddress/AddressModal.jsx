@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import userApi from "../../../api/userApi"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { addNewAddressSlice } from "../../../features/user/userSlice"
 
 function AddressModal({ isModal, setIsModal, fetchAddress }) {
   const { userid } = useParams()
   const dispatch = useDispatch()
+  const userInformation = useSelector((state) => state.user.userInformation)
+
   const [newAddress, setNewAddress] = useState({
     id: Math.random(),
     fullName: "",
@@ -64,27 +66,30 @@ function AddressModal({ isModal, setIsModal, fetchAddress }) {
   }
 
   return (
-    <div className="fixed z-50 w-full p-4  md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center inset-0 bg-black bg-opacity-25">
-      <form onSubmit={handleAddAddress} className=" bg-white p-10 h-2/4 w-2/5">
+    <div className="fixed z-50 lg:w-full sm: w-full p-4  md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center inset-0 bg-black bg-opacity-25">
+      <form
+        onSubmit={handleAddAddress}
+        className=" bg-white p-10 lg:h-2/4 lg:w-2/5 sm: w-full flex lg:flex-row sm: flex-col lg:items-between sm: items-center"
+      >
         <h1 className="text-center font-bold text-2xl mb-5">Add new Address</h1>
-        <div className="w-full flex justify-between mb-5">
-          <label className="w-1/5" htmlFor="name">
+        <div className="w-full flex lg:flex-nowrap sm: flex-wrap justify-between mb-5">
+          <label className="lg:w-1/5 md: full sm: w-full" htmlFor="name">
             Name
           </label>
           <input
-            className="rounded-md border w-4/5 text-black"
+            className="rounded-md border lg:w-4/5 md: w-full sm:w-full text-black"
             type="text"
-            onChange={handleChange}
+            disabled
             name="fullName"
-            value={newAddress.fullName}
+            value={userInformation.fullName}
           />
         </div>
-        <div className="w-full flex justify-between mb-5">
-          <label className="w-1/5" htmlFor="address">
+        <div className="w-full flex lg:flex-nowrap sm: flex-wrap justify-between mb-5">
+          <label className="lg:w-1/5 md: w-full sm:w-full" htmlFor="address">
             Address
           </label>
           <input
-            className="rounded-md w-4/5 border text-black"
+            className="rounded-md lg:w-4/5 md: w-full sm:w-full border text-black"
             type="text"
             onChange={handleChange}
             name="address"

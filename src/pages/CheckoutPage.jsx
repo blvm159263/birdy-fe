@@ -99,6 +99,8 @@ export default function CheckoutPage() {
                 code = res.data;
                 openNotificationWithIcon("Place order successfully!", "Redirecting to payment page...")
             }
+        }).catch(err => {
+            openNotificationWithIcon("Place order failed!", "Please try again later...")
         })
         if (code) {
             await paymentApi.getQRMomo({ amount: amount, orderId: code }).then(res => {
