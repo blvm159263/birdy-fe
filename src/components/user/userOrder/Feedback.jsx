@@ -8,7 +8,7 @@ import { getOrderDetail } from "../../../features/user/userSlice"
 
 function Feedback({ setIsPopupOpen, ordercode, detail }) {
   const [hoverd, setHovered] = useState() // used for when hoved on star
-  const [rated, setRated] = useState(1)
+  const [rated, setRated] = useState(0)
   const [comment, setComment] = useState("")
   const [orderDetail, setOrderDetail] = useState()
   const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)

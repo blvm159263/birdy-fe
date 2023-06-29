@@ -6,27 +6,37 @@ import { addNewAddressSlice } from "../../../features/user/userSlice"
 import { Checkbox, Modal, Select, Space } from "antd"
 import TextArea from "antd/es/input/TextArea"
 
-function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
-  const { userid } = useParams()
-  const dispatch = useDispatch()
-  const userInformation = useSelector((state) => state.user.userInformation)
+function UpdateAddressModal({
+  setIsUpdate,
+  fetchAddress,
+  address,
+  // userAddresses,
 
+  setUpdated,
+}) {
+  const { userid } = useParams()
+  const [addressString, setAddressString] = useState("")
+  const userInformation = useSelector((state) => state.user.userInformation)
+  const userAddresses = useSelector((state) => state.user.userAddress)
+  console.log(userAddresses)
+
+  // console.log(address)
   const [newAddress, setNewAddress] = useState({
     id: address.id,
-    // fullName: "",
+    fullName: userInformation.fullName,
     address: address.address,
     userId: userid,
     // ward: "string",
     // city: "string",
     // province: "string",
-    isDefault: false,
+    isDefault: address.isDefault,
   })
 
-  const { address: newAddressAddress, ...newAddressRest } = newAddress
-  console.log(newAddressAddress)
+  // const { address: newAddressAddress, ...newAddressRest } = newAddress
+  // console.log(newAddressAddress, typeof newAddressAddress)
 
   useEffect(() => {
-    setNewAddress(address)
+    setNewAddress(newAddress)
   }, [address])
 
   const handleChange = (evt) => {
@@ -50,10 +60,11 @@ function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
       userId: userid,
     })
   }
+  // console.log("TMP", newAddress)
 
-  const updateAddress = (addressid, params) => {
+  const updateAddress = (params) => {
     userApi
-      .updateAddress(addressid, params)
+      .updateAddress(params)
       .then((response) => console.log(response.data))
       .catch((error) => {
         console.log(error)
@@ -63,13 +74,15 @@ function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
   const handleUpdateAddress = (e) => {
     e.preventDefault()
 
-    updateAddress(address.id, newAddressAddress)
+    updateAddress(newAddress)
 
     handleResetForm()
 
-    setIsUpdate(false)
+    setUpdated(true)
 
     fetchAddress(userid)
+
+    setIsUpdate(false)
   }
 
   return (
@@ -78,32 +91,33 @@ function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
         onSubmit={handleUpdateAddress}
         className=" bg-white p-10 lg:h-2/4 lg:w-2/5 sm: w-full flex lg:flex-col sm: flex-col lg:items-between sm: items-center"
       >
-        <h1 className="text-center font-bold text-2xl mb-5">Update Address</h1>
-        <div className="w-full flex lg:flex-nowrap sm: flex-wrap justify-between mb-5">
+        <h1 className="text-center font-bold text-2xl mb-8">Update Address</h1>
+        <div className="w-full flex items-center lg:flex-nowrap sm: flex-wrap justify-between mb-5">
           <label className="lg:w-1/5 md: full sm: w-full" htmlFor="name">
             Name
           </label>
           <input
-            className="rounded-md border lg:w-4/5 md: w-full sm:w-full text-black"
+            className="rounded-md border lg:w-4/5 p-2 md: w-full sm:w-full text-black"
             type="text"
             disabled
             name="fullName"
             value={userInformation.fullName}
           />
         </div>
-        <div className="w-full flex lg:flex-nowrap sm: flex-wrap justify-between mb-5">
+        <div className="w-full flex items-center lg:flex-nowrap sm: flex-wrap justify-between mb-7">
           <label className="lg:w-1/5 md: w-full sm:w-full" htmlFor="address">
             Address
           </label>
           <input
-            className="rounded-md lg:w-4/5 md: w-full sm:w-full border text-black"
+            className="rounded-md lg:w-4/5 p-2 md: w-full sm:w-full border text-black"
             type="text"
+            id="address"
+            value={newAddress.address}
             onChange={handleChange}
             name="address"
-            value={newAddress.address}
           />
         </div>
-        <div className="">
+        <div className="mb-6">
           <input
             type="checkbox"
             className="mr-2"
@@ -120,7 +134,10 @@ function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
           </button>
           <button
             className="ml-4 text-red-500 hover:text-red-300"
-            onClick={() => setIsUpdate(false)}
+            onClick={() => {
+              setIsUpdate(false)
+              setUpdated(false)
+            }}
           >
             Close
           </button>
