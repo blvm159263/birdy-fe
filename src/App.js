@@ -1,5 +1,5 @@
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom"
-import { FloatButton } from 'antd';
+import {BrowserRouter, Route, Routes} from "react-router-dom"
+import {FloatButton} from 'antd';
 import "./App.css"
 import "./style.scss";
 // Components
@@ -10,8 +10,6 @@ import SearchPage from "./pages/SearchPage"
 import LoginPage from "./pages/LoginPage"
 import DetailItemPage from "./pages/DetailItemPage"
 import AdminLayout from "./layouts/AdminLayout"
-import AdminProductManage from "./components/admin/admin_product_manage/AdminProductManage"
-import AdminUserManage from "./components/admin/user_manage/AdminUserManage"
 import ShopLayout from "./layouts/ShopLayout"
 import ShopProfile from "./components/shop_manage/ShopProfile"
 import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
@@ -26,10 +24,10 @@ import ViewShopPage from "./pages/ViewShopPage"
 import AllShopsPage from "./pages/AllShopsPage"
 import CheckoutPage from "./pages/CheckoutPage"
 import HomeChat from "./pages/HomeChat"
-import { useEffect, useContext, useState } from "react"
+import {useContext, useEffect} from "react"
 import storageService from "./api/storage"
 import jwtDecode from "jwt-decode"
-import { LoginContext } from "./context/LoginProvider"
+import {LoginContext} from "./context/LoginProvider"
 import AllFeaturedPage from "./pages/AllFeaturedPage"
 import ShopHomeSubPage from "./components/store/ShopHomeSubPage"
 import ShopAllProductsSubPage from "./components/store/ShopAllProductsSubPage"
@@ -43,7 +41,10 @@ import UserDeliveryOrder from "./components/user/userOrder/UserDeliveryOrder"
 import UserCompletedOrder from "./components/user/userOrder/UserCompletedOrder"
 import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
 import UserAllOrder from "./components/user/userOrder/UserAllOrder"
-import { ChatContext } from "./context/ChatContext";
+import {ChatContext} from "./context/ChatContext";
+import AdminDashboard from "./components/admin/subpages/AdminDashboard";
+import AdminSubPageType from "./constants/AdminSubPageType";
+import AdminAllStores from "./components/admin/subpages/AdminAllStores";
 
 function App() {
   const { isLogin, setIsLogin, setRole, role } = useContext(LoginContext)
@@ -166,12 +167,13 @@ function App() {
           )}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/shop-login" element={<ShopLoginPage />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminProductManage />} />
-            <Route path="/admin/user-manage-ad" element={<AdminUserManage />} />
-            {/* <Route path="/store-manage-ad" element={} /> */}
-          </Route>
 
+          {/* Admin routes */}
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path={AdminSubPageType.DASHBOARD.path} element={<AdminDashboard />} />
+            <Route path={AdminSubPageType.ALL_STORES.path} element={<AdminAllStores />} />
+            <Route path="*" element={<NoPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
 

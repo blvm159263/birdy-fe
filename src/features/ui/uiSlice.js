@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import {createSlice} from "@reduxjs/toolkit"
 import ViewShopSubPageType from "../../constants/ViewShopSubPageType";
 
 const initialState = {
@@ -7,6 +7,7 @@ const initialState = {
     isShowCartDeleteAllSelectedModal: false,
     isShowCartDeleteModal: false,
     isShowShopProductManageForm: false,
+    currentAdminSubPage: undefined
 }
 
 export const uiSlice = createSlice({
@@ -27,6 +28,9 @@ export const uiSlice = createSlice({
         },
         setShowShopProductManageForm: (state, action) => {
             state.isShowShopProductManageForm = action.payload;
+        },
+        setCurrentAdminSubPage: (state, action) => {
+            state.currentAdminSubPage = action.payload;
         }
     }
 });
@@ -35,6 +39,7 @@ export const {toggleFilterSideBar,
     setCurrentViewShopSubPage,
     setShowCartDeleteAllSelectedModal,
     setShowCartDeleteModal,
-    setShowShopProductManageForm} = uiSlice.actions;
+    setShowShopProductManageForm,
+    setCurrentAdminSubPage} = uiSlice.actions;
 
 export default uiSlice.reducer;
