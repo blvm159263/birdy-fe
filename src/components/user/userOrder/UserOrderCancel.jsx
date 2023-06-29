@@ -9,11 +9,11 @@ import { getAllOrder } from "../../../features/user/userSlice"
 function UserOrderCancel() {
   const { userid } = useParams()
   const userOrder = useSelector((state) => state.user.userOrder)
-  const totalPrice = useSelector((state) => state.user.totalPriceList)
-  // const [userOrder, setUserOrder] = useState()
-  const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
+  // const totalPrice = useSelector((state) => state.user.totalPriceList)
+  // // const [userOrder, setUserOrder] = useState()
+  // const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
 
-  const [total, setTotal] = useState([])
+  // const [total, setTotal] = useState([])
 
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
@@ -30,9 +30,9 @@ function UserOrderCancel() {
   useEffect(() => {
     fetchUserOrder(userid)
   }, [])
-  useEffect(() => {
-    setTotal(totalPrice)
-  }, [totalPrice])
+  // useEffect(() => {
+  //   setTotal(totalPrice)
+  // }, [totalPrice])
   const cancelOrder =
     userOrder && userOrder.filter((order) => order.state === "CANCELED")
 
@@ -72,14 +72,11 @@ function UserOrderCancel() {
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
               </p>
-              <p>
-                Total Price: $
-                {totalPrice.find((item) => item.id === order.id)?.price}
-              </p>
+              <p>Total Price: ${order.total.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
-              <button className="px-2 py-1 border rounded-md">Feedback</button>
-              <button className="px-2 py-1 border rounded-md ml-2">
+              {/* <button className="px-2 py-1 border rounded-md">Feedback</button> */}
+              <button className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500">
                 Buy Again
               </button>
             </div>

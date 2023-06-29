@@ -9,11 +9,11 @@ import { getAllOrder } from "../../../features/user/userSlice"
 function UserPendingOrder() {
   const { userid } = useParams()
   const userOrder = useSelector((state) => state.user.userOrder)
-  const totalPrice = useSelector((state) => state.user.totalPriceList)
-  const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
+  // const totalPrice = useSelector((state) => state.user.totalPriceList)
+  // const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
 
-  // const [userOrder, setUserOrder] = useState()
-  const [total, setTotal] = useState([])
+  // // const [userOrder, setUserOrder] = useState()
+  // const [total, setTotal] = useState([])
 
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
@@ -30,9 +30,9 @@ function UserPendingOrder() {
   useEffect(() => {
     fetchUserOrder(userid)
   }, [])
-  useEffect(() => {
-    setTotal(totalPrice)
-  }, [totalPrice])
+  // useEffect(() => {
+  //   setTotal(totalPrice)
+  // }, [totalPrice])
   const pendingOrder =
     userOrder &&
     userOrder.filter(
@@ -75,15 +75,11 @@ function UserPendingOrder() {
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
               </p>
-              <p>
-                Total Price: $
-                {totalPrice.find((item) => item.id === order.id)?.price}
-              </p>
+              <p>Total Price: ${order.total.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
-              <button className="px-2 py-1 border rounded-md">Feedback</button>
-              <button className="px-2 py-1 border rounded-md ml-2">
-                Buy Again
+              <button className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500">
+                Cancel
               </button>
             </div>
           </div>
