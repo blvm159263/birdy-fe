@@ -8,10 +8,13 @@ import { LoginContext } from "../../context/LoginProvider"
 import storageService from "../../api/storage"
 import { NotificationContext } from "../../context/NotificationProvider"
 import jwtDecode from "jwt-decode"
+import { AuthContext } from "../../context/AuthContext"
+import userApi from "../../api/userApi"
 
 function SignIn({ setIsSignIn, setIsForgotPassword }) {
   const openNotificationWithIcon = useContext(NotificationContext)
   const { setIsLogin, setRole } = useContext(LoginContext)
+  const { setCurrentUser } = useContext(AuthContext)
 
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true)
   const [phoneNumber, setPhoneNumber] = useState("")
@@ -59,13 +62,20 @@ function SignIn({ setIsSignIn, setIsForgotPassword }) {
           if (res.status === 200) {
             // alert("login thành công")
             let token = jwtDecode(res.data.token)
-            if(token.role !== "USER"){
+            if (token.role !== "USER") {
               openNotificationWithIcon("Error", "Số điện thoại được đăng kí là chủ shop!")
               return
             }
             const date = new Date()
             storageService.setAccessToken(res.data.token)
             setRole(token.role)
+            userApi.getUserByPhoneNumber(token.sub).then((res) => {
+              setCurrentUser({
+                phoneNumber: token.sub,
+                fullName: res.data.fullName,
+                avatarUrl: res.data.avatarUrl,
+              })
+            })
             setIsLogin(true)
             navigate("/")
           } else if (res.status === 403) {

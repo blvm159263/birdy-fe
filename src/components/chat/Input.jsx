@@ -55,6 +55,7 @@ const Input = () => {
       <input
         type="text"
         placeholder="Type something..."
+        readOnly={data.chatId === "null" ? true : false}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKey}
         value={text}

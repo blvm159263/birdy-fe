@@ -10,8 +10,6 @@ export const AuthContextProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState({});
     
     useEffect(() => {
-
-
         let token = storageService.getAccessToken();
         if (token) {
             token = jwtDecode(token);
@@ -44,10 +42,10 @@ export const AuthContextProvider = ({ children }) => {
         // return () => {
         //     unsub();
         // };
-    }, []);
+    }, [currentUser]);
 
     return (
-        <AuthContext.Provider value={{ currentUser }}>
+        <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
             {children}
         </AuthContext.Provider>
     );
