@@ -120,10 +120,17 @@ function ShopOrderManage() {
   // test
   const columns = [
     {
-      title: 'Order ID',
+      title: 'ID',
       dataIndex: 'id',
-      width: 150,
+      align: 'center',
+      width: 80,
       // sorter: (a, b) => a.id - b.id,
+      // sorter: true,
+    },
+    {
+      title: 'Order Date',
+      dataIndex: 'date',
+      width: 200,
       sorter: true,
     },
     {
@@ -133,6 +140,7 @@ function ShopOrderManage() {
     {
       title: 'Total',
       dataIndex: 'total',
+      width: 150,
     },
     {
       title: 'Payment',
@@ -142,7 +150,7 @@ function ShopOrderManage() {
     {
       title: 'Status',
       dataIndex: 'status',
-      width: 200,
+      width: 150,
       filters: [
         {
           text: 'Pending',
@@ -158,7 +166,7 @@ function ShopOrderManage() {
     {
       title: 'Shipping',
       dataIndex: 'shipping',
-      width: 200,
+      width: 180,
       filters: [
         {
           text: 'Pending',
@@ -182,7 +190,8 @@ function ShopOrderManage() {
     {
       title: 'Details',
       dataIndex: 'details',
-      align: 'center'
+      // align: 'center',
+      width: 100,
     },
   ];
 
@@ -220,7 +229,8 @@ function ShopOrderManage() {
     return {
       key: index + 1,
       id: order.id,
-      name: order.customer,
+      date: order.orderDate,
+      name: <p className="w-full truncate" >{order.customer}</p>,
       total: '$' + order.total,
       payment: order.paymentMethod.toUpperCase(),
       status: <Tag color={getColorTag(order.paymentStatus)}>{order.paymentStatus}</Tag>,
