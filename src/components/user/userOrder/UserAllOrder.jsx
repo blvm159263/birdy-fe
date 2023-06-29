@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import orderApi from "../../../api/orderApi"
 import UserOrderList from "./UserOrderList"
@@ -6,8 +6,15 @@ import UserOrderDetail from "./UserOrderDetail"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllOrder } from "../../../features/user/userSlice"
 import Feedback from "./Feedback"
+import { SelectionChatContext } from "../../../context/SelectionChatContext"
+import { async } from "q"
+import shopApi from "../../../api/shopApi"
+import { ChatContext } from "../../../context/ChatContext"
 
 function UserAllOrder() {
+
+  const { setUser, handleSelect } = useContext(SelectionChatContext);
+  const { setIsChatOpen } = useContext(ChatContext);
   const userInformation = useSelector((state) => state.user.userInformation)
   const userOrder = useSelector((state) => state.user.userOrder)
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
@@ -34,6 +41,19 @@ function UserAllOrder() {
     // setTotal(totalPrice)
   }, [userInformation])
 
+  const setUserChat = async (shopId) => {
+    await shopApi.getShopInformationByShopId(shopId).then((res) => {
+      const user = {
+        phoneNumber: res.data.phoneNumber,
+        fullName: res.data.shopName,
+        avatarUrl: res.data.avatarUrl,
+      };
+      setUser(user);
+      handleSelect(user);
+      setIsChatOpen(true);
+    })
+  }
+
   return (
     <div>
       {userOrder &&
@@ -44,7 +64,10 @@ function UserAllOrder() {
                 <div className="flex items-center">
                   <h2 className="font-bold text-gray-300 mr-2">#{order.id}</h2>
                   <p className="font-bold mr-2">{order.code}</p>
-                  <button className="mr-2 px-2 py-1 border rounded-md text-white bg-sky-300">
+                  <button onClick={() => {
+                    setUserChat(order.shopId);
+                  }}
+                    className="mr-2 px-2 py-1 border rounded-md text-white bg-sky-300">
                     Chat
                   </button>
                   <Link

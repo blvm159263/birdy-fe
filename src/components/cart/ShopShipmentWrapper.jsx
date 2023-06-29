@@ -3,15 +3,17 @@ import { useEffect, useState, useContext } from "react";
 import shopApi from "../../api/shopApi";
 import orderApi from "../../api/orderApi";
 import { el } from "date-fns/locale";
-import {NotificationContext} from '../../context/NotificationProvider';
+import { NotificationContext } from '../../context/NotificationProvider';
+import { set } from "date-fns";
+import { async } from "q";
 
 function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, address, totalShipment, setTotalShipment }) {
-
+    console.log(shipmentIds);
     const openNotificationWithIcon = useContext(NotificationContext);
 
     const [shipmentList, setShipmentList] = useState([]);
     const [shipmentPrice, setShipmentPrice] = useState(0);
-    const [prevShipmentId, setPrevShipmentId] = useState(0);
+    const [prevShipmentId, setPrevShipmentId] = useState(null);
 
     useEffect(() => {
         shopApi.getShipmentByShopId(shopId).then(res => {
@@ -24,32 +26,48 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
         }).catch(err => { console.log(err); });
     }, [])
 
-    const onSelectedShipment = (value) => {
-        if (prevShipmentId !== 0) {
-            var index = shipmentIds.indexOf(prevShipmentId);
+    const onSelectedShipment = async (value) => {
+        if (!address) {
+            openNotificationWithIcon('Warning', 'Please select address first')
+            return;
+        }
+        let price = 0;
+
+        await orderApi.getShipmentPrice({
+            shopId: shopId,
+            addressId: address.id,
+            shipmentId: value
+        }).then(res => {
+            if (res.status === 200) {
+                price = res.data;
+                console.log(price);
+                setShipmentPrice(price);
+            }
+        }).catch(err => { console.log(err); });
+        console.log(price);
+        
+        const shipment = {
+            shipmentId: value,
+            shipmentPrice: price,
+        }
+
+        if (prevShipmentId !== null) {
+            var index = shipmentIds.findIndex(item => item.shipmentId === prevShipmentId.shipmentId)
+            console.log(index);
             if (index !== -1) {
                 //replace prevShipmentId with value
-                shipmentIds[index] = value;
+                shipmentIds[index] = shipment;
                 setShipmentIds(shipmentIds);
+                let total = 0;
+                shipmentIds.forEach(item => {
+                    total += item.shipmentPrice;
+                });
+                setTotalShipment(total);
             }
         } else {
-            setShipmentIds([...shipmentIds, value]);
+            setShipmentIds([...shipmentIds, shipment]);
         }
-        setPrevShipmentId(value);
-        if (address) {
-            orderApi.getShipmentPrice({
-                shopId: shopId,
-                addressId: address.id,
-                shipmentId: value
-            }).then(res => {
-                if (res.status === 200) {
-                    setShipmentPrice(res.data);
-                    setTotalShipment(totalShipment + res.data)
-                }
-            }).catch(err => { console.log(err); });
-        }else{
-            openNotificationWithIcon('Warning','Please select address first')
-        }
+        setPrevShipmentId(shipment);
 
     };
 
