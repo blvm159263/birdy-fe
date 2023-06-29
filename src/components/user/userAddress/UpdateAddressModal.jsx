@@ -10,22 +10,18 @@ function UpdateAddressModal({
   setIsUpdate,
   fetchAddress,
   address,
-  // userAddresses,
-
   setUpdated,
 }) {
-  const { userid } = useParams()
-  const [addressString, setAddressString] = useState("")
   const userInformation = useSelector((state) => state.user.userInformation)
   const userAddresses = useSelector((state) => state.user.userAddress)
-  console.log(userAddresses)
+  console.log(userInformation)
 
   // console.log(address)
   const [newAddress, setNewAddress] = useState({
     id: address.id,
     fullName: userInformation.fullName,
     address: address.address,
-    userId: userid,
+    userId: userInformation.id,
     // ward: "string",
     // city: "string",
     // province: "string",
@@ -57,7 +53,7 @@ function UpdateAddressModal({
       fullName: "",
       phoneNumber: "",
       address: "",
-      userId: userid,
+      userId: userInformation.id,
     })
   }
   // console.log("TMP", newAddress)
@@ -80,7 +76,7 @@ function UpdateAddressModal({
 
     setUpdated(true)
 
-    fetchAddress(userid)
+    fetchAddress(userInformation.id)
 
     setIsUpdate(false)
   }

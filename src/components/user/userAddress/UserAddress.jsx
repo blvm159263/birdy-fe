@@ -8,28 +8,31 @@ import AddressModal from "./AddressModal"
 import UpdateAddressModal from "./UpdateAddressModal"
 
 function UserAddress() {
-  const { userid } = useParams()
+  // const { userid } = useParams()
   const [updated, setUpdated] = useState(false)
   const [isAddNew, setIsAddNew] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
   const userAddresses = useSelector((state) => state.user.userAddress)
+  const userInformation = useSelector((state) => state.user.userInformation)
 
   const dispatch = useDispatch()
 
-  const fetchAddress = (userid) => {
-    userApi
-      .getAllUserAddress(userid)
-      .then((response) => {
-        dispatch(getUserAddresses(response.data))
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+  const fetchAddress = () => {
+    if (userInformation) {
+      userApi
+        .getAllUserAddress(userInformation.id)
+        .then((response) => {
+          dispatch(getUserAddresses(response.data))
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    }
   }
 
   useEffect(() => {
-    fetchAddress(userid)
-  }, [updated])
+    fetchAddress()
+  }, [updated, userInformation])
 
   return (
     <div className="w-5/6 bg-white">
@@ -58,7 +61,7 @@ function UserAddress() {
                 <div className="flex">
                   <h2 className="">{item.fullName}</h2>
                   <div className="mx-2 border-l"></div>
-                  <p>1234567890</p>
+                  <p>{userInformation.phoneNumber}</p>
                 </div>
                 <p>{item.address}</p>
                 {item.isDefault && (

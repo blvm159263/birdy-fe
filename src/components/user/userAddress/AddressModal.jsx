@@ -7,7 +7,6 @@ import { Checkbox, Modal, Select, Space } from "antd"
 import TextArea from "antd/es/input/TextArea"
 
 function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
-  const { userid } = useParams()
   const dispatch = useDispatch()
   const userInformation = useSelector((state) => state.user.userInformation)
   const userAddresses = useSelector((state) => state.user.userAddress)
@@ -22,7 +21,7 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
     id: newId,
     fullName: userInformation.fullName,
     address: "",
-    userId: userid,
+    userId: userInformation ? userInformation.id : "",
     isDefault: false,
   })
 
@@ -47,17 +46,19 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
       fullName: "",
       phoneNumber: "",
       address: "",
-      userId: userid,
+      userId: userAddresses.id,
     })
   }
 
-  const addNewAddressInForm = () => {
-    userApi
-      .addNewAddress(userid, newAddress)
-      .then((response) => console.log(response.data))
-      .catch((error) => {
-        console.log(error)
-      })
+  const addNewAddressInForm = async () => {
+    if (userInformation) {
+      await userApi
+        .addNewAddress(userInformation.id, newAddress)
+        .then((response) => console.log(response.data))
+        .catch((error) => {
+          console.log(error)
+        })
+    }
   }
 
   const handleAddAddress = (e) => {
@@ -69,7 +70,7 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
 
     setIsAddNew(false)
 
-    fetchAddress(userid)
+    fetchAddress(userInformation.id)
 
     setUpdated(true)
   }
