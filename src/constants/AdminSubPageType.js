@@ -5,8 +5,8 @@ const AdminSubPageType = {
   ALL_SHOPS: {
     path: "all-shops"
   },
-  NEW_STORE_REQUESTS: {
-    path: "store-requests"
+  NEW_SHOP_REQUESTS: {
+    path: "shop-requests"
   },
   NEW_PRODUCT_REQUESTS: {
     path: "product-requests"

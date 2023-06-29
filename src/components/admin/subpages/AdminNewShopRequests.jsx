@@ -8,7 +8,7 @@ import Pagination from "../../../features/search/Pagination";
 import {Empty, Spin} from "antd";
 import CustomSearchBar from "../../../features/search/CustomSearchBar";
 
-export default function AdminAllShops() {
+export default function AdminNewShopRequests() {
   const [shops, setShops] = useState([]);
   const searchText = useSelector((state) => state.search.searchText);
   const searchTrigger = useSelector((state) => state.search.searchTrigger);
@@ -21,7 +21,7 @@ export default function AdminAllShops() {
   useEffect(() => {
     setShops([]);
     setLoading(true);
-    dispatch(setCurrentAdminSubPage(AdminSubPageType.ALL_SHOPS));
+    dispatch(setCurrentAdminSubPage(AdminSubPageType.NEW_SHOP_REQUESTS));
     setOldSearchText(searchText);
 
     const params = {
@@ -31,7 +31,7 @@ export default function AdminAllShops() {
 
     // Fetch shops
     shopApi
-      .searchShopByNameAndStatus(true, params)
+      .searchShopByNameAndStatus(false, params)
       .then((response) => {
         setShops(response.data[0]);
         setTotalPage(response.data[1]);
@@ -41,12 +41,12 @@ export default function AdminAllShops() {
 
   return (
     <div id='admin-all-stores' className='p-4'>
-      <CustomSearchBar placeholder='Search shop...'/>
-      <h1 className='text-2xl font-bold my-4'>All active shops</h1>
+      <CustomSearchBar placeholder='Search shop request...'/>
+      <h1 className='text-2xl font-bold my-4'>New shop requests</h1>
       {oldSearchText.length > 0 &&
         <div className="flex justify-between mb-4">
           <p className="text-neutral-500">
-            All active shop related to “<span className="text-orange-500">{oldSearchText}</span>”
+            All shop requests related to “<span className="text-orange-500">{oldSearchText}</span>”
           </p>
         </div>
       }

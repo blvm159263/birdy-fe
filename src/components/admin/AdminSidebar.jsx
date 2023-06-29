@@ -1,10 +1,18 @@
 import {AppstoreAddOutlined, HomeOutlined, LogoutOutlined, ShopOutlined, UserOutlined} from "@ant-design/icons";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import AdminSubPageType from "../../constants/AdminSubPageType";
 import {Link} from "react-router-dom";
+import {useEffect} from "react";
+import {resetAllState} from "../../features/search/searchSlice";
 
 export default function AdminSidebar() {
   const currentPage = useSelector(state => state.ui.currentAdminSubPage);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetAllState());
+    console.log("reset all search state")
+  }, [currentPage])
 
   return (
     <aside className="flex flex-col top-0 left-0 col-span-3 bg-white h-full border-r">
@@ -30,7 +38,7 @@ export default function AdminSidebar() {
             </Link>
           </li>
           <li>
-            <Link to={`/admin/${AdminSubPageType.NEW_STORE_REQUESTS.path}`} className={`${currentPage === AdminSubPageType.NEW_STORE_REQUESTS ? 'font-bold bg-sky-200 hover:bg-sky-100' : ''} relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
+            <Link to={`/admin/${AdminSubPageType.NEW_SHOP_REQUESTS.path}`} className={`${currentPage === AdminSubPageType.NEW_SHOP_REQUESTS ? 'font-bold bg-sky-200 hover:bg-sky-100' : ''} relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
               <AppstoreAddOutlined />
               <span className="ml-2 text-sm tracking-wide truncate">New shops requests</span>
             </Link>
