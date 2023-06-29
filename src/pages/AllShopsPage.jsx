@@ -1,7 +1,7 @@
 import StoreCardList from "../components/store/StoreCardList"
-import React, { useEffect, useState } from "react"
+import React, {useEffect, useState} from "react"
 import shopApi from "../api/shopApi"
-import { useSelector } from "react-redux"
+import {useSelector} from "react-redux"
 import Pagination from "../features/search/Pagination"
 
 export default function AllShopsPage() {

@@ -44,7 +44,7 @@ import UserAllOrder from "./components/user/userOrder/UserAllOrder"
 import {ChatContext} from "./context/ChatContext";
 import AdminDashboard from "./components/admin/subpages/AdminDashboard";
 import AdminSubPageType from "./constants/AdminSubPageType";
-import AdminAllStores from "./components/admin/subpages/AdminAllStores";
+import AdminAllShops from "./components/admin/subpages/AdminAllShops";
 
 function App() {
   const { isLogin, setIsLogin, setRole, role } = useContext(LoginContext)
@@ -171,7 +171,7 @@ function App() {
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
             <Route path={AdminSubPageType.DASHBOARD.path} element={<AdminDashboard />} />
-            <Route path={AdminSubPageType.ALL_STORES.path} element={<AdminAllStores />} />
+            <Route path={AdminSubPageType.ALL_SHOPS.path} element={<AdminAllShops />} />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>

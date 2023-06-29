@@ -20,19 +20,19 @@ export default function AdminSidebar() {
           {/* Manage stores */}
           <li className="px-5">
             <div className="flex flex-row items-center h-8">
-              <div className="text-sm font-light tracking-wide text-gray-500">Manage stores</div>
+              <div className="text-sm font-light tracking-wide text-gray-500">Manage shops</div>
             </div>
           </li>
           <li>
-            <Link to={`/admin/${AdminSubPageType.ALL_STORES.path}`} className={`${currentPage === AdminSubPageType.ALL_STORES ? 'font-bold bg-sky-200 hover:bg-sky-100' : ''} relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
+            <Link to={`/admin/${AdminSubPageType.ALL_SHOPS.path}`} className={`${currentPage === AdminSubPageType.ALL_SHOPS ? 'font-bold bg-sky-200 hover:bg-sky-100' : ''} relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
               <ShopOutlined />
-              <span className="ml-2 text-sm tracking-wide truncate">All stores</span>
+              <span className="ml-2 text-sm tracking-wide truncate">All shops</span>
             </Link>
           </li>
           <li>
             <Link to={`/admin/${AdminSubPageType.NEW_STORE_REQUESTS.path}`} className={`${currentPage === AdminSubPageType.NEW_STORE_REQUESTS ? 'font-bold bg-sky-200 hover:bg-sky-100' : ''} relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
               <AppstoreAddOutlined />
-              <span className="ml-2 text-sm tracking-wide truncate">New store requests</span>
+              <span className="ml-2 text-sm tracking-wide truncate">New shops requests</span>
             </Link>
           </li>
           <li>
