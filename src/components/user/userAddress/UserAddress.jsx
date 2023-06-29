@@ -5,17 +5,16 @@ import userApi from "../../../api/userApi"
 import { useDispatch, useSelector } from "react-redux"
 import { getUserAddresses } from "../../../features/user/userSlice"
 import AddressModal from "./AddressModal"
-import NewAddressModal from "../../checkout/NewAddressModal"
 import UpdateAddressModal from "./UpdateAddressModal"
+
 function UserAddress() {
   const { userid } = useParams()
   const [updated, setUpdated] = useState(false)
   const [isAddNew, setIsAddNew] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
   const userAddresses = useSelector((state) => state.user.userAddress)
-  // console.log(userAddresses)
+
   const dispatch = useDispatch()
-  // console.log(userAddresses)
 
   const fetchAddress = (userid) => {
     userApi
@@ -27,7 +26,6 @@ function UserAddress() {
         console.log(e)
       })
   }
-  const handleUpdate = () => {}
 
   useEffect(() => {
     fetchAddress(userid)
@@ -67,7 +65,10 @@ function UserAddress() {
               <div className="flex flex-col items-end">
                 <button
                   className="text-sky-400"
-                  onClick={() => setIsUpdate(item.id)}
+                  onClick={() => {
+                    setIsUpdate(item.id)
+                    setUpdated(false)
+                  }}
                 >
                   Update
                 </button>
@@ -75,6 +76,7 @@ function UserAddress() {
               {isUpdate === item.id && (
                 <UpdateAddressModal
                   updated={updated}
+                  // userAddresses={userAddresses}
                   setUpdated={setUpdated}
                   address={item}
                   setIsUpdate={setIsUpdate}

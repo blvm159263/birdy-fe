@@ -10,14 +10,15 @@ function UpdateAddressModal({
   setIsUpdate,
   fetchAddress,
   address,
+  // userAddresses,
   updated,
   setUpdated,
 }) {
   const { userid } = useParams()
   const [addressString, setAddressString] = useState("")
-  const dispatch = useDispatch()
   const userInformation = useSelector((state) => state.user.userInformation)
   const userAddresses = useSelector((state) => state.user.userAddress)
+  console.log(userAddresses)
 
   // console.log(address)
   const [newAddress, setNewAddress] = useState({
@@ -28,7 +29,7 @@ function UpdateAddressModal({
     // ward: "string",
     // city: "string",
     // province: "string",
-    isDefault: false,
+    isDefault: address.isDefault,
   })
 
   // const { address: newAddressAddress, ...newAddressRest } = newAddress
@@ -59,7 +60,7 @@ function UpdateAddressModal({
       userId: userid,
     })
   }
-  console.log("TMP", newAddress)
+  // console.log("TMP", newAddress)
 
   const updateAddress = (params) => {
     userApi
@@ -77,11 +78,11 @@ function UpdateAddressModal({
 
     handleResetForm()
 
-    setIsUpdate(false)
+    setUpdated(true)
 
     fetchAddress(userid)
 
-    setUpdated(true)
+    setIsUpdate(false)
   }
 
   return (
@@ -90,32 +91,33 @@ function UpdateAddressModal({
         onSubmit={handleUpdateAddress}
         className=" bg-white p-10 lg:h-2/4 lg:w-2/5 sm: w-full flex lg:flex-col sm: flex-col lg:items-between sm: items-center"
       >
-        <h1 className="text-center font-bold text-2xl mb-5">Update Address</h1>
-        <div className="w-full flex lg:flex-nowrap sm: flex-wrap justify-between mb-5">
+        <h1 className="text-center font-bold text-2xl mb-8">Update Address</h1>
+        <div className="w-full flex items-center lg:flex-nowrap sm: flex-wrap justify-between mb-5">
           <label className="lg:w-1/5 md: full sm: w-full" htmlFor="name">
             Name
           </label>
           <input
-            className="rounded-md border lg:w-4/5 md: w-full sm:w-full text-black"
+            className="rounded-md border lg:w-4/5 p-2 md: w-full sm:w-full text-black"
             type="text"
             disabled
             name="fullName"
             value={userInformation.fullName}
           />
         </div>
-        <div className="w-full flex lg:flex-nowrap sm: flex-wrap justify-between mb-5">
+        <div className="w-full flex items-center lg:flex-nowrap sm: flex-wrap justify-between mb-7">
           <label className="lg:w-1/5 md: w-full sm:w-full" htmlFor="address">
             Address
           </label>
           <input
-            className="rounded-md lg:w-4/5 md: w-full sm:w-full border text-black"
+            className="rounded-md lg:w-4/5 p-2 md: w-full sm:w-full border text-black"
             type="text"
+            id="address"
             value={newAddress.address}
             onChange={handleChange}
             name="address"
           />
         </div>
-        <div className="">
+        <div className="mb-6">
           <input
             type="checkbox"
             className="mr-2"
