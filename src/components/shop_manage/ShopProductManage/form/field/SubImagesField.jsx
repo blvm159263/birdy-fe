@@ -22,11 +22,10 @@ export default function SubImagesField({setSubImages, setObjects}) {
     if(subImagesFetched) {
       const mappedArr = subImagesFetched.map((subImageFetched) => {
         return {
-          id: subImageFetched.id,
+          uid: subImageFetched.id,
           name: subImageFetched.productName,
-          productId: subImageFetched.productId,
-          url: subImageFetched.imgUrl,
           status: "done",
+          url: subImageFetched.imgUrl,
         }
       });
       setFileList(mappedArr);
@@ -49,7 +48,7 @@ export default function SubImagesField({setSubImages, setObjects}) {
         newFileList[i].type !== "image/jpeg" &&
         newFileList[i].type !== "image/png" &&
         newFileList[i].type !== "image/jpg" &&
-        newFileList[i].id === undefined
+        newFileList[i].url === undefined
       ) {
         newFileList[i].status = "error"
         setError("Only JPG/PNG file can be uploaded!")
@@ -61,7 +60,7 @@ export default function SubImagesField({setSubImages, setObjects}) {
     setFileList(newFileList);
     const fileOnlyList = newFileList.map(fileItem => fileItem.originFileObj).filter(fileItem => fileItem !== undefined);
     setSubImages(fileOnlyList.length !== 0 ? fileOnlyList : null);
-    const objectOnlyList = newFileList.filter(fileItem => fileItem.id !== undefined);
+    const objectOnlyList = newFileList.filter(fileItem => fileItem.url !== undefined);
     setObjects(objectOnlyList);
   }
 
