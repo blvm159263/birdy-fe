@@ -138,7 +138,7 @@ function Sidebar() {
 
 
   const handlePath = function () {
-    switch (window.location.pathname.split("/")[1]) {
+    switch (window.location.pathname.split("")[1]) {
       case "": return 1;
       case "/": return 1;
       case "/dashboard": return 1;
@@ -171,7 +171,7 @@ function Sidebar() {
             >
 
               <Menu
-                defaultSelectedKeys={[handlePath()]}
+                // defaultSelectedKeys={[handlePath().toString()]}
                 defaultOpenKeys={["sub1"]}
                 mode="inline"
                 theme="light"
