@@ -5,6 +5,7 @@ import ImgCrop from 'antd-img-crop'
 import format from "date-fns/format";
 import shopApi from "../../api/shopApi";
 import { NotificationContext } from "../../context/NotificationProvider";
+import { LoginContext } from "../../context/LoginProvider";
 
 
 const getBase64 = (file) =>
@@ -16,6 +17,8 @@ const getBase64 = (file) =>
   })
 
 function ShopProfile() {
+
+  const { shopId } = useContext(LoginContext)
 
   const [updateStatus, setUpdateStatus] = useState(false);
   const openNotificationWithIcon = useContext(NotificationContext);
@@ -74,7 +77,7 @@ function ShopProfile() {
 
   useEffect(() => {
     updateStatus && setUpdateStatus(false);
-    shopApi.getShopDetailByShopId(1).then((res) => {
+    shopApi.getShopDetailByShopId(shopId).then((res) => {
       console.log(res.data[0].avatarUrl);
       setShop(res.data[0]);
 
@@ -106,7 +109,7 @@ function ShopProfile() {
       shopImage: shopAvar[0]?.originFileObj || null,
     }
     console.log(params);
-    shopApi.editProfile(1, params).then((res) => {
+    shopApi.editProfile(shopId, params).then((res) => {
       console.log(res);
       if (res.status === 200) {
         // alert('Update success!');

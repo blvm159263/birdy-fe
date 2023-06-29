@@ -18,7 +18,7 @@ function UserOrderList({ orderid, order, setIsPopupOpen, isPopupOpen }) {
 
   const [totalPrice, setTotalPrice] = useState(0)
   const fetchOrderDetail = async () => {
-    await orderApi.getOrderDetailByOrderId(orderid).then((response) => {
+    await orderApi.getAllOrderDetailsByOrderId(orderid).then((response) => {
       // const order = {
       //   id: orderid,
       //   data: response.data,

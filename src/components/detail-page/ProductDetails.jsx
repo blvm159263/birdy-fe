@@ -52,8 +52,8 @@ function ProductDetails({ product }) {
       )}
       <p id="description" className="mb-10">
         <span className="font-bold">Description: </span>
-        {product.description}
       </p>
+        {product.description}
     </div>
   )
 }

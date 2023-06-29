@@ -46,9 +46,10 @@ import UserCompletedOrder from "./components/user/userOrder/UserCompletedOrder"
 import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
 import UserAllOrder from "./components/user/userOrder/UserAllOrder"
 import { ChatContext } from "./context/ChatContext";
+import shopApi from "./api/shopApi";
 
 function App() {
-  const { isLogin, setIsLogin, setRole, role } = useContext(LoginContext)
+  const { isLogin, setIsLogin, setRole, role, setShopId } = useContext(LoginContext)
 
   const { setIsChatOpen, isChatOpen } = useContext(ChatContext)
 
@@ -68,6 +69,15 @@ function App() {
       } else {
         setIsLogin(true)
         setRole(token.role)
+        if (token.role === "SHOP") {
+          shopApi.getShopInformationByPhoneNumber(token.sub)
+            .then((res) => {
+              console.log(res.data);
+              setShopId(res.data.id)
+            }).catch((err) => {
+              console.log(err)
+            })
+        }
       }
     }
   }, [])
