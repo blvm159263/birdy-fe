@@ -26,7 +26,7 @@ function Review({ product }) {
   }
 
   return (
-    <div className="bg-white h-fil; p-7 lg:w-2/5 sm:w-full lg:ml-4 sm:ml-0 rounded-md">
+    <div className="bg-white h-fit p-7 lg:w-2/5 sm:w-full lg:ml-4 sm:ml-0 rounded-md">
       <h1 className="text-3xl font-bold text-left mb-5">Reviews</h1>
       <div id="reviews" style={{ height: "70%" }}>
         {reviews.map((review, index) => (

@@ -66,7 +66,7 @@ function ShopSignIn({ setIsSignIn, setIsForgotPassword }) {
             storageService.setAccessToken(res.data.token)
             setRole(token.role)
             setIsLogin(true)
-            navigate("/shop")
+            navigate("/")
           } else if (res.status === 403) {
           }
         })

@@ -1,6 +1,8 @@
-import { React, useState, useEffect } from "react"
+import { React, useState, useEffect, useContext } from "react"
 import { Link } from "react-router-dom"
 import { Button, Menu } from "antd"
+import storageService from "../../api/storage"
+import { LoginContext } from "../../context/LoginProvider"
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -98,8 +100,18 @@ console.log(items)
 // }
 
 function Sidebar() {
+
+  const { setIsLogin, setRole } = useContext(LoginContext)
+
+  const onLogout = () => {
+    storageService.removeAccessToken();
+    setIsLogin(false);
+    setRole(null);
+  }
+    
+
   const handlePath = function () {
-    switch (window.location.pathname.split("/shop")[1]) {
+    switch (window.location.pathname.split("/")[1]) {
       case "":
         return 1
       case "/orders":
@@ -181,9 +193,10 @@ function Sidebar() {
                   className="font-medium text-base text-gray-400"
                   key="5"
                   icon={items[3].icon}
+                  onClick={onLogout}
                 >
                   {items[3].label}
-                  <Link to="/logout" />
+                  {/* <Link to="/logout" /> */}
                 </Menu.Item>
               </Menu>
             </div>

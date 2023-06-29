@@ -1,6 +1,7 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom"
+import { FloatButton } from 'antd';
 import "./App.css"
-
+import "./style.scss";
 // Components
 import Layout from "./layouts/Layout"
 import HomePage from "./pages/HomePage"
@@ -24,7 +25,8 @@ import UserOrder from "./components/user/userOrder/UserOrder"
 import ViewShopPage from "./pages/ViewShopPage"
 import AllShopsPage from "./pages/AllShopsPage"
 import CheckoutPage from "./pages/CheckoutPage"
-import { useEffect, useContext } from "react"
+import HomeChat from "./pages/HomeChat"
+import { useEffect, useContext, useState } from "react"
 import storageService from "./api/storage"
 import jwtDecode from "jwt-decode"
 import { LoginContext } from "./context/LoginProvider"
@@ -41,10 +43,13 @@ import UserDeliveryOrder from "./components/user/userOrder/UserDeliveryOrder"
 import UserCompletedOrder from "./components/user/userOrder/UserCompletedOrder"
 import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
 import UserAllOrder from "./components/user/userOrder/UserAllOrder"
+import { ChatContext } from "./context/ChatContext";
 
 function App() {
-  const { isLogin, setIsLogin, setRole } = useContext(LoginContext)
+  const { isLogin, setIsLogin, setRole, role } = useContext(LoginContext)
 
+  const { setIsChatOpen, isChatOpen } = useContext(ChatContext)
+  
   function convertTimestampToDate(timestamp) {
     return new Date(timestamp * 1000)
   }
@@ -65,96 +70,128 @@ function App() {
     }
   }, [])
 
+  const showChat = () => {
+    setIsChatOpen(true);
+  };
+
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="all-featured" element={<AllFeaturedPage />} />
-          <Route path="/search">
-            <Route path="all-shop" element={<AllShopsPage />} />
-            <Route path=":searchType" element={<SearchPage />} />
+    <>
+      <BrowserRouter>
+        <Routes>
+          {role !== "SHOP" && (
+            <>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<HomePage />} />
+                <Route path="all-featured" element={<AllFeaturedPage />} />
+                <Route path="/search">
+                  <Route path="all-shop" element={<AllShopsPage />} />
+                  <Route path=":searchType" element={<SearchPage />} />
+                </Route>
+                <Route path="/detail-item/:id" element={<DetailItemPage />} />
+                <Route path="/cart">
+                  <Route index element={<CartPage />} />
+                  <Route path="/cart/checkout" element={<CheckoutPage />} />
+                </Route>
+                <Route path="/user/:userid" element={<UserPage />}>
+                  <Route path="/user/:userid" element={<UserInfor />} />
+                  <Route path="/user/:userid/address" element={<UserAddress />} />
+                  <Route path="/user/:userid/order" element={<UserOrder />}>
+                    <Route index element={<UserAllOrder />} />
+                    <Route
+                      path="/user/:userid/order/pending"
+                      element={<UserPendingOrder />}
+                    />
+                    <Route
+                      path="/user/:userid/order/delivery"
+                      element={<UserDeliveryOrder />}
+                    />
+                    <Route
+                      path="/user/:userid/order/completed"
+                      element={<UserCompletedOrder />}
+                    />
+                    <Route
+                      path="/user/:userid/order/canceled"
+                      element={<UserOrderCancel />}
+                    />
+                  </Route>
+                </Route>
+                <Route path="view-shop/:id" element={<ViewShopPage />}>
+                  <Route index element={<ShopHomeSubPage />} />
+                  <Route
+                    path={ViewShopSubPageType.ALL_PRODUCTS.path}
+                    element={<ShopAllProductsSubPage />}
+                  />
+                  <Route
+                    path={ViewShopSubPageType.LATEST.path}
+                    element={<ShopLatestProductsSubPage />}
+                  />
+                  <Route
+                    path={ViewShopSubPageType.BIRDS.path}
+                    element={
+                      <ShopProductsByCategorySubPage
+                        viewShopSubPageType={ViewShopSubPageType.BIRDS}
+                      />
+                    }
+                  />
+                  <Route
+                    path={ViewShopSubPageType.ACCESSORIES.path}
+                    element={
+                      <ShopProductsByCategorySubPage
+                        viewShopSubPageType={ViewShopSubPageType.ACCESSORIES}
+                      />
+                    }
+                  />
+                  <Route
+                    path={ViewShopSubPageType.FOODS.path}
+                    element={
+                      <ShopProductsByCategorySubPage
+                        viewShopSubPageType={ViewShopSubPageType.FOODS}
+                      />
+                    }
+                  />
+                </Route>
+                <Route path="*" element={<NoPage />} />
+              </Route>
+            </>)}
+          {role === "SHOP" && (
+            <>
+              <Route path="/" element={<ShopLayout />}>
+                <Route index element={<ShopProfile />} />
+                <Route path="/products" element={<ShopProductManage />} />
+                <Route path="/orders" element={<ShopOrderManage />} />
+                <Route path="/product/new" element={<CreateProduct />} />
+              </Route>
+            </>
+          )}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/shop-login" element={<ShopLoginPage />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminProductManage />} />
+            <Route path="/admin/user-manage-ad" element={<AdminUserManage />} />
+            {/* <Route path="/store-manage-ad" element={} /> */}
           </Route>
-          <Route path="/detail-item/:id" element={<DetailItemPage />} />
-          <Route path="/cart">
-            <Route index element={<CartPage />} />
-            <Route path="/cart/checkout" element={<CheckoutPage />} />
-          </Route>
-          <Route path="/user/:userid" element={<UserPage />}>
-            <Route path="/user/:userid" element={<UserInfor />} />
-            <Route path="/user/:userid/address" element={<UserAddress />} />
-            <Route path="/user/:userid/order" element={<UserOrder />}>
-              <Route index element={<UserAllOrder />} />
-              <Route
-                path="/user/:userid/order/pending"
-                element={<UserPendingOrder />}
-              />
-              <Route
-                path="/user/:userid/order/delivery"
-                element={<UserDeliveryOrder />}
-              />
-              <Route
-                path="/user/:userid/order/completed"
-                element={<UserCompletedOrder />}
-              />
-              <Route
-                path="/user/:userid/order/canceled"
-                element={<UserOrderCancel />}
-              />
-            </Route>
-          </Route>
-          <Route path="view-shop/:id" element={<ViewShopPage />}>
-            <Route index element={<ShopHomeSubPage />} />
-            <Route
-              path={ViewShopSubPageType.ALL_PRODUCTS.path}
-              element={<ShopAllProductsSubPage />}
-            />
-            <Route
-              path={ViewShopSubPageType.LATEST.path}
-              element={<ShopLatestProductsSubPage />}
-            />
-            <Route
-              path={ViewShopSubPageType.BIRDS.path}
-              element={
-                <ShopProductsByCategorySubPage
-                  viewShopSubPageType={ViewShopSubPageType.BIRDS}
-                />
-              }
-            />
-            <Route
-              path={ViewShopSubPageType.ACCESSORIES.path}
-              element={
-                <ShopProductsByCategorySubPage
-                  viewShopSubPageType={ViewShopSubPageType.ACCESSORIES}
-                />
-              }
-            />
-            <Route
-              path={ViewShopSubPageType.FOODS.path}
-              element={
-                <ShopProductsByCategorySubPage
-                  viewShopSubPageType={ViewShopSubPageType.FOODS}
-                />
-              }
-            />
-          </Route>
-          <Route path="*" element={<NoPage />} />
-        </Route>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/shop-login" element={<ShopLoginPage />} />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminProductManage />} />
-          <Route path="/admin/user-manage-ad" element={<AdminUserManage />} />
-          {/* <Route path="/store-manage-ad" element={} /> */}
-        </Route>
-        <Route path="/shop" element={<ShopLayout />}>
-          <Route index element={<ShopProfile />} />
-          <Route path="/shop/products" element={<ShopProductManage />} />
-          <Route path="/shop/orders" element={<ShopOrderManage />} />
-          <Route path="/shop/product/new" element={<CreateProduct />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+
+        </Routes>
+      </BrowserRouter>
+
+      {isLogin && <>
+        {isChatOpen ?
+          <HomeChat setIsChatOpen={setIsChatOpen} />
+          :
+          <FloatButton
+            shape="circle"
+            badge={{
+              dot: true,
+            }}
+            style={{
+              right: 24,
+            }}
+            onClick={showChat}
+          />}
+
+      </>}
+    </>
   )
 }
 

@@ -1,7 +1,33 @@
 import React from "react"
 import { Rate } from 'antd';
+import shopApi from "../../api/shopApi";
+import { useEffect, useState, useContext } from "react";
+import {
+  SelectionChatContext
+} from "../../context/SelectionChatContext";
+import { ChatContext } from "../../context/ChatContext";
+function ShopInfo({ product }) {
 
-function ShopInfo() {
+  const [shop, setShop] = useState()
+
+
+  const { setUser, handleSelect } = useContext(SelectionChatContext);
+
+  useEffect(() => {
+    shopApi.getShopInformationByShopId(product.shopId).then((res) => {
+      setShop(res.data);
+      setUser({
+        phoneNumber: res.data.phoneNumber,
+        fullName: res.data.shopName,
+        avatarUrl: res.data.avatarUrl,
+      })
+    }).catch((err) => {
+      console.log(err)
+    })
+
+  }, [product.shopId])
+
+
   return (
     <div className="my-3 w-full flex rounded-md bg-white lg:flex-row sm: flex-col py-3 px-8">
       <div className="lg:mb-0 sm: mb-4 flex lg:flex-row sm: flex-col lg:w-2/5 sm: w-full lg:border-r-2 lg:border-r-grey-200 sm:border-0 lg:pr-6 sm: pr-0 items-center">
@@ -9,11 +35,11 @@ function ShopInfo() {
           <img src="/assets/images/shop_avar.png " alt="" className="h-full" />
         </div>
         <div className="">
-          <h1 className="font-bold text-2xl">BIRD CAGE.LTD</h1>
-          <p className="text-lg">@cage.shop</p>
+          <h1 className="font-bold text-2xl">{shop?.shopName}</h1>
         </div>
         <div className="lg:ml-6 sm: ml-0 flex flex-col justify-between">
-          <button className="py-1 px-10 my-1 bg-sky-300 rounded-md text-white border border-white font-bold hover:bg-white hover:border-blue-400 hover:text-blue-400">
+          <button className="py-1 px-10 my-1 bg-sky-300 rounded-md text-white border border-white font-bold hover:bg-white hover:border-blue-400 hover:text-blue-400"
+            onClick={handleSelect}>
             Chat
           </button>
           <button className="py-1 px-10 my-1 bg-sky-300 rounded-md text-white border border-white font-bold hover:bg-white hover:border-blue-400 hover:text-blue-400">
@@ -23,13 +49,13 @@ function ShopInfo() {
       </div>
       <div className="lg:px-5 sm: px-3 lg:mb-0 md:mb-3 sm: mb-4 lg:w-1/5 md:w-full sm: w-full">
         <p>
-          <span className="font-bold">128</span> Products
+          <span className="font-bold">{shop?.totalProduct}</span> Products
         </p>
         <p className="mt-2">
-          Rating <span className="font-bold">5.0</span>
+          Rating <span className="font-bold">{shop?.rating}</span>
         </p>
         <div className="flex mt-2">
-        <Rate disabled defaultValue={2} />
+          <Rate disabled value={shop?.rating} />
           <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
             (1024 Reviews)
           </p>
@@ -40,8 +66,7 @@ function ShopInfo() {
           <img src="/assets/images/location-log.png" alt="" />
         </div>
         <p className="ml-7 ">
-          FPTU, District 9, <br />
-          Thu Duc City, Ho Chi Minh City
+          {shop?.address}
         </p>
       </div>
     </div>

@@ -26,7 +26,7 @@ function DetailItemPage() {
     <div className="bg-gray-200 py-10">
       <div className="flex flex-col justify-center items-center lg:mx-20 sm: mx-5">
         <ProductOverview product={product} />
-        <ShopInfo />
+        <ShopInfo product={product}/>
         <div className="flex w-full h-100 lg:flex-row sm: flex-col">
           <ProductDetails product={product} />
           <Review product={product} />

@@ -171,7 +171,7 @@ export default function NavBar() {
                 PROFILE
               </Link>
               <span className="px-2 pt-[0.2rem]">|</span>
-              <span onClick={onLogout} className="px-2 pt-[0.2rem]">
+              <span  onClick={onLogout} className="px-2 pt-[0.2rem] cursor-pointer">
                 Log Out
               </span>
             </>

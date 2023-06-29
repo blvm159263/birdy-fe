@@ -3,7 +3,7 @@ import React from "react"
 import { useState, useContext } from "react"
 import validator from 'validator'
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
-import app from "../../config/firebaseConfig"
+import {app} from "../../config/firebaseConfig"
 import { NotificationContext } from "../../context/NotificationProvider"
 import accountApi from "../../api/accountApi"
 import { is } from "date-fns/locale"
