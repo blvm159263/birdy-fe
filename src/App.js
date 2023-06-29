@@ -180,12 +180,12 @@ function App() {
           {role === "SHOP" && (
             <>
               <Route path="/" element={<ShopLayout />}>
-                <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                <Route path="/dashboard" element={<ShopDashboard />} />
-                <Route path="/profile" element={<ShopProfile />} />
-                <Route path="/products" element={<ShopProductManage />} />
-                <Route path="/orders" element={<ShopOrderManage />} />
-                <Route path="/product/new" element={<CreateProduct />} />
+                <Route path="/" element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<ShopDashboard />} />
+                <Route path="profile" element={<ShopProfile />} />
+                <Route path="products" element={<ShopProductManage />} />
+                <Route path="orders" element={<ShopOrderManage />} />
+                <Route path="product/new" element={<CreateProduct />} />
               </Route>
             </>
           )}

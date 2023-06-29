@@ -27,7 +27,8 @@ export default function EditProductForm({onEditSuccess}) {
   const dispatch = useDispatch();
   const formValues = useSelector(state => state.shop.productFormValues);
   const [mainImage, setMainImage] = useState(null);
-  const [subImages, setSubImages] = useState(null)
+  const [subImages, setSubImages] = useState(null);
+  const [objects, setObjects] = useState(null);
 
   useEffect(() => {
     console.log("---------------------")
@@ -37,7 +38,9 @@ export default function EditProductForm({onEditSuccess}) {
     console.log(mainImage);
     console.log("Current subImages:");
     console.log(subImages);
-  }, [formValues, mainImage, subImages])
+    console.log("Current objects:");
+    console.log(objects);
+  }, [formValues, mainImage, subImages, objects])
 
   function handleFormSubmit(e) {
     e.preventDefault();
@@ -73,23 +76,23 @@ export default function EditProductForm({onEditSuccess}) {
       productDTO: JSON.stringify(productDTO),
       mainImage: mainImage,
       subImages: subImages,
-      objects: JSON.stringify([]),
+      objects: JSON.stringify(objects),
     }
 
     console.log("Submitted form! With below data:");
     console.log(params);
 
-    // productApi.updateProductById(productDTO.id, params).then((response) => {
-    //   console.log(response);
-    //   if (response.status === 200) {
-    //     openNotificationWithIcon('Success', 'Edit product successfully!');
-    //     dispatch(setShowShopProductEditModal(false));
-    //     onEditSuccess();
-    //   }
-    // }).catch((error) => {
-    //   openNotificationWithIcon('Error', 'Error while edit product!');
-    //   console.log(error);
-    // })
+    productApi.updateProductById(productDTO.id, params).then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        openNotificationWithIcon('Success', 'Edit product successfully!');
+        dispatch(setShowShopProductEditModal(false));
+        onEditSuccess();
+      }
+    }).catch((error) => {
+      openNotificationWithIcon('Error', 'Error while edit product!');
+      console.log(error);
+    })
   }
 
   return (
@@ -98,7 +101,7 @@ export default function EditProductForm({onEditSuccess}) {
           onSubmit={(e) => handleFormSubmit(e)}>
       <NameField/>
       <MainImageField setMainImage={setMainImage}/>
-      <SubImagesField setSubImages={setSubImages}/>
+      <SubImagesField setSubImages={setSubImages} setObjects={setObjects}/>
       <CategoryField/>
       <div className='grid grid-cols-5 gap-3'>
         {formValues.categoryId === 1 && <SpeciesField/>}

@@ -15,49 +15,53 @@ function LineChart() {
   const [series, setSeries] = useState([]);
 
   const fetchYear = async () => {
-    try {
-      await chartApi.getAllYearsOrder(shopId)
-        .then((res) => {
-          setAllYears(res.data);
-          setCurrentYear(res.data[0]);
-        })
-    } catch (error) {
-      console.log(error);
-      setAllYears([new Date().getFullYear()]);
-      setCurrentYear([new Date().getFullYear()]);
+    if (shopId) {
+      try {
+        await chartApi.getAllYearsOrder(shopId)
+          .then((res) => {
+            setAllYears(res.data);
+            setCurrentYear(res.data[0]);
+          })
+      } catch (error) {
+        console.log(error);
+        setAllYears([new Date().getFullYear()]);
+        setCurrentYear([new Date().getFullYear()]);
+      }
     }
   }
 
   useEffect(() => {
     fetchYear();
-  }, [])
+  }, [shopId])
 
   const fetchData = async () => {
-    try {
-      await chartApi.getChartOrder(shopId, currentYear)
-        .then((res) => {
-          console.log(res);
+    if (shopId && currentYear) {
+      try {
+        await chartApi.getChartOrder(shopId, currentYear)
+          .then((res) => {
+            console.log(res);
 
-          const updatedSeries = [
-            {
-              ...lineChart.series[0],
-              data: res.data.done,
-            },
-            {
-              ...lineChart.series[1],
-              data: res.data.canceled,
-            },
-          ];
-          setSeries(updatedSeries);
-        })
-    } catch (error) {
-      console.log(error);
+            const updatedSeries = [
+              {
+                ...lineChart.series[0],
+                data: res.data.done,
+              },
+              {
+                ...lineChart.series[1],
+                data: res.data.canceled,
+              },
+            ];
+            setSeries(updatedSeries);
+          })
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
   useEffect(() => {
     fetchData();
-  }, [currentYear])
+  }, [shopId, currentYear])
 
   const options = allYears.map((v) => ({
     value: v,
