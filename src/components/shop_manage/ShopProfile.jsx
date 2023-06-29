@@ -10,11 +10,11 @@ import { LoginContext } from "../../context/LoginProvider";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
-  })
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 function ShopProfile() {
 
@@ -37,30 +37,23 @@ function ShopProfile() {
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj)
+      file.preview = await getBase64(file.originFileObj);
     }
-    setPreviewImage(file.url || file.preview)
-    setPreviewOpen(true)
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    )
-  }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  };
 
   const handleChange = ({ fileList: newFileList }) => {
-    setError(null)
+    setError(null);
     for (var i = 0; i < newFileList.length; i++) {
-      if (
-        newFileList[i].type !== "image/jpeg" &&
-        newFileList[i].type !== "image/png"
-      ) {
-        newFileList[i].status = "error"
-        setError("Only JPG/PNG file can be uploaded!")
-      } else {
-        newFileList[i].status = "done"
-        setError(null)
+      if (newFileList[i].type !== 'image/jpeg' && newFileList[i].type !== 'image/png') {
+        newFileList[i].status = 'error';
+        setError('Only JPG/PNG file can be uploaded!');
       }
+      else { newFileList[i].status = 'done'; setError(null); }
     }
-    setShopAvar(newFileList)
+    setShopAvar(newFileList);
   }
   const uploadButton = (
     <div>
@@ -73,7 +66,8 @@ function ShopProfile() {
         Upload (0/1)
       </div>
     </div>
-  )
+  );
+
 
   useEffect(() => {
     updateStatus && setUpdateStatus(false);
@@ -122,29 +116,30 @@ function ShopProfile() {
   }
 
   const handleEntailmentRequest = (e) => {
-    e.preventDefault()
+    e.preventDefault();
   }
 
   function hidePhoneNumber(phoneNumber) {
-    const visibleDigits = 2 // Number of digits to keep visible at the beginning and end
-    const hiddenDigits = phoneNumber.length - visibleDigits * 2 // Number of digits to hide with asterisks
+    const visibleDigits = 2; // Number of digits to keep visible at the beginning and end
+    const hiddenDigits = phoneNumber.length - (visibleDigits * 2); // Number of digits to hide with asterisks
 
     // Create the masked phone number string
     const maskedPhoneNumber =
       phoneNumber.substr(0, visibleDigits) +
       "*".repeat(hiddenDigits) +
-      phoneNumber.substr(-visibleDigits)
+      phoneNumber.substr(-visibleDigits);
 
-    return maskedPhoneNumber
+    return maskedPhoneNumber;
   }
+
 
   // const isoString = "2023-05-10T12:30:00.000Z";
   const getDate = (dateString) => {
-    const isoString = dateString
+    const isoString = dateString;
 
-    const formattedDate = format(new Date(isoString), "dd/MM/yyyy")
+    const formattedDate = format(new Date(isoString), 'dd/MM/yyyy');
 
-    return formattedDate
+    return formattedDate;
   }
 
   const HandleReset = () => {
@@ -160,6 +155,7 @@ function ShopProfile() {
   }
 
   return (
+
     <div className="bg-gray-300 p-10 w-4/5 absolute top-0 right-0 h-screen">
       <h1 className="text-center mb-10 text-2xl font-bold">Shop Profile</h1>
 
@@ -184,27 +180,20 @@ function ShopProfile() {
               }
             }}
           >
+
             <div className="flex flex-row w-full place-content-between">
               <div className="basis-3/5 align-middle">
+
                 <div className="mt-7 mb-14 flex items-center">
                   <div className="w-1/5">
-                    <label className="pr-2 block text-sm text-right font-medium text-gray-400">
+                    <label
+                      className="pr-2 block text-sm text-right font-medium text-gray-400"
+                    >
                       Account
                     </label>
                   </div>
                   <div className="w-full flex items-center pl-6">
-                    {/* <div className="w-7 h-7"> */}
-                    {/* <img
-                        src="../assets/images/shop-avar.png"
-                        src={url}
-                        className="w-fit h-fit"
-                        alt=""
-                      /> */}
-                    <Avatar
-                      className="border"
-                      src={<img src={url} alt="avatar" />}
-                      size={32}
-                    />
+                    <Avatar className="border" src={<img src={url} alt="avatar" />} size={32} />
                     {/* </div> */}
                     <span className="pl-2 text-sm text-black">{shop.shopName}</span>
                   </div>
@@ -236,7 +225,9 @@ function ShopProfile() {
 
                 <div className="mb-14 flex items-center">
                   <div className="w-1/5">
-                    <label className="pr-2 block text-right text-sm font-medium text-gray-400">
+                    <label
+                      className="pr-2 block text-right text-sm font-medium text-gray-400"
+                    >
                       Create Date
                     </label>
                   </div>
@@ -247,7 +238,9 @@ function ShopProfile() {
 
                 <div className="mb-14 flex items-center">
                   <div className="w-1/5">
-                    <label className="pr-2 block text-sm text-right font-medium text-gray-400">
+                    <label
+                      className="pr-2 block text-sm text-right font-medium text-gray-400"
+                    >
                       Shop phone
                     </label>
                   </div>
@@ -258,7 +251,9 @@ function ShopProfile() {
 
                 <div className="mb-14 flex items-center">
                   <div className="w-1/5">
-                    <label className="pr-2 block text-sm text-right font-medium text-gray-400">
+                    <label
+                      className="pr-2 block text-sm text-right font-medium text-gray-400"
+                    >
                       Shop address
                     </label>
                   </div>
@@ -310,33 +305,27 @@ function ShopProfile() {
                           {shopAvar.length >= 1 ? null : uploadButton}
                         </Upload>
                       </ImgCrop>
-                      <Modal
-                        open={previewOpen}
-                        title={previewTitle}
-                        footer={null}
-                        onCancel={handleCancel}
-                      >
+                      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
                         <img
                           alt="example"
                           style={{
-                            width: "100%",
+                            width: '100%',
                           }}
                           src={previewImage}
                         />
                       </Modal>
                     </div>
-                    <div className="text-sm text-gray-400 ml-2">
-                      Upload type:
-                      <br />
-                      .JPEG, .PNG
-                    </div>
+                    <div className="text-sm text-gray-400 ml-2">Upload type:<br />.JPEG, .PNG</div>
                   </div>
                 </div>
               </div>
             </div>
           </form>
+
+
         </div>
       </div>
+
     </div>
   )
 }

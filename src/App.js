@@ -185,18 +185,6 @@ function App() {
             <Route path="/admin/user-manage-ad" element={<AdminUserManage />} />
             {/* <Route path="/store-manage-ad" element={} /> */}
           </Route>
-          <Route path="/detail-item/:id" element={<DetailItemPage />} />
-          <Route path="/cart">
-            <Route index element={<CartPage />} />
-            <Route path="/cart/checkout" element={<CheckoutPage />} />
-          </Route>
-          <Route path="/user/:userid" element={<UserPage />}>
-            <Route index element={<UserInfor />} />
-            <Route path="/user/:userid/address" element={<UserAddress />} />
-            <Route path="/user/:userid/order" element={<UserOrder />} />
-          </Route>
-          <Route path="view-shop/:id" element={<ViewShopPage />} />
-          <Route path="*" element={<NoPage />} />
         </Routes>
       </BrowserRouter >
 

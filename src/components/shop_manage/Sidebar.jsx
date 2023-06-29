@@ -11,10 +11,10 @@ function getItem(label, key, icon, children, type) {
     children,
     label,
     type,
-  }
+  };
 }
 
-const { SubMenu } = Menu
+const { SubMenu } = Menu;
 const items = [
 
   getItem('Dashboard', '1',
@@ -31,8 +31,7 @@ const items = [
         strokeLinejoin="round"
         d="M4 6h16M4 12h8m-8 6h16"
       />
-    </svg>
-  ),
+    </svg>,),
 
   getItem('Shop Profile', '2',
     <svg
@@ -64,12 +63,9 @@ const items = [
         strokeLinejoin="round"
         d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
       />
-    </svg>
-  ),
+    </svg>),
 
-  getItem(
-    "Shop Products",
-    "sub1",
+  getItem('Shop Products', 'sub1',
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="w-5 h-5 mr-2"
@@ -102,10 +98,10 @@ const items = [
         strokeLinejoin="round"
         d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
       />
-    </svg>
-  ),
-]
-console.log(items)
+    </svg>),
+];
+console.log(items);
+
 
 // const getPath = function () {
 //   window.location.pathname.split("/")[2];
@@ -152,18 +148,18 @@ function Sidebar() {
             </div>
           </div>
           <div className="flex-1 h-full py-7">
-            <div className="w-full h-full bg-white">
+
+            <div
+              className="w-full h-full bg-white"
+            >
+
               <Menu
                 defaultSelectedKeys={[handlePath()]}
                 defaultOpenKeys={["sub1"]}
                 mode="inline"
                 theme="light"
               >
-                <Menu.Item
-                  className="font-medium text-base text-gray-400"
-                  key="1"
-                  icon={items[0].icon}
-                >
+                <Menu.Item className="font-medium text-base text-gray-400" key="1" icon={items[0].icon}>
                   {items[0].label}
                   <Link to="/dashboard" />
                 </Menu.Item>
@@ -189,6 +185,7 @@ function Sidebar() {
                   {items[4].label}
                 </Menu.Item>
               </Menu>
+
             </div>
           </div>
         </div>

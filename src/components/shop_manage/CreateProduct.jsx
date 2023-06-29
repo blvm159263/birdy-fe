@@ -7,8 +7,9 @@ import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
 import { el } from "date-fns/locale"
 import { set } from "date-fns"
+import { updateProductFormValues } from "../../features/shops/shopSlice";
 
-const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"]
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -42,7 +43,6 @@ function CreateProduct() {
             ["bold", "italic", "underline", "strike"],
             [{ color: [] }, "link"],
             [{ header: 1 }, { header: 2 }, "blockquote"],
-            ,
             [{ align: ["right", "center", "justify"] }],
             [{ indent: "-1" }, { indent: "+1" }],
             [{ list: "ordered" }, { list: "bullet" }],
@@ -271,7 +271,7 @@ function CreateProduct() {
                 console.log(err)
             })
     }
-    
+
     const handleEntailmentRequest = (e) => {
         e.preventDefault()
     }
@@ -537,8 +537,7 @@ function CreateProduct() {
                                     placeholder="product material"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
                                 />
-                            </div>
-                        )}
+                            </div>)}
                         <div className="mb-7">
                             <label
                                 htmlFor="color"
@@ -556,79 +555,17 @@ function CreateProduct() {
                         </div>
                         {category === categories[1] && (
                             <div className="mb-7">
-                                <label
-                                    htmlFor="size"
-                                    className="block mb-2 text-sm font-medium text-gray-900"
-                                >
+                                <label htmlFor="size" className="block mb-2 text-sm font-medium text-gray-900" >
                                     Size (optional)
                                 </label>
-                                <div className="flex flex-row w-4/6">
-                                    <div className="basis-2/3">
-                                        <div className="flex flex-wrap items-stretch w-full relative">
-                                            <input
-                                                type="number"
-                                                min={1}
-                                                id="size"
-                                                name="size"
-                                                placeholder="Width"
-                                                className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-r-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
-                                            />
-                                            <div className="flex">
-                                                <span className="flex items-center leading-normal bg-white rounded-lg rounded-l-none border border-l-0 border-gray-300 p-2.5 whitespace-no-wrap text-grey-dark text-sm">
-                                                    cm
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="basis-1/6 text-gray-300 font-extralight text-center text-4xl">
-                                        &times;
-                                    </div>
-                                    <div className="basis-2/3">
-                                        <div className="flex flex-wrap items-stretch w-full relative">
-                                            <input
-                                                type="number"
-                                                min={1}
-                                                id="size"
-                                                name="size"
-                                                placeholder="Length"
-                                                className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-r-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
-                                            />
-                                            <div className="flex">
-                                                <span className="flex items-center leading-normal bg-white rounded-lg rounded-l-none border border-l-0 border-gray-300 p-2.5 whitespace-no-wrap text-grey-dark text-sm">
-                                                    cm
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="basis-1/6 text-gray-300 font-extralight text-center text-4xl">
-                                        &times;
-                                    </div>
-                                    <div className="basis-2/3">
-                                        <div className="flex flex-wrap items-stretch w-full relative">
-                                            <input
-                                                type="number"
-                                                min={1}
-                                                id="size"
-                                                name="size"
-                                                placeholder="Height"
-                                                className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-r-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
-                                            />
-                                            <div className="flex">
-                                                <span className="flex items-center leading-normal bg-white rounded-lg rounded-l-none border border-l-0 border-gray-300 p-2.5 whitespace-no-wrap text-grey-dark text-sm">
-                                                    cm
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* <input
-                                        type="number"
-                                        id="color"
-                                        placeholder="color"
-                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
-                                    /> */}
-                                </div>
-                            </div>
-                        )}
+                                <input
+                                    type="text"
+                                    id="size"
+                                    name="size"
+                                    placeholder="size"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
+                                />
+                            </div>)}
                         {category !== categories[0] && (
                             <div className="mb-7">
                                 <label
@@ -638,21 +575,12 @@ function CreateProduct() {
                                     Expired date (optional)
                                 </label>
                                 <DatePicker
-                                    // defaultValue={dayjs('01/01/2015', dateFormatList[0])}
                                     className="block w-40"
                                     id="expDate"
                                     name="expDate"
                                     size="large"
-                                    format={dateFormatList}
-                                />
-                                {/* <input
-                                    type="text"
-                                    id="expDate"
-                                    placeholder="color"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
-                                /> */}
-                            </div>
-                        )}
+                                    format={dateFormatList} />
+                            </div>)}
                         <div className="mb-7">
                             <label
                                 htmlFor="price"
@@ -662,12 +590,9 @@ function CreateProduct() {
                             </label>
                             <div className="flex flex-wrap items-stretch w-full relative">
                                 <div className="flex">
-                                    <span className="flex items-center leading-normal bg-white rounded-lg rounded-r-none border border-r-0 border-gray-300 p-2.5 whitespace-no-wrap text-grey-dark text-sm">
-                                        $
-                                    </span>
+                                    <span className="flex items-center leading-normal bg-white rounded-lg rounded-r-none border border-r-0 border-gray-300 p-2.5 whitespace-no-wrap text-grey-dark text-sm">$</span>
                                 </div>
-                                <input
-                                    type="number"
+                                <input type="number"
                                     min={0.01}
                                     step={"0.01"}
                                     id="price"
@@ -676,20 +601,8 @@ function CreateProduct() {
                                     required
                                     className="bg-gray-50 border border-gray-300 text-gray-900 flex-shrink flex-grow w-px flex-1 text-sm rounded-lg rounded-l-none focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block p-2.5 relative"
                                 />
-                            </div>
-                            {/* <Input
-                                    style={{ backgroundColor: "#f9fafb" }}
-                                    size="large"
-                                    addonBefore="$"
-                                    placeholder="0.00"
-                                    type="number"
-                                    min={0.01}
-                                    step={"0.01"}
-                                    id="price"
-                                    className="bg-gray-50 border border-gray-50 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:outline-none focus:shadow-outline block w-full "
-                                    required
-                                /> */}
-                        </div>
+                            </div >
+                        </div >
 
                         <div className="mb-7">
                             <label
@@ -736,10 +649,10 @@ function CreateProduct() {
                                 Submit
                             </button>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+                    </form >
+                </div >
+            </div >
+        </div >
     )
 }
 
