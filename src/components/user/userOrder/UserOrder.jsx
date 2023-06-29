@@ -7,6 +7,7 @@ import UserPendingOrder from "./UserPendingOrder"
 import UserCompletedOrder from "./UserCompletedOrder"
 
 function UserOrder() {
+  console.log("render UserOrder");
   return (
     <div className="bg-white w-4/5">
       <h1 className="text-center py-2 text-2xl font-bold">User Order</h1>

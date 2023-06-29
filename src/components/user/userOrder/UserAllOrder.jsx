@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import orderApi from "../../../api/orderApi"
 import UserOrderList from "./UserOrderList"
@@ -6,34 +6,53 @@ import UserOrderDetail from "./UserOrderDetail"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllOrder } from "../../../features/user/userSlice"
 import Feedback from "./Feedback"
+import { SelectionChatContext } from "../../../context/SelectionChatContext"
+import { async } from "q"
+import shopApi from "../../../api/shopApi"
+import { ChatContext } from "../../../context/ChatContext"
 
 function UserAllOrder() {
-  const { userid } = useParams()
+
+  const { setUser, handleSelect } = useContext(SelectionChatContext);
+  const { setIsChatOpen } = useContext(ChatContext);
+  const userInformation = useSelector((state) => state.user.userInformation)
   const userOrder = useSelector((state) => state.user.userOrder)
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
   const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
 
-  // const [userOrder, setUserOrder] = useState()
-  // const [total, setTotal] = useState([])
-  // const [shopId, setShopId] = useState("")
-
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   const dispatch = useDispatch()
-  const fetchUserOrder = async (userid) => {
-    await orderApi
-      .getAllOrderByUserId(userid)
-      .then((response) => {
-        dispatch(getAllOrder(response.data))
-        // setUserOrder(response.data)
-      })
-      .catch((e) => console.log(e))
+  const fetchUserOrder = async () => {
+    if (userInformation) {
+      await orderApi
+        .getAllOrderByUserId(userInformation.id)
+        .then((response) => {
+          dispatch(getAllOrder(response.data))
+          // setUserOrder(response.data)
+        })
+        .catch((e) => console.log(e))
+    }
+
   }
   // console.log(orderDetailProduct)
   useEffect(() => {
-    fetchUserOrder(userid)
+    fetchUserOrder()
     // setTotal(totalPrice)
-  }, [])
+  }, [userInformation])
+
+  const setUserChat = async (shopId) => {
+    await shopApi.getShopInformationByShopId(shopId).then((res) => {
+      const user = {
+        phoneNumber: res.data.phoneNumber,
+        fullName: res.data.shopName,
+        avatarUrl: res.data.avatarUrl,
+      };
+      setUser(user);
+      handleSelect(user);
+      setIsChatOpen(true);
+    })
+  }
 
   return (
     <div>
@@ -45,7 +64,10 @@ function UserAllOrder() {
                 <div className="flex items-center">
                   <h2 className="font-bold text-gray-300 mr-2">#{order.id}</h2>
                   <p className="font-bold mr-2">{order.code}</p>
-                  <button className="mr-2 px-2 py-1 border rounded-md text-white bg-sky-300">
+                  <button onClick={() => {
+                    setUserChat(order.shopId);
+                  }}
+                    className="mr-2 px-2 py-1 border rounded-md text-white bg-sky-300">
                     Chat
                   </button>
                   <Link
@@ -67,7 +89,12 @@ function UserAllOrder() {
                   </p>
                 </div>
               </div>
-              <UserOrderList orderid={order.id} />
+              <UserOrderList
+                setIsPopupOpen={setIsPopupOpen}
+                isPopupOpen={isPopupOpen}
+                orderid={order.id}
+                order={order}
+              />
               <div className="flex justify-between py-3 border-b">
                 <p className="">
                   <span className="font-bold">Delivery to: </span>{" "}
@@ -77,7 +104,7 @@ function UserAllOrder() {
               </div>
               <div className="py-2 flex justify-end">
                 {order.state === "PENDING" &&
-                order.paymentStatus === "PENDING" ? (
+                  order.paymentStatus === "PENDING" ? (
                   <button className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500">
                     Cancel
                   </button>
@@ -86,7 +113,7 @@ function UserAllOrder() {
                     {order.state !== "CANCELED" ? (
                       <button
                         className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                        onClick={() => setIsPopupOpen(!isPopupOpen)}
+                        onClick={() => setIsPopupOpen(order.id)}
                         disabled={
                           order.state === "PENDING" &&
                           order.paymentStatus === "PAID"
@@ -105,10 +132,6 @@ function UserAllOrder() {
                 )}
               </div>
             </div>
-
-            {isPopupOpen ? (
-              <Feedback order={order} setIsPopupOpen={setIsPopupOpen} />
-            ) : null}
           </div>
         ))}
     </div>

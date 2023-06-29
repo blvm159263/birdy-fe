@@ -8,11 +8,12 @@ import { LoginContext } from "../../../context/LoginProvider"
 import storageService from "../../../api/storage"
 import { NotificationContext } from "../../../context/NotificationProvider"
 import jwtDecode from "jwt-decode"
+import shopApi from "../../../api/shopApi"
 
 function ShopSignIn({ setIsSignIn, setIsForgotPassword }) {
 
   const openNotificationWithIcon = useContext(NotificationContext)
-  const { setIsLogin, setRole } = useContext(LoginContext)
+  const { setIsLogin, setRole, setShopId } = useContext(LoginContext)
 
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true)
   const [phoneNumber, setPhoneNumber] = useState("")
@@ -59,13 +60,20 @@ function ShopSignIn({ setIsSignIn, setIsForgotPassword }) {
           if (res.status === 200) {
             // alert("login thành công")
             let token = jwtDecode(res.data.token)
-            if(token.role !== "SHOP"){
+            if (token.role !== "SHOP") {
               openNotificationWithIcon("error", "Bạn không phải chủ shop")
               return
             }
             storageService.setAccessToken(res.data.token)
             setRole(token.role)
             setIsLogin(true)
+            shopApi.getShopInformationByPhoneNumber(token.sub)
+              .then((res) => {
+                console.log(res.data);
+                setShopId(res.data.id)
+              }).catch((err) => {
+                console.log(err)
+              })
             navigate("/")
           } else if (res.status === 403) {
           }

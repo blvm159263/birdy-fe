@@ -40,7 +40,11 @@ const userApi = {
   deleteWishlist(userId, productId) {
     const url = `/users/${userId}/wishlist/${productId}`
     return axiosClient.delete(url)
-  }
+  },
+  updateAddress(params) {
+    const url = `/addresses/`
+    return axiosClient.put(url, params)
+  },
 }
 
 export default userApi

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import SearchBar from "../features/search/SearchBar"
 import SearchType from "../constants/SearchType"
 import React, { useState, useContext } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import jwtDecode from "jwt-decode"
 import storageService from "../api/storage"
 import { LoginContext } from "../context/LoginProvider"
@@ -12,7 +12,7 @@ import { resetAllState } from "../features/search/searchSlice"
 
 export default function NavBar() {
   const { isLogin, setIsLogin, setRole } = useContext(LoginContext)
-
+  const navigate = useNavigate()
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const cartCount = useSelector((state) => state.cart.items.length)
   const dispatch = useDispatch()
@@ -21,6 +21,7 @@ export default function NavBar() {
     storageService.removeAccessToken()
     setIsLogin(false)
     setRole("")
+    navigate("/")
     window.location.reload()
   }
 
@@ -167,11 +168,14 @@ export default function NavBar() {
         <div className="absolute top-0 right-0 hidden md:flex text-white text-sm xl:text-base">
           {isLogin ? (
             <>
-              <Link to="/" className="px-2 pt-1">
+              <Link to="/user" className="px-2 pt-1">
                 PROFILE
               </Link>
               <span className="px-2 pt-[0.2rem]">|</span>
-              <span  onClick={onLogout} className="px-2 pt-[0.2rem] cursor-pointer">
+              <span
+                onClick={onLogout}
+                className="px-2 pt-[0.2rem] cursor-pointer"
+              >
                 Log Out
               </span>
             </>

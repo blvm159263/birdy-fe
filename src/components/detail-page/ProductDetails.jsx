@@ -1,8 +1,9 @@
 import React from "react"
+import { useState } from "react"
 
 function ProductDetails({ product }) {
   return (
-    <div className="bg-white p-7 lg:w-3/5 sm:w-full rounded-md lg:mb-0 sm: mb-3">
+    <div className="bg-white p-7 grow  lg:w-3/5 sm:w-full rounded-md lg:mb-0 sm: mb-3">
       <h1 className="text-3xl font-bold text-left mb-5">Product Details</h1>
       {product.categoryId === 1 ? (
         <div>
@@ -50,10 +51,10 @@ function ProductDetails({ product }) {
       ) : (
         <div></div>
       )}
-      <p id="description" className="mb-10">
+      <p id="description" className="mb-3">
         <span className="font-bold">Description: </span>
-        {product.description}
       </p>
+      <div dangerouslySetInnerHTML={{ __html: product.description }} />
     </div>
   )
 }

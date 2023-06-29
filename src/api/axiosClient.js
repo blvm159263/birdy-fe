@@ -1,13 +1,12 @@
-import axios from "axios";
-import storageService from "./storage";
+import axios from "axios"
+import storageService from "./storage"
 
-let token;
+let token
 
 const axiosClient = axios.create({
   // baseURL: "https://birdy-swp.azurewebsites.net/api/v1/",
   baseURL: "http://localhost/api/v1/",
-
-});
+})
 
 // // Add a request interceptor
 // axios.interceptors.request.use(
@@ -22,11 +21,11 @@ const axiosClient = axios.create({
 // );
 
 axiosClient.interceptors.request.use(async (currentConfig) => {
-  const customHeaders = {};
+  const customHeaders = {}
 
-  const accessToken = storageService.getAccessToken();
+  const accessToken = storageService.getAccessToken()
   if (accessToken) {
-    customHeaders['Authorization'] = 'Bearer ' + accessToken;
+    customHeaders["Authorization"] = "Bearer " + accessToken
   }
 
   return {
@@ -35,9 +34,8 @@ axiosClient.interceptors.request.use(async (currentConfig) => {
       ...customHeaders, // Attach token
       ...currentConfig.headers, // The remain data
     },
-  };
-});
-
+  }
+})
 
 // Add a response interceptor
 axios.interceptors.response.use(
@@ -45,19 +43,19 @@ axios.interceptors.response.use(
     if (response.data) {
       // return success
       if (response.status === 200 || response.status === 201) {
-        return response;
+        return response
       }
       // reject errors & warnings
-      return Promise.reject(response);
+      return Promise.reject(response)
     }
     // default fallback
-    return Promise.reject(response);
+    return Promise.reject(response)
   },
   function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)
 
-export default axiosClient;
+export default axiosClient

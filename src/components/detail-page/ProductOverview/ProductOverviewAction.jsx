@@ -1,17 +1,16 @@
 import React, { useState, useContext, useEffect } from "react"
-import { Rate } from 'antd';
+import { Rate } from "antd"
 import { useDispatch } from "react-redux"
 import { addToCart } from "../../../features/cart/cartSlice"
 import { useNavigate } from "react-router-dom"
 import { NotificationContext } from "../../../context/NotificationProvider"
-import userApi from "../../../api/userApi";
-import storageService from "../../../api/storage";
-import jwtDecode from "jwt-decode";
-import { set } from "date-fns";
+import userApi from "../../../api/userApi"
+import storageService from "../../../api/storage"
+import jwtDecode from "jwt-decode"
+import { set } from "date-fns"
 
 function ProductOverviewAction({ product }) {
   const openNotificationWithIcon = useContext(NotificationContext)
-
 
   const [quantity, setQuantity] = useState(1)
   const [wishlist, setWishlist] = useState()
@@ -22,28 +21,34 @@ function ProductOverviewAction({ product }) {
     setQuantity(quantity + value)
   }
 
-
   const fetchData = async () => {
-    let token = storageService.getAccessToken();
+    let token = storageService.getAccessToken()
     if (token) {
-      token = jwtDecode(token);
-      await userApi.getUserByPhoneNumber(token.sub).then((res) => {
-        setUserId(res.data.id)
-      }).catch((err) => {
-        console.log(err);
-      })
-      await userApi.getWishlist(userId, product.id).then((res) => {
-        setWishlist(res.data);
-      }).catch((err) => {
-        console.log(err);
-      })
+      token = jwtDecode(token)
+      await userApi
+        .getUserByPhoneNumber(token.sub)
+        .then((res) => {
+          setUserId(res.data.id)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      if ((userId, product.id)) {
+        userApi
+          .getWishlist(userId, product.id)
+          .then((res) => {
+            setWishlist(res.data)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
     }
   }
 
   useEffect(() => {
-    fetchData();
-  }, [product])
-
+    fetchData()
+  }, [userId, product.id])
 
   const onWishlist = async () => {
     if (!userId) {
@@ -51,43 +56,53 @@ function ProductOverviewAction({ product }) {
         "Please login",
         "Please login to add to wishlist!"
       )
-      return;
+      return
     }
-    if(!wishlist){
-      await userApi.addWishlist(userId, product.id).then((res) => {
-        openNotificationWithIcon(
-          "Add to Wishlist",
-          "Add to Wishlist Successfully!"
-        )
-      }).catch((err) => {
-        console.log(err);
-      });
-      await userApi.getWishlist(userId, product.id).then((res) => {
-        setWishlist(res.data);
-      }
-      ).catch((err) => {
-        console.log(err);
-      })
-    }else{
-      await userApi.deleteWishlist(userId, product.id).then((res) => {
-        openNotificationWithIcon(
-          "Remove from Wishlist",
-          "Remove from Wishlist Successfully!"
-        )
-      }).catch((err) => {
-        console.log(err);
-      });
-      setWishlist(null);
+    if (!wishlist) {
+      await userApi
+        .addWishlist(userId, product.id)
+        .then((res) => {
+          openNotificationWithIcon(
+            "Add to Wishlist",
+            "Add to Wishlist Successfully!"
+          )
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      await userApi
+        .getWishlist(userId, product.id)
+        .then((res) => {
+          setWishlist(res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    } else {
+      await userApi
+        .deleteWishlist(userId, product.id)
+        .then((res) => {
+          openNotificationWithIcon(
+            "Remove from Wishlist",
+            "Remove from Wishlist Successfully!"
+          )
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      setWishlist(null)
     }
   }
 
   return (
     <div className="lg:p-14 sm: p-5 lg:w-1/2 sm: w-full">
       <h1 className="text-2xl font-bold">{product.productName}</h1>
-      <div style={{
-        background: '#fafafa'
-      }}
-        className="my-4 text-lg">
+      <div
+        style={{
+          background: "#fafafa",
+        }}
+        className="my-4 text-lg"
+      >
         <p className="text-lg font-bold text-orange-500 py-2">
           ${product.unitPrice}
         </p>
@@ -101,9 +116,7 @@ function ProductOverviewAction({ product }) {
       <div className="my-4">
         <p>Availability: {product.quantity} left in stock</p>
       </div>
-      <div className="my-4">
-
-      </div>
+      <div className="my-4"></div>
       <div className="flex my-4">
         <p className="mr-6">Quantity:</p>
         <button
@@ -143,9 +156,10 @@ function ProductOverviewAction({ product }) {
           >
             ADD TO CART
           </button>
-          <button className=" h-14 w-14 flex items-center justify-center border-2 border-blue-100 hover:bg-sky-200 hover:border-white rounded-md"
+          <button
+            className=" h-14 w-14 flex items-center justify-center border-2 border-blue-100 hover:bg-sky-200 hover:border-white rounded-md"
             style={{
-              background: wishlist ? 'red' : 'white'
+              background: wishlist ? "red" : "white",
             }}
             onClick={onWishlist}
           >

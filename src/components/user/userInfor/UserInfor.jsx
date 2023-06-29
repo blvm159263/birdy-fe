@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setGender } from "../../../features/user/userSlice"
 import isLoadingPage from "../../loading/isLoadingPage"
@@ -6,7 +6,14 @@ import isLoadingPage from "../../loading/isLoadingPage"
 function UserInfor({ isLoading }) {
   const userInformation = useSelector((state) => state.user.userInformation)
   const dispatch = useDispatch()
+  const [selectedGender, setSelectedGender] = useState("")
   const handleSaveInformation = (e) => [e.preventDefault()]
+
+  useEffect(() => {
+    if (userInformation && userInformation.gender) {
+      setSelectedGender(userInformation.gender.toString())
+    }
+  }, [userInformation])
 
   return (
     <div className="w-5/6 bg-white">
@@ -70,7 +77,7 @@ function UserInfor({ isLoading }) {
                       Gender
                     </label>
                   </td>
-                  <td className="flex">
+                  {/* <td className="flex">
                     <input
                       type="radio"
                       name="gender"
@@ -96,6 +103,41 @@ function UserInfor({ isLoading }) {
                       name="gender"
                       id="other"
                       className="mr-3"
+                    />
+                    <label htmlFor="other">Other</label>
+                  </td> */}
+                  <td className="flex">
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="1"
+                      id="male"
+                      className="mr-3"
+                      checked={selectedGender === "1"}
+                      onChange={() => setSelectedGender("1")}
+                    />
+                    <label className="mr-4" htmlFor="male">
+                      Male
+                    </label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      className="mr-3"
+                      value="2"
+                      id="female"
+                      checked={selectedGender === "2"}
+                      onChange={() => setSelectedGender("2")}
+                    />
+                    <label className="mr-4" htmlFor="female">
+                      Female
+                    </label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      id="other"
+                      className="mr-3"
+                      checked={selectedGender === "3"}
+                      onChange={() => setSelectedGender("3")}
                     />
                     <label htmlFor="other">Other</label>
                   </td>

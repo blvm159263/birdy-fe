@@ -1,5 +1,5 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom"
-import {FloatButton} from 'antd';
+import { BrowserRouter, Route, Routes, useNavigate, Navigate } from "react-router-dom"
+import { FloatButton } from 'antd';
 import "./App.css"
 import "./style.scss";
 // Components
@@ -11,6 +11,7 @@ import LoginPage from "./pages/LoginPage"
 import DetailItemPage from "./pages/DetailItemPage"
 import AdminLayout from "./layouts/AdminLayout"
 import ShopLayout from "./layouts/ShopLayout"
+import ShopDashboard from "./components/shop_manage/ShopDashboard"
 import ShopProfile from "./components/shop_manage/ShopProfile"
 import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
 import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
@@ -24,7 +25,8 @@ import ViewShopPage from "./pages/ViewShopPage"
 import AllShopsPage from "./pages/AllShopsPage"
 import CheckoutPage from "./pages/CheckoutPage"
 import HomeChat from "./pages/HomeChat"
-import {useContext, useEffect} from "react"
+// import ShopDashboard from "./components/shop_manage/ShopDashboard";
+import { useEffect, useContext, useState } from "react"
 import storageService from "./api/storage"
 import jwtDecode from "jwt-decode"
 import {LoginContext} from "./context/LoginProvider"
@@ -47,12 +49,17 @@ import AdminSubPageType from "./constants/AdminSubPageType";
 import AdminAllShops from "./components/admin/subpages/AdminAllShops";
 import AdminNewShopRequests from "./components/admin/subpages/AdminNewShopRequests";
 import AdminProductRequests from "./components/admin/subpages/AdminProductRequests";
+import { ChatContext } from "./context/ChatContext";
+import shopApi from "./api/shopApi";
+import { useDispatch, useSelector } from "react-redux";
+import userApi from "./api/userApi";
+import { getUser } from "./features/user/userSlice";
 
 function App() {
-  const { isLogin, setIsLogin, setRole, role } = useContext(LoginContext)
-
+  const { isLogin, setIsLogin, setRole, role, setShopId } = useContext(LoginContext)
+  const userInformation = useSelector((state) => state.user.userInformation)
+  const dispatch = useDispatch()
   const { setIsChatOpen, isChatOpen } = useContext(ChatContext)
-  
   function convertTimestampToDate(timestamp) {
     return new Date(timestamp * 1000)
   }
@@ -69,6 +76,23 @@ function App() {
       } else {
         setIsLogin(true)
         setRole(token.role)
+        if (token.role === "SHOP") {
+          shopApi.getShopInformationByPhoneNumber(token.sub)
+            .then((res) => {
+              console.log(res.data);
+              setShopId(res.data.id)
+            }).catch((err) => {
+              console.log(err)
+            })
+        } else {
+          userApi.getUserByPhoneNumber(token.sub).then((res) => {
+           dispatch(getUser(res.data))
+          }
+          ).catch((err) => {
+            console.log(err)
+          }
+          )
+        }
       }
     }
   }, [])
@@ -96,25 +120,25 @@ function App() {
                   <Route index element={<CartPage />} />
                   <Route path="/cart/checkout" element={<CheckoutPage />} />
                 </Route>
-                <Route path="/user/:userid" element={<UserPage />}>
-                  <Route path="/user/:userid" element={<UserInfor />} />
-                  <Route path="/user/:userid/address" element={<UserAddress />} />
-                  <Route path="/user/:userid/order" element={<UserOrder />}>
+                <Route path="/user" element={<UserPage />}>
+                  <Route index element={<UserInfor />} />
+                  <Route path="/user/address" element={<UserAddress />} />
+                  <Route path="/user/order" element={<UserOrder />}>
                     <Route index element={<UserAllOrder />} />
                     <Route
-                      path="/user/:userid/order/pending"
+                      path="/user/order/pending"
                       element={<UserPendingOrder />}
                     />
                     <Route
-                      path="/user/:userid/order/delivery"
+                      path="/user/order/delivery"
                       element={<UserDeliveryOrder />}
                     />
                     <Route
-                      path="/user/:userid/order/completed"
+                      path="/user/order/completed"
                       element={<UserCompletedOrder />}
                     />
                     <Route
-                      path="/user/:userid/order/canceled"
+                      path="/user/order/canceled"
                       element={<UserOrderCancel />}
                     />
                   </Route>
@@ -160,7 +184,9 @@ function App() {
           {role === "SHOP" && (
             <>
               <Route path="/" element={<ShopLayout />}>
-                <Route index element={<ShopProfile />} />
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/dashboard" element={<ShopDashboard />} />
+                <Route path="/profile" element={<ShopProfile />} />
                 <Route path="/products" element={<ShopProductManage />} />
                 <Route path="/orders" element={<ShopOrderManage />} />
                 <Route path="/product/new" element={<CreateProduct />} />
@@ -179,7 +205,8 @@ function App() {
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter >
+
 
       {isLogin && <>
         {isChatOpen ?
@@ -196,7 +223,8 @@ function App() {
             onClick={showChat}
           />}
 
-      </>}
+      </>
+      }
     </>
   )
 }
