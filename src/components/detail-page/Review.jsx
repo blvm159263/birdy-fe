@@ -10,15 +10,17 @@ function Review({ product }) {
   const [totalReview, setTotalReview] = useState(0)
 
   useEffect(() => {
-    console.log(pageReview)
-    productApi
-      .getProductReview(product.id, { page: pageReview - 1 })
-      .then((response) => {
-        setReviews(response.data[0])
-        setTotalReview(response.data[1])
-      })
-      .catch((error) => console.log(error))
-  }, [pageReview, product])
+    if (product.id) {
+      console.log(pageReview)
+      productApi
+        .getProductReview(product.id, { page: pageReview - 1 })
+        .then((response) => {
+          setReviews(response.data[0])
+          setTotalReview(response.data[1])
+        })
+        .catch((error) => console.log(error))
+    }
+  }, [pageReview, product.id])
 
   const getOtherPage = (current) => {
     setPageReview(current)
@@ -26,7 +28,7 @@ function Review({ product }) {
   }
 
   return (
-    <div className="bg-white h-fit p-7 lg:w-2/5 sm:w-full lg:ml-4 sm:ml-0 rounded-md">
+    <div className="bg-white grow p-7 lg:w-2/5 sm:w-full lg:ml-4 sm:ml-0 rounded-md">
       <h1 className="text-3xl font-bold text-left mb-5">Reviews</h1>
       <div id="reviews" style={{ height: "70%" }}>
         {reviews.map((review, index) => (

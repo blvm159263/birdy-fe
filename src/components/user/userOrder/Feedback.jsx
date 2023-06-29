@@ -69,7 +69,7 @@ function Feedback({ setIsPopupOpen, ordercode, detail }) {
   // }, [orderDetail])
 
   return (
-    <div className="fixed z-50 lg:w-full sm: w-full p-4  md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center inset-0 bg-gray-100 bg-opacity-5">
+    <div className="fixed z-50 overflow-hidden lg:w-full sm: w-full p-4  md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center inset-0 bg-gray-100 bg-opacity-5">
       <form className="w-4/5 bg-white p-2">
         <div className="border-b-2 py-4">
           <h1 className=" text-center font-bold text-2xl ">Feedback</h1>
