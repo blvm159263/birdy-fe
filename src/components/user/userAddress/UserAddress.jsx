@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import data from "./UserAddressDataTMP"
+
 import { useParams } from "react-router-dom"
 import userApi from "../../../api/userApi"
 import { useDispatch, useSelector } from "react-redux"
@@ -9,9 +9,10 @@ function UserAddress() {
   const { userid } = useParams()
 
   const [isModal, setIsModal] = useState(false)
-
   const userAddresses = useSelector((state) => state.user.userAddress)
+  console.log(userAddresses)
   const dispatch = useDispatch()
+  // console.log(userAddresses)
 
   const fetchAddress = (userid) => {
     userApi
@@ -43,32 +44,30 @@ function UserAddress() {
 
       <div className="py-4 px-6">
         {userAddresses &&
-          userAddresses.map((item) => {
-            return (
-              <div
-                key={item.id}
-                className="flex justify-between items-center border-b py-4"
-              >
-                <div>
-                  <div className="flex">
-                    <h2 className="">{item.fullName}</h2>
-                    <div className="mx-2 border-l"></div>
-                    <p>1234567890</p>
-                  </div>
-                  <p>{item.address}</p>
-                  {item.isDefault && (
-                    <p className="text-red-400">Default Address</p>
-                  )}
+          userAddresses.map((item) => (
+            <div
+              key={item.id}
+              className="flex justify-between items-center border-b py-4"
+            >
+              <div>
+                <div className="flex">
+                  <h2 className="">{item.fullName}</h2>
+                  <div className="mx-2 border-l"></div>
+                  <p>1234567890</p>
                 </div>
-                <div className="flex flex-col items-end">
-                  <button className="text-sky-400">Update</button>
-                  <button className="rounded-md border px-1 py-1">
-                    Set as default
-                  </button>
-                </div>
+                <p>{item.address}</p>
+                {item.isDefault && (
+                  <p className="text-red-400">Default Address</p>
+                )}
               </div>
-            )
-          })}
+              <div className="flex flex-col items-end">
+                <button className="text-sky-400">Update</button>
+                <button className="rounded-md border px-1 py-1">
+                  Set as default
+                </button>
+              </div>
+            </div>
+          ))}
       </div>
 
       {isModal && (

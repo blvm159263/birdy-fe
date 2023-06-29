@@ -51,8 +51,11 @@ const productApi = {
     deleteProduct(productId) {
         const url = `/products/delete/${productId}`
         return axiosClient.delete(url);
+    },    
+    getAllFeaturedProduct(params) {
+        const url = `/products/view/all`;
+        return axiosClient.get(url, {params});
     }
-    
 };
 
 export default productApi;

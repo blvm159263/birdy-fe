@@ -1,19 +1,24 @@
 import React from 'react'
 import ShopWrapper from '../components/cart/ShopWrapper'
-import { useDispatch, useSelector } from 'react-redux'
-import { deSelectAllItems, deleteAllSelected, selectAllItems } from '../features/cart/cartSlice';
-import { Link } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux'
+import {deSelectAllItems, selectAllItems} from '../features/cart/cartSlice';
+import {Link} from 'react-router-dom';
+import CartDeleteConfirmModal from "../components/cart/CartDeleteConfirmModal";
+import {setShowCartDeleteAllSelectedModal} from "../features/ui/uiSlice";
+import CartDeleteAllSelectedConfirmModal from "../components/cart/CartDeleteAllSelectedConfirmModal";
 
 export default function CartPage() {
   const items = useSelector(state => state.cart.items);
   const shopIds = items.map(item => item.shopId).filter((shopId, index, shopIds) => shopIds.indexOf(shopId) === index);
   const selected = items.filter(item => item.selected === false).length === 0;
-  const totalProduct = useSelector(state => state.cart.totalProduct);
-  const totalPrice = useSelector(state => state.cart.totalPrice);
+  const totalSelectedProduct = items.filter(item => item.selected === true).reduce((total, {quantity}) => total + quantity, 0);
+  const totalSelectedPrice = items.filter(item => item.selected === true).reduce((total, {quantity, price}) => total + quantity * price, 0);
   const dispatch = useDispatch();
 
   return (
     <div id='cardPage' className='bg-neutral-100 py-6 pb-12'>
+      <CartDeleteConfirmModal/>
+      <CartDeleteAllSelectedConfirmModal/>
       <section className='container mx-auto'>
         <div className='grid grid-cols-9 text-center bg-white rounded-sm p-2'>
           <div className='col-span-1'>
@@ -49,14 +54,16 @@ export default function CartPage() {
             Choose All
           </div>
           <div className="col-span-2 text-red-500 font-bold">
-            <button onClick={() => dispatch(deleteAllSelected())}>Delete Selected</button>
+            {totalSelectedProduct === 0 ?
+              <span className='text-neutral-500'>Delete Selected</span> :
+              <button onClick={() => dispatch(setShowCartDeleteAllSelectedModal(true))}>Delete Selected</button>}
           </div>
           <div className="col-span-3">
-            Total (<span className='font-bold'>{totalProduct}</span> products): <span className='font-bold'>${totalPrice.toFixed(2)}</span>
+            Total (<span className='font-bold'>{totalSelectedProduct}</span> products): <span className='font-bold'>${totalSelectedPrice.toFixed(2)}</span>
           </div>
           <div className="col-span-2">
-            {totalProduct === 0 ?
-            (<span to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
+            {totalSelectedProduct === 0 ?
+            (<span className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
             (<Link to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</Link>)}
           </div>
         </div>

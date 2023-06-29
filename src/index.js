@@ -8,17 +8,25 @@ import { persistor, store } from "./app/store"
 import { PersistGate } from "redux-persist/integration/react"
 import { LoginProvider } from "./context/LoginProvider"
 import { NotificationProvider } from "./context/NotificationProvider"
+import { ChatContextProvider } from "./context/ChatContext"
+import { AuthContextProvider } from "./context/AuthContext"
+import { SelectionChatContextProvider } from "./context/SelectionChatContext"
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
   <Provider store={store}>
     <PersistGate persistor={persistor}>
-      <LoginProvider>
-        <NotificationProvider>
-          <App />
-        </NotificationProvider>
-      </LoginProvider>
-
+      <AuthContextProvider>
+        <ChatContextProvider>
+          <SelectionChatContextProvider >
+            <LoginProvider>
+              <NotificationProvider>
+                <App />
+              </NotificationProvider>
+            </LoginProvider>
+          </SelectionChatContextProvider >
+        </ChatContextProvider>
+      </AuthContextProvider>
     </PersistGate>
   </Provider>
 )

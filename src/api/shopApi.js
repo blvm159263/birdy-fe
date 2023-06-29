@@ -5,7 +5,10 @@ const shopApi = {
         const url = '/shops/' + id;
         return axiosClient.get(url);
     },
-
+    getShopInformationByPhoneNumber(phoneNumber) {
+        const url = '/shops/phone-number/' + phoneNumber;
+        return axiosClient.get(url);
+    },
     getShopDetailByShopId(id) {
         const url = '/shops/detail/' + id;
         return axiosClient.get(url);
@@ -46,6 +49,15 @@ const shopApi = {
             },
         };
         return axiosClient.patch(url, data, config);
+        return axiosClient.get(url); 
+    },
+    searchShopByNameAndStatus(status, params) {
+        const url = `/shops/${status}/view`;
+        return axiosClient.get(url, {params});
+    },
+    getAllShopProducts(id, params) {
+        const url = `/shops/${id}/products`;
+        return axiosClient.get(url, {params});
     }
 
 }

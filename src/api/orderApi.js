@@ -1,4 +1,4 @@
-import axiosClient from "./axiosClient";
+import axiosClient from "./axiosClient"
 
 const orderApi = {
     getShipmentPrice(params) {
@@ -20,7 +20,7 @@ const orderApi = {
     editOrderState(id, state, comment) {
         const url = `/orders/edit/${id}?state=${state}&comment=${comment}`
         return axiosClient.patch(url)
-    }
-};
+    },
+}
 
-export default orderApi;
+export default orderApi

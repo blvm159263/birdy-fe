@@ -1,10 +1,14 @@
 import React, { useState, useContext } from "react"
+import { useDispatch } from "react-redux";
 import { Popconfirm } from "antd";
 import { NotificationContext } from "../../../context/NotificationProvider";
 import productApi from "../../../api/productApi";
+import { setShowShopProductManageForm } from "../../../features/ui/uiSlice";
+import { setEditId } from "../../../features/shops/shopSlice";
 
 function ShopProductCard({ product, onDeleteSuccess }) {
 
+  const dispatch = useDispatch();
   console.log(product);
 
   const openNotificationWithIcon = useContext(NotificationContext);
@@ -25,8 +29,9 @@ function ShopProductCard({ product, onDeleteSuccess }) {
   //   // message.error('Click on No');
   // };
 
+
   return (
-    <div className="bg-white rounded-lg h-full shadow-md sm:w-fit lg:w-[18%] flex flex-col items-center">
+    <div className="bg-white rounded-lg shadow-md flex flex-col items-center">
       <div className="h-52 w-full overflow-hidden">
         <img
           src={product.imageMain}
@@ -36,13 +41,29 @@ function ShopProductCard({ product, onDeleteSuccess }) {
       </div>
       <div className="px-6 py-3 flex flex-col items-center">
         <p className="text-gray-600 mb-4 truncate w-44 text-center">{product.productName}</p>
-        <h1 className="text-lg text-left font-semibold mb-2">Quantity: {product.quantity}</h1>
+        <h1 className="text-lg text-left font-semibold mb-2">
+          Quantity: {product.quantity}
+        </h1>
 
-        {product.state === 0 && <p className="mb-3 w-fit border text-sm font-medium text-white text-center rounded-md px-2 py-1 bg-yellow-300">PENDING...</p>}
-        {product.state === 1 && <p className="mb-3 w-fit border text-sm font-medium text-white text-center rounded-md px-2 py-1 bg-green-400">APPROVED</p>}
+        {product.state === 0 && (
+          <p className="mb-3 w-fit border text-sm font-medium text-white text-center rounded-md px-2 py-1 bg-yellow-300">
+            PENDING...
+          </p>
+        )}
+        {product.state === 1 && (
+          <p className="mb-3 w-fit border text-sm font-medium text-white text-center rounded-md px-2 py-1 bg-green-400">
+            APPROVED
+          </p>
+        )}
 
         <div className="flex justify-between w-full">
-          <button className=" text-red-500 px-4 py-2  border-grey-100 w-1/2">
+          <button
+            onClick={() => {
+              dispatch(setEditId(product.id));
+              dispatch(setShowShopProductManageForm(true));
+            }}
+            className=" text-red-500 px-4 py-2  border-grey-100 w-1/2"
+          >
             Edit
           </button>
           <Popconfirm

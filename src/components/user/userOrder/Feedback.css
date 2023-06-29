@@ -1,0 +1,9 @@
+.star-container span {
+  margin: 0px 2px;
+  font-size: 1.5rem;
+}
+.star-container .hovered {
+  margin: 0px 2px;
+  font-size: 1.5rem;
+  color: #ffe234;
+}
