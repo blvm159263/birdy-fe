@@ -8,7 +8,6 @@ import { set } from "date-fns";
 import { async } from "q";
 
 function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, address, totalShipment, setTotalShipment }) {
-    console.log(shipmentIds);
     const openNotificationWithIcon = useContext(NotificationContext);
 
     const [shipmentList, setShipmentList] = useState([]);
@@ -45,7 +44,7 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
             }
         }).catch(err => { console.log(err); });
         console.log(price);
-        
+
         const shipment = {
             shipmentId: value,
             shipmentPrice: price,
@@ -69,27 +68,28 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
         }
         setPrevShipmentId(shipment);
 
-    };
 
-    return (
-        <div className='bg-white rounded-sm mt-4 flex justify-between gap-4 items-center text-center p-2 drop-shadow-sm'>
-            <div className="col-span-7 font-bold">
-                Shipment Type:
-                <Select
-                    className="ml-4"
-                    onChange={(value) => { onSelectedShipment(value) }}
-                    options={shipmentList.map((shipment) => ({
-                        label: shipment.shipmentTypeName,
-                        value: shipment.id,
-                    }))}
-                    placeholder="Shipment Type"
-                />
+        return (
+            <div className="bg-white rounded-sm mt-4 flex justify-between gap-4 items-center text-center p-2 drop-shadow-sm">
+                <div className="col-span-7 font-bold">
+                    Shipment Type:
+                    <Select
+                        className="ml-4"
+                        onChange={(value) => {
+                            onSelectedShipment(value)
+                        }}
+                        options={shipmentList.map((shipment) => ({
+                            label: shipment.shipmentTypeName,
+                            value: shipment.id,
+                        }))}
+                        placeholder="Shipment Type"
+                    />
+                </div>
+                <div className="col-span-2">
+                    <span className="font-bold mr-16">${shipmentPrice.toFixed(3)}</span>
+                </div>
             </div>
-            <div className="col-span-2">
-                <span className='font-bold mr-16'>${shipmentPrice.toFixed(3)}</span>
-            </div>
-        </div>
-    )
-}
+        )
+    }
 
-export default ShopShipmentWrapper;
+    export default ShopShipmentWrapper
