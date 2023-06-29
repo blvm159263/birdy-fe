@@ -29,6 +29,10 @@ const userApi = {
     const url = `/users/${data.userId}/addresses`
     return axiosClient.post(url, data)
   },
+  updateAddress(id, params) {
+    const url = `/addresses/addresses/` + id
+    return axiosClient.put(url, params)
+  },
 }
 
 export default userApi
