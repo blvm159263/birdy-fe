@@ -67,6 +67,7 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
             setShipmentIds([...shipmentIds, shipment]);
         }
         setPrevShipmentId(shipment);
+    }
 
 
         return (
@@ -92,4 +93,4 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
         )
     }
 
-    export default ShopShipmentWrapper
+export default ShopShipmentWrapper
