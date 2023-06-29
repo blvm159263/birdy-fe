@@ -1,15 +1,11 @@
 import React from "react"
-import { Rate } from 'antd';
-import shopApi from "../../api/shopApi";
-import { useEffect, useState, useContext } from "react";
-import {
-  SelectionChatContext
-} from "../../context/SelectionChatContext";
-import { ChatContext } from "../../context/ChatContext";
+import { Rate } from "antd"
+import shopApi from "../../api/shopApi"
+import { useEffect, useState, useContext } from "react"
+import { SelectionChatContext } from "../../context/SelectionChatContext"
+import { ChatContext } from "../../context/ChatContext"
 function ShopInfo({ product }) {
-
   const [shop, setShop] = useState()
-
 
   const { setUser, handleSelect } = useContext(SelectionChatContext);
 
@@ -25,8 +21,7 @@ function ShopInfo({ product }) {
       console.log(err)
     })
 
-  }, [product.shopId])
-
+  }, [product])
 
   return (
     <div className="my-3 w-full flex rounded-md bg-white lg:flex-row sm: flex-col py-3 px-8">
@@ -39,7 +34,7 @@ function ShopInfo({ product }) {
         </div>
         <div className="lg:ml-6 sm: ml-0 flex flex-col justify-between">
           <button className="py-1 px-10 my-1 bg-sky-300 rounded-md text-white border border-white font-bold hover:bg-white hover:border-blue-400 hover:text-blue-400"
-            onClick={handleSelect}>
+            onClick={() => handleSelect(null)}>
             Chat
           </button>
           <button className="py-1 px-10 my-1 bg-sky-300 rounded-md text-white border border-white font-bold hover:bg-white hover:border-blue-400 hover:text-blue-400">
@@ -54,10 +49,10 @@ function ShopInfo({ product }) {
         <p className="mt-2">
           Rating <span className="font-bold">{shop?.rating}</span>
         </p>
-        <div className="flex mt-2">
+        <div className="flex items-center mt-2">
           <Rate disabled value={shop?.rating} />
           <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-            (1024 Reviews)
+            (76)
           </p>
         </div>
       </div>
@@ -65,9 +60,7 @@ function ShopInfo({ product }) {
         <div className="h-5 w-5">
           <img src="/assets/images/location-log.png" alt="" />
         </div>
-        <p className="ml-7 ">
-          {shop?.address}
-        </p>
+        <p className="ml-7 ">{shop?.address}</p>
       </div>
     </div>
   )

@@ -42,6 +42,16 @@ export default function CheckoutPage() {
         getUser(token);
     }, []);
 
+    useEffect(() => {
+        
+        let total = 0;
+        shipmentIds.forEach(shipment => {
+            total += shipment.shipmentPrice;
+        })
+        console.log(total);
+        setTotalShipment(total);
+    }, [shipmentIds]);
+
     const getUser = async (token) => {
         let userId;
         await userApi.getUserByPhoneNumber(token.sub).then(res => {
@@ -67,7 +77,7 @@ export default function CheckoutPage() {
                 createDate: null,
                 state: "PENDING",
                 comment: "",
-                shipmentId: shipmentId,
+                shipmentId: shipmentId.shipmentId,
                 shipmentType: "",
                 paymentMethodId: 3,
                 paymentTypeName: "",
@@ -75,6 +85,8 @@ export default function CheckoutPage() {
                 paymentStatus: "PENDING",
                 addressId: address.id,
                 address: "",
+                shopId: null,
+                total: null,
             }
             orderList.push(order);
         })

@@ -6,8 +6,7 @@ import { addNewAddressSlice } from "../../../features/user/userSlice"
 import { Checkbox, Modal, Select, Space } from "antd"
 import TextArea from "antd/es/input/TextArea"
 
-function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
-  const { userid } = useParams()
+function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
   const dispatch = useDispatch()
   const userInformation = useSelector((state) => state.user.userInformation)
   const userAddresses = useSelector((state) => state.user.userAddress)
@@ -20,12 +19,9 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
 
   const [newAddress, setNewAddress] = useState({
     id: newId,
-    // fullName: "",
+    fullName: userInformation.fullName,
     address: "",
-    userId: userid,
-    // ward: "string",
-    // city: "string",
-    // province: "string",
+    userId: userInformation ? userInformation.id : "",
     isDefault: false,
   })
 
@@ -37,11 +33,10 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
   const handleChange = (evt) => {
     const { value, name, checked } = evt.target
 
-    setNewAddress({
-      ...newAddress,
-      [name]: value,
-      [name]: checked,
-    })
+    setNewAddress((prevState) => ({
+      ...prevState,
+      [name]: name === "isDefault" ? checked : value,
+    }))
 
     console.log(value, name)
   }
@@ -51,17 +46,19 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
       fullName: "",
       phoneNumber: "",
       address: "",
-      userId: userid,
+      userId: userAddresses.id,
     })
   }
 
-  const addNewAddressInForm = () => {
-    userApi
-      .addNewAddress(userid, newAddress)
-      .then((response) => console.log(response.data))
-      .catch((error) => {
-        console.log(error)
-      })
+  const addNewAddressInForm = async () => {
+    if (userInformation) {
+      await userApi
+        .addNewAddress(userInformation.id, newAddress)
+        .then((response) => console.log(response.data))
+        .catch((error) => {
+          console.log(error)
+        })
+    }
   }
 
   const handleAddAddress = (e) => {
@@ -73,7 +70,9 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
 
     setIsAddNew(false)
 
-    fetchAddress(userid)
+    fetchAddress(userInformation.id)
+
+    setUpdated(true)
   }
 
   return (
@@ -113,7 +112,6 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
             className="mr-2"
             name="isDefault"
             onChange={handleChange}
-            // value={newAddress.isDefault}
             checked={newAddress.isDefault}
           />
           <label htmlFor="">Set as default address</label>
@@ -125,7 +123,10 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
           </button>
           <button
             className="ml-4 text-red-500 hover:text-red-300"
-            onClick={() => setIsAddNew(false)}
+            onClick={() => {
+              setIsAddNew(false)
+              setUpdated(false)
+            }}
           >
             Close
           </button>

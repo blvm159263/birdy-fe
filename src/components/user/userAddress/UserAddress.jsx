@@ -5,41 +5,44 @@ import userApi from "../../../api/userApi"
 import { useDispatch, useSelector } from "react-redux"
 import { getUserAddresses } from "../../../features/user/userSlice"
 import AddressModal from "./AddressModal"
-import NewAddressModal from "../../checkout/NewAddressModal"
 import UpdateAddressModal from "./UpdateAddressModal"
-function UserAddress() {
-  const { userid } = useParams()
 
+function UserAddress() {
+  // const { userid } = useParams()
+  const [updated, setUpdated] = useState(false)
   const [isAddNew, setIsAddNew] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
   const userAddresses = useSelector((state) => state.user.userAddress)
-  console.log(userAddresses)
-  const dispatch = useDispatch()
-  // console.log(userAddresses)
+  const userInformation = useSelector((state) => state.user.userInformation)
 
-  const fetchAddress = (userid) => {
-    userApi
-      .getAllUserAddress(userid)
-      .then((response) => {
-        dispatch(getUserAddresses(response.data))
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+  const dispatch = useDispatch()
+
+  const fetchAddress = () => {
+    if (userInformation) {
+      userApi
+        .getAllUserAddress(userInformation.id)
+        .then((response) => {
+          dispatch(getUserAddresses(response.data))
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    }
   }
-  const handleUpdate = () => {}
 
   useEffect(() => {
-    fetchAddress(userid)
-  }, [])
-  console.log(userAddresses)
+    fetchAddress()
+  }, [updated, userInformation])
 
   return (
     <div className="w-5/6 bg-white">
       <div className="flex justify-between items-center py-4 px-10">
         <h1 className=" text-center text-2xl font-bold">Address</h1>
         <button
-          onClick={() => setIsAddNew(!isAddNew)}
+          onClick={() => {
+            setIsAddNew(!isAddNew)
+            setUpdated(false)
+          }}
           className="rounded-md py-3 px-2 text-white bg-sky-400"
         >
           + Add new Address
@@ -58,7 +61,7 @@ function UserAddress() {
                 <div className="flex">
                   <h2 className="">{item.fullName}</h2>
                   <div className="mx-2 border-l"></div>
-                  <p>1234567890</p>
+                  <p>{userInformation.phoneNumber}</p>
                 </div>
                 <p>{item.address}</p>
                 {item.isDefault && (
@@ -68,13 +71,19 @@ function UserAddress() {
               <div className="flex flex-col items-end">
                 <button
                   className="text-sky-400"
-                  onClick={() => setIsUpdate(item.id)}
+                  onClick={() => {
+                    setIsUpdate(item.id)
+                    setUpdated(false)
+                  }}
                 >
                   Update
                 </button>
               </div>
               {isUpdate === item.id && (
                 <UpdateAddressModal
+                  updated={updated}
+                  // userAddresses={userAddresses}
+                  setUpdated={setUpdated}
                   address={item}
                   setIsUpdate={setIsUpdate}
                   fetchAddress={fetchAddress}
@@ -87,6 +96,9 @@ function UserAddress() {
       {isAddNew && (
         <AddressModal
           isAddNew={isAddNew}
+          updated={updated}
+          // userAddresses={userAddresses}
+          setUpdated={setUpdated}
           setIsAddNew={setIsAddNew}
           fetchAddress={fetchAddress}
         />
