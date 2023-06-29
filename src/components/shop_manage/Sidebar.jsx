@@ -122,14 +122,16 @@ function Sidebar() {
   }
 
   const fetchShop = async () => {
-    await shopApi.getShopInformationByShopId(shopId)
-      .then((res) => {
-        console.log(res);
-        setShop(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+    if (shopId) {
+      await shopApi.getShopInformationByShopId(shopId)
+        .then((res) => {
+          console.log(res);
+          setShop(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
   }
 
   useEffect(() => {
@@ -171,7 +173,7 @@ function Sidebar() {
             >
 
               <Menu
-                defaultSelectedKeys={[handlePath()]}
+                // defaultSelectedKeys={[handlePath()]}
                 defaultOpenKeys={["sub1"]}
                 mode="inline"
                 theme="light"

@@ -19,7 +19,28 @@ export default function SubImagesField({setSubImages}) {
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    console.log(subImagesFetched);
+    // const arr = subImagesFetched.map((subImageFetched) => {
+    //   console.log(subImageFetched.imgUrl);
+    //   return {
+    //     uid: '-1',
+    //     name: 'subImage.png',
+    //     url: subImageFetched.imgUrl,
+    //     status: "done",
+    //   }
+    // });
+    //
+    //
+  // }
+  //   setFileList();
+  //   console.log("Sub image file list");
+  //   console.log(subImagesFetched.map(subImageFetched => {
+  //     return {
+  //       uid: '-1',
+  //       name: 'subImage.png',
+  //       url: subImageFetched.imgUrl,
+  //       status: "done",
+  //     }
+  //   }))
   },[subImagesFetched]);
 
   const handlePreview = async (file) => {
