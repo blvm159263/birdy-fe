@@ -26,8 +26,8 @@ export default function EditProductForm({onEditSuccess}) {
   const openNotificationWithIcon = useContext(NotificationContext);
   const dispatch = useDispatch();
   const formValues = useSelector(state => state.shop.productFormValues);
-  const [mainImage, setMainImage] = useState(formValues.imageMain);
-  const [subImages, setSubImages] = useState([])
+  const [mainImage, setMainImage] = useState(null);
+  const [subImages, setSubImages] = useState(null)
 
   useEffect(() => {
     console.log("---------------------")
