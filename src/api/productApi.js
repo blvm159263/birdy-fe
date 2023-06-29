@@ -48,9 +48,26 @@ const productApi = {
         const url = `/products/review/${productId}`
         return axiosClient.get(url, { params });
     },
+    deleteProduct(productId) {
+        const url = `/products/delete/${productId}`
+        return axiosClient.delete(url);
+    },
     getAllFeaturedProduct(params) {
         const url = `/products/view/all`;
         return axiosClient.get(url, {params});
+    },
+    updateProductById(id, params) {
+        const data = new FormData();
+        data.append('productDTO', params.productDTO);
+        data.append('mainImage', params.mainImage);
+        const url = `/products/update/${id}`;
+        data.append('subImages', params.subImages);
+        data.append('objects', params.objects);
+        return axiosClient.put(url, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
     }
 };
 

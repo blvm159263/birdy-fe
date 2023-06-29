@@ -6,7 +6,7 @@ const initialState = {
     currentViewShopSubPage: ViewShopSubPageType.HOME,
     isShowCartDeleteAllSelectedModal: false,
     isShowCartDeleteModal: false,
-    isShowShopProductManageForm: false,
+    isShowShopProductEditModal: false,
 }
 
 export const uiSlice = createSlice({
@@ -25,8 +25,8 @@ export const uiSlice = createSlice({
         setShowCartDeleteModal: (state, action) => {
             state.isShowCartDeleteModal = action.payload;
         },
-        setShowShopProductManageForm: (state, action) => {
-            state.isShowShopProductManageForm = action.payload;
+        setShowShopProductEditModal: (state, action) => {
+            state.isShowShopProductEditModal = action.payload;
         }
     }
 });
@@ -35,6 +35,6 @@ export const {toggleFilterSideBar,
     setCurrentViewShopSubPage,
     setShowCartDeleteAllSelectedModal,
     setShowCartDeleteModal,
-    setShowShopProductManageForm} = uiSlice.actions;
+    setShowShopProductEditModal} = uiSlice.actions;
 
 export default uiSlice.reducer;

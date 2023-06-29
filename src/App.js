@@ -13,6 +13,7 @@ import AdminLayout from "./layouts/AdminLayout"
 import AdminProductManage from "./components/admin/admin_product_manage/AdminProductManage"
 import AdminUserManage from "./components/admin/user_manage/AdminUserManage"
 import ShopLayout from "./layouts/ShopLayout"
+import ShopDashboard from "./components/shop_manage/ShopDashboard"
 import ShopProfile from "./components/shop_manage/ShopProfile"
 import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
 import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
@@ -49,7 +50,7 @@ function App() {
   const { isLogin, setIsLogin, setRole, role } = useContext(LoginContext)
 
   const { setIsChatOpen, isChatOpen } = useContext(ChatContext)
-  
+
   function convertTimestampToDate(timestamp) {
     return new Date(timestamp * 1000)
   }
@@ -156,11 +157,14 @@ function App() {
             </>)}
           {role === "SHOP" && (
             <>
-              <Route path="/" element={<ShopLayout />}>
-                <Route index element={<ShopProfile />} />
-                <Route path="/products" element={<ShopProductManage />} />
-                <Route path="/orders" element={<ShopOrderManage />} />
-                <Route path="/product/new" element={<CreateProduct />} />
+              <Route path="/shop" element={<ShopLayout />}>
+                {/* <Route index element={<ShopDashboard />} /> */}
+                <Route path="/shop" element={<Navigate to="/shop/dashboard" replace />} />
+                <Route path="/shop/dashboard" element={<ShopDashboard />} />
+                <Route path="/shop/profile" element={<ShopProfile />} />
+                <Route path="/shop/products" element={<ShopProductManage />} />
+                <Route path="/shop/orders" element={<ShopOrderManage />} />
+                <Route path="/shop/product/new" element={<CreateProduct />} />
               </Route>
             </>
           )}
