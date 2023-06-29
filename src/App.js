@@ -43,7 +43,6 @@ import UserDeliveryOrder from "./components/user/userOrder/UserDeliveryOrder"
 import UserCompletedOrder from "./components/user/userOrder/UserCompletedOrder"
 import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
 import UserAllOrder from "./components/user/userOrder/UserAllOrder"
-import {ChatContext} from "./context/ChatContext";
 import AdminDashboard from "./components/admin/subpages/AdminDashboard";
 import AdminSubPageType from "./constants/AdminSubPageType";
 import AdminAllShops from "./components/admin/subpages/AdminAllShops";
