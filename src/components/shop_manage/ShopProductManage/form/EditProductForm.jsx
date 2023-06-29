@@ -73,6 +73,7 @@ export default function EditProductForm({onEditSuccess}) {
       productDTO: JSON.stringify(productDTO),
       mainImage: mainImage,
       subImages: subImages,
+      objects: JSON.stringify([]),
     }
 
     console.log("Submitted form! With below data:");
