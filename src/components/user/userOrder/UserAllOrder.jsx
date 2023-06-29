@@ -13,10 +13,6 @@ function UserAllOrder() {
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
   const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
 
-  // const [userOrder, setUserOrder] = useState()
-  // const [total, setTotal] = useState([])
-  // const [shopId, setShopId] = useState("")
-
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   const dispatch = useDispatch()
@@ -67,7 +63,12 @@ function UserAllOrder() {
                   </p>
                 </div>
               </div>
-              <UserOrderList orderid={order.id} />
+              <UserOrderList
+                setIsPopupOpen={setIsPopupOpen}
+                isPopupOpen={isPopupOpen}
+                orderid={order.id}
+                order={order}
+              />
               <div className="flex justify-between py-3 border-b">
                 <p className="">
                   <span className="font-bold">Delivery to: </span>{" "}
@@ -86,7 +87,7 @@ function UserAllOrder() {
                     {order.state !== "CANCELED" ? (
                       <button
                         className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                        onClick={() => setIsPopupOpen(!isPopupOpen)}
+                        onClick={() => setIsPopupOpen(order.id)}
                         disabled={
                           order.state === "PENDING" &&
                           order.paymentStatus === "PAID"
@@ -105,10 +106,6 @@ function UserAllOrder() {
                 )}
               </div>
             </div>
-
-            {isPopupOpen ? (
-              <Feedback order={order} setIsPopupOpen={setIsPopupOpen} />
-            ) : null}
           </div>
         ))}
     </div>

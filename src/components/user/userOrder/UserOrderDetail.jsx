@@ -47,7 +47,7 @@ function UserOrderDetail({ detail, orderid }) {
         <p>Quantity: x{detail.quantity}</p>
       </div>
       <div className="text-md">
-        ${(product.unitPrice * detail.quantity).toFixed(3)}
+        ${(detail.price * detail.quantity).toFixed(3)}
       </div>
     </>
   )

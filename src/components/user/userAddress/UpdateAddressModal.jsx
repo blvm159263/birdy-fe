@@ -6,22 +6,15 @@ import { addNewAddressSlice } from "../../../features/user/userSlice"
 import { Checkbox, Modal, Select, Space } from "antd"
 import TextArea from "antd/es/input/TextArea"
 
-function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
+function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
   const { userid } = useParams()
   const dispatch = useDispatch()
   const userInformation = useSelector((state) => state.user.userInformation)
-  const userAddresses = useSelector((state) => state.user.userAddress)
-
-  const maxId = userAddresses.reduce(
-    (max, obj) => (obj.id > max ? obj.id : max),
-    0
-  )
-  const newId = maxId + 1
 
   const [newAddress, setNewAddress] = useState({
-    id: newId,
+    id: address.id,
     // fullName: "",
-    address: "",
+    address: address.address,
     userId: userid,
     // ward: "string",
     // city: "string",
@@ -29,21 +22,24 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
     isDefault: false,
   })
 
+  const { address: newAddressAddress, ...newAddressRest } = newAddress
+  console.log(newAddressAddress)
+
   useEffect(() => {
-    setNewAddress(newAddress)
-    console.log(newAddress)
-  }, [newAddress])
+    setNewAddress(address)
+  }, [address])
 
   const handleChange = (evt) => {
     const { value, name, checked } = evt.target
 
-    setNewAddress({
-      ...newAddress,
-      [name]: value,
-      [name]: checked,
-    })
+    setNewAddress((prevState) => ({
+      ...prevState,
+      [name]: name === "isDefault" ? checked : value,
+    }))
 
-    console.log(value, name)
+    console.log(newAddress)
+
+    // console.log(value, name)
   }
 
   const handleResetForm = () => {
@@ -55,34 +51,34 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
     })
   }
 
-  const addNewAddressInForm = () => {
+  const updateAddress = (addressid, params) => {
     userApi
-      .addNewAddress(userid, newAddress)
+      .updateAddress(addressid, params)
       .then((response) => console.log(response.data))
       .catch((error) => {
         console.log(error)
       })
   }
 
-  const handleAddAddress = (e) => {
+  const handleUpdateAddress = (e) => {
     e.preventDefault()
 
-    addNewAddressInForm()
+    updateAddress(address.id, newAddressAddress)
 
     handleResetForm()
 
-    setIsAddNew(false)
+    setIsUpdate(false)
 
     fetchAddress(userid)
   }
 
   return (
-    <div className="fixed z-50 lg:w-full sm: w-full p-4  md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center inset-0 bg-black bg-opacity-25">
+    <div className="fixed z-50 lg:w-full sm: w-full p-4  md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center inset-0 bg-black bg-opacity-10">
       <form
-        onSubmit={handleAddAddress}
+        onSubmit={handleUpdateAddress}
         className=" bg-white p-10 lg:h-2/4 lg:w-2/5 sm: w-full flex lg:flex-col sm: flex-col lg:items-between sm: items-center"
       >
-        <h1 className="text-center font-bold text-2xl mb-5">Add new Address</h1>
+        <h1 className="text-center font-bold text-2xl mb-5">Update Address</h1>
         <div className="w-full flex lg:flex-nowrap sm: flex-wrap justify-between mb-5">
           <label className="lg:w-1/5 md: full sm: w-full" htmlFor="name">
             Name
@@ -113,7 +109,6 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
             className="mr-2"
             name="isDefault"
             onChange={handleChange}
-            // value={newAddress.isDefault}
             checked={newAddress.isDefault}
           />
           <label htmlFor="">Set as default address</label>
@@ -121,11 +116,11 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
 
         <div className="flex justify-end">
           <button className="text-sky-500 hover:text-sky-300" type="submit">
-            Add
+            Update
           </button>
           <button
             className="ml-4 text-red-500 hover:text-red-300"
-            onClick={() => setIsAddNew(false)}
+            onClick={() => setIsUpdate(false)}
           >
             Close
           </button>
@@ -135,4 +130,4 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress }) {
   )
 }
 
-export default AddressModal
+export default UpdateAddressModal
