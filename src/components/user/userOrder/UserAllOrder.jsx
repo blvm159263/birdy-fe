@@ -8,7 +8,7 @@ import { getAllOrder } from "../../../features/user/userSlice"
 import Feedback from "./Feedback"
 
 function UserAllOrder() {
-  const { userid } = useParams()
+  const userInformation = useSelector((state) => state.user.userInformation)
   const userOrder = useSelector((state) => state.user.userOrder)
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
   const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
@@ -16,20 +16,23 @@ function UserAllOrder() {
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   const dispatch = useDispatch()
-  const fetchUserOrder = async (userid) => {
-    await orderApi
-      .getAllOrderByUserId(userid)
-      .then((response) => {
-        dispatch(getAllOrder(response.data))
-        // setUserOrder(response.data)
-      })
-      .catch((e) => console.log(e))
+  const fetchUserOrder = async () => {
+    if (userInformation) {
+      await orderApi
+        .getAllOrderByUserId(userInformation.id)
+        .then((response) => {
+          dispatch(getAllOrder(response.data))
+          // setUserOrder(response.data)
+        })
+        .catch((e) => console.log(e))
+    }
+
   }
   // console.log(orderDetailProduct)
   useEffect(() => {
-    fetchUserOrder(userid)
+    fetchUserOrder()
     // setTotal(totalPrice)
-  }, [])
+  }, [userInformation])
 
   return (
     <div>
@@ -78,7 +81,7 @@ function UserAllOrder() {
               </div>
               <div className="py-2 flex justify-end">
                 {order.state === "PENDING" &&
-                order.paymentStatus === "PENDING" ? (
+                  order.paymentStatus === "PENDING" ? (
                   <button className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500">
                     Cancel
                   </button>

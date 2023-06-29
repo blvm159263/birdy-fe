@@ -9,21 +9,26 @@ import { useParams } from "react-router-dom"
 
 import { useDispatch, useSelector } from "react-redux"
 import userApi from "../api/userApi"
-import { getAUser } from "../features/user/userSlice"
+import { getUser } from "../features/user/userSlice"
 import jwtDecode from "jwt-decode"
 import storageService from "../api/storage"
 function UserPage() {
+  console.log("render UserPage");
   const userInformation = useSelector((state) => state.user.userInformation)
   const [isLoading, setIsLoading] = useState(true)
 
   const dispatch = useDispatch()
-  const { userid } = useParams()
+  //const { userid } = useParams()
 
-  const fetchUser = (userid) => {
+  const fetchUser = () => {
+    let token = storageService.getAccessToken();
+    if(token){
+      token = jwtDecode(token);
+    }
     userApi
-      .getUserById(userid)
+      .getUserByPhoneNumber(token.sub)
       .then((response) => {
-        dispatch(getAUser(response.data))
+        dispatch(getUser(response.data))
         setIsLoading(false)
       })
       .catch((error) => {
@@ -33,7 +38,7 @@ function UserPage() {
 
   useEffect(() => {
 
-    fetchUser(userid)
+    fetchUser()
   }, [])
   return (
     <div className="flex h-full bg-gray-200 px-16 py-10">

@@ -12,11 +12,8 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    getAUser: (state, action) => {
-      return {
-        ...state,
-        userInformation: action.payload,
-      }
+    getUser: (state, action) => {
+      state.userInformation = action.payload
     },
 
     getAllOrder: (state, action) => {
@@ -63,7 +60,7 @@ export const userSlice = createSlice({
 })
 
 export const {
-  getAUser,
+  getUser,
   getUserAddresses,
   addNewAddressSlice,
   getAllOrder,

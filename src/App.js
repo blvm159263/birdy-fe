@@ -47,12 +47,15 @@ import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
 import UserAllOrder from "./components/user/userOrder/UserAllOrder"
 import { ChatContext } from "./context/ChatContext";
 import shopApi from "./api/shopApi";
+import { useDispatch, useSelector } from "react-redux";
+import userApi from "./api/userApi";
+import { getUser } from "./features/user/userSlice";
 
 function App() {
   const { isLogin, setIsLogin, setRole, role, setShopId } = useContext(LoginContext)
-
+  const userInformation = useSelector((state) => state.user.userInformation)
+  const dispatch = useDispatch()
   const { setIsChatOpen, isChatOpen } = useContext(ChatContext)
-
   function convertTimestampToDate(timestamp) {
     return new Date(timestamp * 1000)
   }
@@ -77,6 +80,14 @@ function App() {
             }).catch((err) => {
               console.log(err)
             })
+        } else {
+          userApi.getUserByPhoneNumber(token.sub).then((res) => {
+           dispatch(getUser(res.data))
+          }
+          ).catch((err) => {
+            console.log(err)
+          }
+          )
         }
       }
     }
@@ -105,25 +116,25 @@ function App() {
                   <Route index element={<CartPage />} />
                   <Route path="/cart/checkout" element={<CheckoutPage />} />
                 </Route>
-                <Route path="/user/:userid" element={<UserPage />}>
-                  <Route path="/user/:userid" element={<UserInfor />} />
-                  <Route path="/user/:userid/address" element={<UserAddress />} />
-                  <Route path="/user/:userid/order" element={<UserOrder />}>
+                <Route path="/user" element={<UserPage />}>
+                  <Route index element={<UserInfor />} />
+                  <Route path="/user/address" element={<UserAddress />} />
+                  <Route path="/user/order" element={<UserOrder />}>
                     <Route index element={<UserAllOrder />} />
                     <Route
-                      path="/user/:userid/order/pending"
+                      path="/user/order/pending"
                       element={<UserPendingOrder />}
                     />
                     <Route
-                      path="/user/:userid/order/delivery"
+                      path="/user/order/delivery"
                       element={<UserDeliveryOrder />}
                     />
                     <Route
-                      path="/user/:userid/order/completed"
+                      path="/user/order/completed"
                       element={<UserCompletedOrder />}
                     />
                     <Route
-                      path="/user/:userid/order/canceled"
+                      path="/user/order/canceled"
                       element={<UserOrderCancel />}
                     />
                   </Route>

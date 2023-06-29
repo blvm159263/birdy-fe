@@ -10,8 +10,14 @@ import { NotificationContext } from "../../context/NotificationProvider"
 import jwtDecode from "jwt-decode"
 import { AuthContext } from "../../context/AuthContext"
 import userApi from "../../api/userApi"
+import { useDispatch, useSelector } from "react-redux"
+import { getUser } from "../../features/user/userSlice"
 
 function SignIn({ setIsSignIn, setIsForgotPassword }) {
+
+  const userInformation = useSelector((state) => state.user.userInformation)
+  const dispatch = useDispatch()
+
   const openNotificationWithIcon = useContext(NotificationContext)
   const { setIsLogin, setRole } = useContext(LoginContext)
   const { setCurrentUser } = useContext(AuthContext)
@@ -74,7 +80,8 @@ function SignIn({ setIsSignIn, setIsForgotPassword }) {
                 phoneNumber: token.sub,
                 fullName: res.data.fullName,
                 avatarUrl: res.data.avatarUrl,
-              })
+              });
+              dispatch(getUser(res.data))
             })
             setIsLogin(true)
             navigate("/")
