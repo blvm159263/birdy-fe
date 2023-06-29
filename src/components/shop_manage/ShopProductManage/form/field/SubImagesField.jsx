@@ -11,7 +11,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error)
   })
 
-export default function SubImagesField({setSubImages}) {
+export default function SubImagesField({setSubImages, setObjects}) {
   const subImagesFetched = useSelector(state => state.shop.subImages);
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState("")
@@ -19,28 +19,19 @@ export default function SubImagesField({setSubImages}) {
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    // const arr = subImagesFetched.map((subImageFetched) => {
-    //   console.log(subImageFetched.imgUrl);
-    //   return {
-    //     uid: '-1',
-    //     name: 'subImage.png',
-    //     url: subImageFetched.imgUrl,
-    //     status: "done",
-    //   }
-    // });
-    //
-    //
-  // }
-  //   setFileList();
-  //   console.log("Sub image file list");
-  //   console.log(subImagesFetched.map(subImageFetched => {
-  //     return {
-  //       uid: '-1',
-  //       name: 'subImage.png',
-  //       url: subImageFetched.imgUrl,
-  //       status: "done",
-  //     }
-  //   }))
+    if(subImagesFetched) {
+      const mappedArr = subImagesFetched.map((subImageFetched) => {
+        return {
+          id: subImageFetched.id,
+          name: subImageFetched.productName,
+          productId: subImageFetched.productId,
+          url: subImageFetched.imgUrl,
+          status: "done",
+        }
+      });
+      setFileList(mappedArr);
+      setObjects(mappedArr);
+    }
   },[subImagesFetched]);
 
   const handlePreview = async (file) => {
@@ -57,7 +48,8 @@ export default function SubImagesField({setSubImages}) {
       if (
         newFileList[i].type !== "image/jpeg" &&
         newFileList[i].type !== "image/png" &&
-        newFileList[i].type !== "image/jpg"
+        newFileList[i].type !== "image/jpg" &&
+        newFileList[i].id === undefined
       ) {
         newFileList[i].status = "error"
         setError("Only JPG/PNG file can be uploaded!")
@@ -67,7 +59,10 @@ export default function SubImagesField({setSubImages}) {
       }
     }
     setFileList(newFileList);
-    setSubImages(newFileList.map(fileList => fileList.originFileObj));
+    const fileOnlyList = newFileList.map(fileItem => fileItem.originFileObj).filter(fileItem => fileItem !== undefined);
+    setSubImages(fileOnlyList.length !== 0 ? fileOnlyList : null);
+    const objectOnlyList = newFileList.filter(fileItem => fileItem.id !== undefined);
+    setObjects(objectOnlyList);
   }
 
   return (
