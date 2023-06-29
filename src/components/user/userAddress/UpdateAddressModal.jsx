@@ -6,14 +6,23 @@ import { addNewAddressSlice } from "../../../features/user/userSlice"
 import { Checkbox, Modal, Select, Space } from "antd"
 import TextArea from "antd/es/input/TextArea"
 
-function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
+function UpdateAddressModal({
+  setIsUpdate,
+  fetchAddress,
+  address,
+  updated,
+  setUpdated,
+}) {
   const { userid } = useParams()
+  const [addressString, setAddressString] = useState("")
   const dispatch = useDispatch()
   const userInformation = useSelector((state) => state.user.userInformation)
+  const userAddresses = useSelector((state) => state.user.userAddress)
 
+  // console.log(address)
   const [newAddress, setNewAddress] = useState({
     id: address.id,
-    // fullName: "",
+    fullName: userInformation.fullName,
     address: address.address,
     userId: userid,
     // ward: "string",
@@ -22,11 +31,11 @@ function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
     isDefault: false,
   })
 
-  const { address: newAddressAddress, ...newAddressRest } = newAddress
-  console.log(newAddressAddress)
+  // const { address: newAddressAddress, ...newAddressRest } = newAddress
+  // console.log(newAddressAddress, typeof newAddressAddress)
 
   useEffect(() => {
-    setNewAddress(address)
+    setNewAddress(newAddress)
   }, [address])
 
   const handleChange = (evt) => {
@@ -50,10 +59,11 @@ function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
       userId: userid,
     })
   }
+  console.log("TMP", newAddress)
 
-  const updateAddress = (addressid, params) => {
+  const updateAddress = (params) => {
     userApi
-      .updateAddress(addressid, params)
+      .updateAddress(params)
       .then((response) => console.log(response.data))
       .catch((error) => {
         console.log(error)
@@ -63,13 +73,15 @@ function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
   const handleUpdateAddress = (e) => {
     e.preventDefault()
 
-    updateAddress(address.id, newAddressAddress)
+    updateAddress(newAddress)
 
     handleResetForm()
 
     setIsUpdate(false)
 
     fetchAddress(userid)
+
+    setUpdated(true)
   }
 
   return (
@@ -98,9 +110,9 @@ function UpdateAddressModal({ setIsUpdate, fetchAddress, address }) {
           <input
             className="rounded-md lg:w-4/5 md: w-full sm:w-full border text-black"
             type="text"
+            value={newAddress.address}
             onChange={handleChange}
             name="address"
-            value={newAddress.address}
           />
         </div>
         <div className="">

@@ -9,11 +9,11 @@ import NewAddressModal from "../../checkout/NewAddressModal"
 import UpdateAddressModal from "./UpdateAddressModal"
 function UserAddress() {
   const { userid } = useParams()
-
+  const [updated, setUpdated] = useState(false)
   const [isAddNew, setIsAddNew] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
   const userAddresses = useSelector((state) => state.user.userAddress)
-  console.log(userAddresses)
+  // console.log(userAddresses)
   const dispatch = useDispatch()
   // console.log(userAddresses)
 
@@ -31,8 +31,7 @@ function UserAddress() {
 
   useEffect(() => {
     fetchAddress(userid)
-  }, [])
-  console.log(userAddresses)
+  }, [updated])
 
   return (
     <div className="w-5/6 bg-white">
@@ -75,6 +74,8 @@ function UserAddress() {
               </div>
               {isUpdate === item.id && (
                 <UpdateAddressModal
+                  updated={updated}
+                  setUpdated={setUpdated}
                   address={item}
                   setIsUpdate={setIsUpdate}
                   fetchAddress={fetchAddress}

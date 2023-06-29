@@ -29,8 +29,8 @@ const userApi = {
     const url = `/users/${data.userId}/addresses`
     return axiosClient.post(url, data)
   },
-  updateAddress(id, params) {
-    const url = `/addresses/addresses/` + id
+  updateAddress(params) {
+    const url = `/addresses/`
     return axiosClient.put(url, params)
   },
 }
