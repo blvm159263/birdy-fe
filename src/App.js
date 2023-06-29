@@ -27,6 +27,7 @@ import ViewShopPage from "./pages/ViewShopPage"
 import AllShopsPage from "./pages/AllShopsPage"
 import CheckoutPage from "./pages/CheckoutPage"
 import HomeChat from "./pages/HomeChat"
+// import ShopDashboard from "./components/shop_manage/ShopDashboard";
 import { useEffect, useContext, useState } from "react"
 import storageService from "./api/storage"
 import jwtDecode from "jwt-decode"
@@ -158,7 +159,9 @@ function App() {
           {role === "SHOP" && (
             <>
               <Route path="/" element={<ShopLayout />}>
-                <Route index element={<ShopProfile />} />
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="//dashboard" element={<ShopDashboard />} />
+                <Route path="/profile" element={<ShopProfile />} />
                 <Route path="/products" element={<ShopProductManage />} />
                 <Route path="/orders" element={<ShopOrderManage />} />
                 <Route path="/product/new" element={<CreateProduct />} />

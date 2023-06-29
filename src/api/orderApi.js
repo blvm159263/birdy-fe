@@ -10,7 +10,7 @@ const orderApi = {
         return axiosClient.post(url, data);
     },
     getAllOrderByUserId(id) {
-        const url = `/order/users/` + id
+        const url = `/orders/user/` + id
         return axiosClient.get(url)
     },
     getAllOrderDetailsByOrderId(id) {

@@ -31,7 +31,7 @@ function ShopProductManage() {
 
   const handleDeleteSuccess = () => {
     // When a deletion is successful, re-fetch the products
-    fetchProducts();
+    fetchProductForShop();
   };
   return (
     <div className="bg-gray-200 min-h-screen py-10 px-6 w-4/5 absolute top-0 right-0">

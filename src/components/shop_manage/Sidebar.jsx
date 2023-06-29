@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useContext } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button, Menu } from "antd"
 import storageService from "../../api/storage"
 import { LoginContext } from "../../context/LoginProvider"
@@ -115,15 +115,17 @@ function Sidebar() {
 
   const { setIsLogin, setRole } = useContext(LoginContext)
 
+  const navigate = useNavigate()
   const onLogout = () => {
     storageService.removeAccessToken();
     setIsLogin(false);
     setRole(null);
+    navigate("/");
   }
 
 
   const handlePath = function () {
-    switch (window.location.pathname.split("/shop")[1]) {
+    switch (window.location.pathname.split("/")[1]) {
       case "": return 1;
       case "/": return 1;
       case "/dashboard": return 1;
@@ -133,14 +135,6 @@ function Sidebar() {
       case "/product/new": return 5;
     }
   }
-
-  // console.log(handlePath);
-  // useEffect(() => {
-  // console.log(window.location.pathname.split("/shop")[1]);
-  //   // return () => {
-  //   //   window.location.pathname.split("/shop")[1];
-  //   // }
-  // }, [window.location.pathname.split("/shop")[1]])
 
   return (
     <div className="flex w-1/5 fixed">
@@ -160,7 +154,7 @@ function Sidebar() {
           <div className="flex-1 h-full py-7">
             <div className="w-full h-full bg-white">
               <Menu
-                defaultSelectedKeys={[handlePath().toString()]}
+                defaultSelectedKeys={[handlePath()]}
                 defaultOpenKeys={["sub1"]}
                 mode="inline"
                 theme="light"
@@ -171,29 +165,28 @@ function Sidebar() {
                   icon={items[0].icon}
                 >
                   {items[0].label}
-                  <Link to="/shop/dashboard" />
+                  <Link to="/dashboard" />
                 </Menu.Item>
                 <Menu.Item className="font-medium text-base text-gray-400" key="2" icon={items[1].icon}>
                   {items[1].label}
-                  <Link to="/shop/profile" />
+                  <Link to="/profile" />
                 </Menu.Item>
                 <Menu.Item className="font-medium text-base text-gray-400" key="3" icon={items[2].icon}>
                   {items[2].label}
-                  <Link to="/shop/orders" />
+                  <Link to="/orders" />
                 </Menu.Item>
                 <SubMenu className="font-medium text-base text-gray-400" key="sub1" icon={items[3].icon} title={items[3].label}>
                   <Menu.Item className="font-normal text-black" key="4">
                     <span style={{ marginLeft: "38px" }} >{items[3].children[0].label}</span>
-                    <Link to="/shop/products" />
+                    <Link to="/products" />
                   </Menu.Item>
                   <Menu.Item className="font-normal text-black" key="5">
                     <span style={{ marginLeft: "38px" }} >{items[3].children[1].label}</span>
-                    <Link to="/shop/product/new" />
+                    <Link to="/product/new" />
                   </Menu.Item>
                 </SubMenu>
-                <Menu.Item className="font-medium text-base text-gray-400" key="6" icon={items[4].icon}>
+                <Menu.Item onClick={onLogout} className="font-medium text-base text-gray-400" key="6" icon={items[4].icon}>
                   {items[4].label}
-                  <Link to="/logout" />
                 </Menu.Item>
               </Menu>
             </div>
