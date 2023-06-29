@@ -9,11 +9,11 @@ import { getAllOrder } from "../../../features/user/userSlice"
 function UserDeliveryOrder() {
   const { userid } = useParams()
   const userOrder = useSelector((state) => state.user.userOrder)
-  const totalPrice = useSelector((state) => state.user.totalPriceList)
-  const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
+  // const totalPrice = useSelector((state) => state.user.totalPriceList)
+  // const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
 
-  // const [userOrder, setUserOrder] = useState()
-  const [total, setTotal] = useState([])
+  // // const [userOrder, setUserOrder] = useState()
+  // const [total, setTotal] = useState([])
 
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
@@ -30,9 +30,9 @@ function UserDeliveryOrder() {
   useEffect(() => {
     fetchUserOrder(userid)
   }, [])
-  useEffect(() => {
-    setTotal(totalPrice)
-  }, [totalPrice])
+  // useEffect(() => {
+  //   setTotal(totalPrice)
+  // }, [totalPrice])
   const deliveryOrder =
     userOrder &&
     userOrder.filter(
@@ -75,14 +75,19 @@ function UserDeliveryOrder() {
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
               </p>
-              <p>
-                Total Price: $
-                {totalPrice.find((item) => item.id === order.id)?.price}
-              </p>
+              <p>Total Price: ${order.total.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
-              <button className="px-2 py-1 border rounded-md">Feedback</button>
-              <button className="px-2 py-1 border rounded-md ml-2">
+              <button
+                className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
+                disabled
+              >
+                Feedback
+              </button>
+              <button
+                className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500"
+                disabled
+              >
                 Buy Again
               </button>
             </div>
