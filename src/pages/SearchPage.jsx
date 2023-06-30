@@ -1,27 +1,28 @@
-import { faChevronRight, faFilter } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useParams } from "react-router"
-import { Link } from "react-router-dom"
+import {faChevronRight} from "@fortawesome/free-solid-svg-icons"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import React, {useEffect, useState} from "react"
+import {useDispatch, useSelector} from "react-redux"
+import {useParams} from "react-router"
+import {Link} from "react-router-dom"
 import productApi from "../api/productApi"
 import ProductCardList from "../components/product/ProductCardList"
 import SearchType from "../constants/SearchType"
 import SortType from "../constants/SortType"
-import { updateSearchType } from "../features/search/searchSlice"
+import {updateSearchType} from "../features/search/searchSlice"
 import FilterSideBar from "../components/FilterSideBar"
-import { toggleFilterSideBar } from "../features/ui/uiSlice"
+import {toggleFilterSideBar} from "../features/ui/uiSlice"
 import shopApi from "../api/shopApi"
 import StoreCardList from "../components/store/StoreCardList"
 import Pagination from "../features/search/Pagination"
 import SortBar from "../features/search/SortBar"
+import {ControlOutlined} from "@ant-design/icons";
 
 export default function SearchPage() {
   const searchText = useSelector((state) => state.search.searchText)
   const dispatch = useDispatch()
   const [products, setProducts] = useState([])
   const isShowing = useSelector((state) => state.ui.isShowFilterSideBar)
-  const [oldSearchText, setOldSearchText] = useState(undefined)
+  const [oldSearchText, setOldSearchText] = useState('')
   const triggerSearch = useSelector((state) => state.search.searchTrigger)
   const sortType = useSelector((state) => state.search.sortType)
   const rating = useSelector((state) => state.search.rating)
@@ -149,22 +150,23 @@ export default function SearchPage() {
 
       {/* Search product results */}
       <section className="container mx-auto mt-6">
-        <div className="flex justify-between mb-4">
-          <p className="text-neutral-500">
-            {searchType} -{" "}
-            <span className="text-neutral-500">
-              Search result for “
-              <span className="text-orange-500">{oldSearchText}</span>”
-            </span>
-          </p>
+        <div className="flex justify-between items-baseline mb-2">
+          <div className='flex items-baseline'>
+            <p className='text-lg font-bold mr-2'>{searchType}</p>
+            {oldSearchText.length > 0 &&
+              <span className="text-neutral-500">
+                Search result for “
+                <span className="text-orange-500">{oldSearchText}</span>”
+              </span>
+            }
+          </div>
           <button
             onClick={() => {
               dispatch(toggleFilterSideBar())
             }}
-            className="text-orange-500 text-lg font-semibold"
+            className="bg-orange-500 text-white py-1 hover:bg-orange-400 active:bg-orange-500 duration-200 px-5 rounded text-lg font-semibold"
           >
-            <FontAwesomeIcon className="mr-2" icon={faFilter} />
-            Filter
+            <ControlOutlined /> Filter
           </button>
         </div>
 
