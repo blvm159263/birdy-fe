@@ -11,7 +11,7 @@ export default function SortBar({totalPage}) {
   const dispatch = useDispatch();
 
   return (
-    <div className='sortByMenu flex justify-between items-center bg-gradient-to-r from-sky-500 to-blue-500 p-4 py-0 rounded-sm mb-6 text-xs md:text-base'>
+    <div className='sortByMenu flex justify-between items-center bg-gradient-to-r from-sky-500 to-blue-500 p-4 py-1 rounded-sm mb-6 text-xs md:text-base'>
       <div className='flex items-center flex-wrap gap-2'>
         <p>Sort by</p>
         <button onClick={() => dispatch(updateSortType(SortType.DEFAULT))} className={`${sortType === SortType.DEFAULT ? "text-white bg-orange-500" : "bg-white"} py-1 px-4 rounded-sm`}>Relevant</button>

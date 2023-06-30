@@ -164,7 +164,7 @@ export default function SearchPage() {
             onClick={() => {
               dispatch(toggleFilterSideBar())
             }}
-            className="bg-orange-500 text-white py-1 hover:bg-orange-400 active:bg-orange-500 duration-200 px-5 rounded text-lg font-semibold"
+            className="bg-orange-500 text-white py-1 hover:bg-orange-400 active:bg-orange-500 duration-200 px-5 rounded text-sm md:text-lg font-semibold"
           >
             <ControlOutlined /> Filter
           </button>
