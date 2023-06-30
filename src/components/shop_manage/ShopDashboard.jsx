@@ -5,10 +5,10 @@ import LineChart from "../chart/LineChart"
 function ShopDashboard() {
 
     return (
-        <div className="bg-gray-300 p-10 w-4/5 absolute top-0 right-0 h-screen">
+        <div className="bg-gray-200 p-4 col-span-9 min-h-screen">
             {/* <h1 className="text-center mb-10 text-2xl font-bold">Shop Dashboard</h1> */}
 
-            <div className=" relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div className="pt-7 pb-14 px-16 bg-white">
 
                     <div className="flex justify-between">

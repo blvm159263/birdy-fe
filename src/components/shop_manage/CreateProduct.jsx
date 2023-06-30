@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect, useContext } from "react"
-import { Select, Modal, Upload, DatePicker } from "antd"
-import { PlusOutlined } from "@ant-design/icons"
+import React, {useContext, useRef, useState} from "react"
+import {DatePicker, Modal, Select, Upload} from "antd"
+import {PlusOutlined} from "@ant-design/icons"
 import productApi from "../../api/productApi"
-import { NotificationContext } from "../../context/NotificationProvider"
-import { LoginContext } from "../../context/LoginProvider"
+import {NotificationContext} from "../../context/NotificationProvider"
+import {LoginContext} from "../../context/LoginProvider"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
 
@@ -276,8 +276,8 @@ function CreateProduct() {
     }
 
     return (
-        <div className="bg-gray-300 p-10 w-4/5 absolute top-0 right-0">
-            <h1 className="text-2xl text-center font-bold mb-10">Create new product</h1>
+        <div className="bg-gray-200 p-4 col-span-9 min-h-screen">
+            <h1 className="text-2xl text-center font-bold mb-5">Create new product</h1>
 
             <div className=" relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div className="p-4 bg-white">

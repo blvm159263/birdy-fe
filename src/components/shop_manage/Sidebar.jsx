@@ -150,8 +150,8 @@ function Sidebar() {
   }
 
   return (
-    <div className="flex w-1/5 fixed">
-      <div className="flex flex-col h-screen py-10 bg-white shadow w-full">
+    <div className="flex col-span-3 border-r shadow">
+      <div className="flex flex-col min-h-screen py-10 bg-white shadow w-full">
         <div className="space-y-3">
           <div className="flex flex-col items-center justify-center">
             <h2 className="text-xl font-bold">Shop Manage</h2>

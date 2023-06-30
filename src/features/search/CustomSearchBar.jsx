@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {triggerSearch, updateSearchText} from "./searchSlice";
 import React from "react";
 
-export default function ShopManageProductSearchBar() {
+export default function CustomSearchBar({placeholder}) {
   const searchText = useSelector(state => state.search.searchText);
   const dispatch = useDispatch();
 
@@ -13,7 +13,7 @@ export default function ShopManageProductSearchBar() {
         <span className="sr-only">Search icon</span>
       </button>
       <input value={searchText} onKeyDown={(e) => e.key === "Enter" ? dispatch(triggerSearch()) : ''} onChange={e => dispatch(updateSearchText(e.target.value))} type="text" id="search-navbar"
-             className="block w-full p-2 pr-10 text-sm border text-neutral-800 border-neutral-300 rounded bg-white placeholder-neutral-400 outline-0" placeholder="Search product..."/>
+             className="block w-full p-2 pr-10 text-sm border text-neutral-800 border-neutral-300 rounded bg-white placeholder-neutral-400 outline-0" placeholder={placeholder}/>
     </div>
   )
 }
