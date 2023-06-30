@@ -127,7 +127,10 @@ export default function NavBar() {
             <li>
               <Link
                 to={`/search/${SearchType.ALL_PRODUCT.text}`}
-                onClick={() => dispatch(resetAllState())}
+                onClick={() => {
+                  dispatch(resetAllState());
+                  toggleMobileMenu();
+                }}
               >
                 All Products
               </Link>
@@ -135,7 +138,10 @@ export default function NavBar() {
             <li>
               <Link
                 to={`/search/${SearchType.BIRD.text}`}
-                onClick={() => dispatch(resetAllState())}
+                onClick={() => {
+                  dispatch(resetAllState());
+                  toggleMobileMenu();
+                }}
               >
                 Birds
               </Link>
@@ -143,7 +149,10 @@ export default function NavBar() {
             <li>
               <Link
                 to={`/search/${SearchType.ACCESSORY.text}`}
-                onClick={() => dispatch(resetAllState())}
+                onClick={() => {
+                  dispatch(resetAllState());
+                  toggleMobileMenu();
+                }}
               >
                 Accessories
               </Link>
@@ -151,7 +160,10 @@ export default function NavBar() {
             <li>
               <Link
                 to={`/search/${SearchType.FOOD.text}`}
-                onClick={() => dispatch(resetAllState())}
+                onClick={() => {
+                  dispatch(resetAllState());
+                  toggleMobileMenu();
+                }}
               >
                 Foods
               </Link>
