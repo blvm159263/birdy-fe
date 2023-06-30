@@ -1,13 +1,15 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Link} from "react-router-dom";
 import adminApi from "../../api/adminApi";
+import {NotificationContext} from "../../context/NotificationProvider";
 
 export default function ProductRequestCard({product}) {
+  const openNotificationWithIcon = useContext(NotificationContext);
 
   function onApprove() {
     adminApi.approveProductById(product.id).then((response) => {
       if(response.status === 200) {
-
+        openNotificationWithIcon('success', 'Approved product ' + product.productName);
       }
     })
   }
@@ -28,7 +30,7 @@ export default function ProductRequestCard({product}) {
         <hr className='my-3'/>
         <p className='text-sm'>Requested by</p>
         <Link to={`/view-shop/${product.shopId}`} className='font-semibold underline hover:text-neutral-500 active:text-neutral-700 duration-200'>{product.shopName}</Link>
-        <button className='w-full bg-gradient-to-r from-green-300 via-green-500 to-green-400 p-1 mt-3 rounded-lg border border-green-400 font-semibold hover:brightness-110 active:brightness-95 duration-200'>Approve</button>
+        <button onClick={() => onApprove()} className='w-full bg-gradient-to-r from-green-300 via-green-500 to-green-400 p-1 mt-3 rounded-lg border border-green-400 font-semibold hover:brightness-110 active:brightness-95 duration-200'>Approve</button>
       </div>
     </div>
   )

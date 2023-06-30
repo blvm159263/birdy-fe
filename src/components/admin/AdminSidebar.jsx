@@ -1,13 +1,27 @@
 import {AppstoreAddOutlined, HomeOutlined, LogoutOutlined, ShopOutlined, UserOutlined} from "@ant-design/icons";
 import {useDispatch, useSelector} from "react-redux";
 import AdminSubPageType from "../../constants/AdminSubPageType";
-import {Link} from "react-router-dom";
-import {useEffect} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {useContext, useEffect} from "react";
 import {resetAllState} from "../../features/search/searchSlice";
+import storageService from "../../api/storage";
+import {LoginContext} from "../../context/LoginProvider";
+import {NotificationContext} from "../../context/NotificationProvider";
 
 export default function AdminSidebar() {
+  const {setIsLogin, setRole} = useContext(LoginContext);
   const currentPage = useSelector(state => state.ui.currentAdminSubPage);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const openNotificationWithIcon = useContext(NotificationContext);
+
+  const onLogout = () => {
+    storageService.removeAccessToken();
+    setIsLogin(false);
+    setRole(null);
+    navigate("/");
+    openNotificationWithIcon('success', 'You have logged out!');
+  }
 
   useEffect(() => {
     dispatch(resetAllState());
@@ -63,10 +77,10 @@ export default function AdminSidebar() {
             </Link>
           </li>
           <li>
-            <Link to='/logout' className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
+            <button onClick={() => onLogout()} className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
               <LogoutOutlined />
               <span className="ml-2 text-sm tracking-wide truncate">Logout</span>
-            </Link>
+            </button>
           </li>
         </ul>
       </div>
