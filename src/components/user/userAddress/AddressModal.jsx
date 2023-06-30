@@ -7,7 +7,6 @@ import { Checkbox, Modal, Select, Space } from "antd"
 import TextArea from "antd/es/input/TextArea"
 
 function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
-  const dispatch = useDispatch()
   const userInformation = useSelector((state) => state.user.userInformation)
   const userAddresses = useSelector((state) => state.user.userAddress)
 

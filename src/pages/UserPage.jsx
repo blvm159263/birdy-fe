@@ -13,19 +13,19 @@ import { getUser } from "../features/user/userSlice"
 import jwtDecode from "jwt-decode"
 import storageService from "../api/storage"
 function UserPage() {
-  console.log("render UserPage");
+  console.log("render UserPage")
   const userInformation = useSelector((state) => state.user.userInformation)
   const [isLoading, setIsLoading] = useState(true)
 
   const dispatch = useDispatch()
   //const { userid } = useParams()
 
-  const fetchUser = () => {
-    let token = storageService.getAccessToken();
-    if(token){
-      token = jwtDecode(token);
+  const fetchUser = async () => {
+    let token = storageService.getAccessToken()
+    if (token) {
+      token = jwtDecode(token)
     }
-    userApi
+    await userApi
       .getUserByPhoneNumber(token.sub)
       .then((response) => {
         dispatch(getUser(response.data))
@@ -37,7 +37,6 @@ function UserPage() {
   }
 
   useEffect(() => {
-
     fetchUser()
   }, [])
   return (
