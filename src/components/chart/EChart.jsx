@@ -19,49 +19,53 @@ function EChart() {
   const [currentYear, setCurrentYear] = useState(null);
 
   const fetchYear = async () => {
-    try {
-      await chartApi.getAllYearsProduct(shopId)
-      .then((res) => {
-        // console.log('hi');
-        setAllYears(res.data);
-        setCurrentYear(res.data[0]);
-      })
-    } catch (error) {
-      console.log(error);
-      setAllYears([new Date().getFullYear()]);
-      setCurrentYear([new Date().getFullYear()]);
+    if(shopId) {
+      try {
+        await chartApi.getAllYearsProduct(shopId)
+          .then((res) => {
+            // console.log('hi');
+            setAllYears(res.data);
+            setCurrentYear(res.data[0]);
+          })
+      } catch (error) {
+        console.log(error);
+        setAllYears([new Date().getFullYear()]);
+        setCurrentYear([new Date().getFullYear()]);
+      }
     }
   }
 
   useEffect(() => {
     fetchYear();
-  }, [])
+  }, [shopId])
 
   const fetchData = async () => {
-    try {
-      await chartApi.getChartProduct(shopId, currentYear)
-        .then((res) => {
-          console.log(res);
-          setAll(res.data.allInYear);
-          setBird(res.data.allBirds);
-          setAccessories(res.data.allAccessories);
-          setFood(res.data.allFood);
+    if (shopId && currentYear) {
+      try {
+        await chartApi.getChartProduct(shopId, currentYear)
+          .then((res) => {
+            console.log(res);
+            setAll(res.data.allInYear);
+            setBird(res.data.allBirds);
+            setAccessories(res.data.allAccessories);
+            setFood(res.data.allFood);
 
-          const chartData = res.data.chartData;
+            const chartData = res.data.chartData;
 
-          // Update eChart.series.data with chartData
-          const updatedSeries = [{ ...eChart.series[0], data: chartData }];
-          // const updatedChart = { ...eChart, series: updatedSeries };
+            // Update eChart.series.data with chartData
+            const updatedSeries = [{ ...eChart.series[0], data: chartData }];
+            // const updatedChart = { ...eChart, series: updatedSeries };
 
-          setData(updatedSeries);
-        })
-    } catch (error) {
-      console.log(error);
+            setData(updatedSeries);
+          })
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   useEffect(() => {
     fetchData();
-  }, [currentYear])
+  }, [shopId, currentYear])
 
   const formatNumber = (number) => {
     if (number >= 1000000000) {

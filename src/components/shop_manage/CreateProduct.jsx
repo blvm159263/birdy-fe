@@ -257,7 +257,7 @@ function CreateProduct() {
 
         // productDto.imageMain = params.mainImage === undefined ? null : params.mainImage;
         // productDto.subImages = params.subImages;
-        console.log(productDto)
+        console.log(params)
         productApi
             .addNewProduct(params)
             .then((res) => {

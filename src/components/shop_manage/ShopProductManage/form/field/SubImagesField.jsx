@@ -11,7 +11,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error)
   })
 
-export default function SubImagesField({setSubImages}) {
+export default function SubImagesField({setSubImages, setObjects}) {
   const subImagesFetched = useSelector(state => state.shop.subImages);
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState("")
@@ -19,7 +19,18 @@ export default function SubImagesField({setSubImages}) {
   const [fileList, setFileList] = useState([]);
 
   useEffect(() => {
-    console.log(subImagesFetched);
+    if(subImagesFetched) {
+      const mappedArr = subImagesFetched.map((subImageFetched) => {
+        return {
+          uid: subImageFetched.id,
+          name: subImageFetched.productName,
+          status: "done",
+          url: subImageFetched.imgUrl,
+        }
+      });
+      setFileList(mappedArr);
+      setObjects(mappedArr);
+    }
   },[subImagesFetched]);
 
   const handlePreview = async (file) => {
@@ -36,7 +47,8 @@ export default function SubImagesField({setSubImages}) {
       if (
         newFileList[i].type !== "image/jpeg" &&
         newFileList[i].type !== "image/png" &&
-        newFileList[i].type !== "image/jpg"
+        newFileList[i].type !== "image/jpg" &&
+        newFileList[i].url === undefined
       ) {
         newFileList[i].status = "error"
         setError("Only JPG/PNG file can be uploaded!")
@@ -46,7 +58,10 @@ export default function SubImagesField({setSubImages}) {
       }
     }
     setFileList(newFileList);
-    setSubImages(newFileList.map(fileList => fileList.originFileObj));
+    const fileOnlyList = newFileList.map(fileItem => fileItem.originFileObj).filter(fileItem => fileItem !== undefined);
+    setSubImages(fileOnlyList.length !== 0 ? fileOnlyList : null);
+    const objectOnlyList = newFileList.filter(fileItem => fileItem.url !== undefined);
+    setObjects(objectOnlyList);
   }
 
   return (

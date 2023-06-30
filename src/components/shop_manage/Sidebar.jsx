@@ -1,8 +1,8 @@
-import { React, useState, useEffect, useContext } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { Button, Menu } from "antd"
+import {React, useContext, useEffect, useState} from "react"
+import {Link, useNavigate} from "react-router-dom"
+import {Menu} from "antd"
 import storageService from "../../api/storage"
-import { LoginContext } from "../../context/LoginProvider"
+import {LoginContext} from "../../context/LoginProvider"
 import shopApi from "../../api/shopApi"
 
 function getItem(label, key, icon, children, type) {
@@ -122,14 +122,16 @@ function Sidebar() {
   }
 
   const fetchShop = async () => {
-    await shopApi.getShopInformationByShopId(shopId)
-      .then((res) => {
-        console.log(res);
-        setShop(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+    if (shopId) {
+      await shopApi.getShopInformationByShopId(shopId)
+        .then((res) => {
+          console.log(res);
+          setShop(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
   }
 
   useEffect(() => {
@@ -139,13 +141,11 @@ function Sidebar() {
 
   const handlePath = function () {
     switch (window.location.pathname.split("/")[1]) {
-      case "": return 1;
-      case "/": return 1;
-      case "/dashboard": return 1;
-      case "/profile": return 2;
-      case "/orders": return 3;
-      case "/products": return 4;
-      case "/product/new": return 5;
+      case "dashboard": return 1;
+      case "profile": return 2;
+      case "orders": return 3;
+      case "products": return 4;
+      case "product/new": return 5;
     }
   }
 
@@ -171,7 +171,7 @@ function Sidebar() {
             >
 
               <Menu
-                defaultSelectedKeys={[handlePath()]}
+                // defaultSelectedKeys={[handlePath().toString()]}
                 defaultOpenKeys={["sub1"]}
                 mode="inline"
                 theme="light"
