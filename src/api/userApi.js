@@ -45,6 +45,11 @@ const userApi = {
     const url = `/addresses/`
     return axiosClient.put(url, params)
   },
+  updateUserInformation(params) {
+    const url = `/users/`
+    console.log(params)
+    return axiosClient.put(url, params)
+  },
 }
 
 export default userApi
