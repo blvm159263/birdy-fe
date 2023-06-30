@@ -37,7 +37,7 @@ const Chats = () => {
           onClick={() => handleSelect(chat[1].userInfo)}
         >
           <div className="avatar">
-            <img className="w-full h-full" src={chat[1].userInfo.avatarUrl} alt="" />
+            <img className="w-full h-full" src={chat[1].userInfo.avatarUrl ? chat[1].userInfo.avatarUrl : ""} alt="" />
           </div>
 
           <div className="userChatInfo">

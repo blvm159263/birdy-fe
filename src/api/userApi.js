@@ -46,7 +46,7 @@ const userApi = {
     return axiosClient.put(url, params)
   },
   updateUserInformation(params) {
-    const url = `/users/`
+    const url = `/users`
     console.log(params)
     return axiosClient.put(url, params)
   },
