@@ -5,20 +5,20 @@ import { Link } from 'react-router-dom'
 
 export default function StoreCard({shop, hideView = false}) {
   return (
-    <div className='storeCard flex flex-wrap bg-white rounded-sm py-4 px-2 md:px-6'>
-      <div className='flex mr-2 md:mr-6'>
-        <img className='w-12 h-12 md:w-16 md:h-16 mb-4' src="/assets/images/avatar-empty.png" alt="avatar" />
+    <div className='storeCard grid grid-cols-12 bg-white rounded-sm py-4 px-2 md:px-6'>
+      <div className='col-span-8 md:col-span-5 flex mr-2 md:mr-6'>
+        <img className='w-10 h-10 md:w-12 md:h-12 mb-4' src="/assets/images/avatar-empty.png" alt="avatar" />
         <div className='ml-2 mr-2 md:mr-6'>
-          <h2 className='text-xs md:text-xl font-bold'>{shop.shopName}</h2>
-          <p className='text-xs md:text-lg'>@{shop.shopName}</p>
+          <h2 className='text-xs md:text-base font-bold'>{shop.shopName}</h2>
+          <p className='text-xs md:text-base'>@{shop.shopName}</p>
         </div>
-        <div className={hideView ? 'self-center' : ''}>
-          <Link to="/search" className='block bg-gradient-to-r from-blue-500 to-sky-500 text-center rounded-sm py-1 px-2 md:px-8 font-semibold text-white text-xs md:text-sm mb-1'>Chat</Link>
-          {hideView ? '' : <Link to={`/view-shop/${shop.id}`} className='block bg-gradient-to-r from-blue-500 to-sky-500 text-center rounded-sm py-1 px-2 md:px-8 font-semibold text-white text-xs md:text-sm'>View</Link>}
+        <div className={hideView ? 'self-center' : 'flex-grow'}>
+          <Link to="/search" className='block bg-gradient-to-r from-blue-500 to-sky-500 text-center rounded-sm py-1 px-2 font-semibold text-white text-xs md:text-sm mb-1'>Chat</Link>
+          {hideView ? '' : <Link to={`/view-shop/${shop.id}`} className='block bg-gradient-to-r from-blue-500 to-sky-500 text-center rounded-sm py-1 px-2 w-full font-semibold text-white text-xs md:text-sm'>View</Link>}
         </div>
       </div>
-      <div className='border border-neutral-100 mr-2 md:mr-6 hidden lg:block' />
-      <div className='col-span-4 mr-2 md:mr-6'>
+      {/*<div className='border border-neutral-100 mr-2 md:mr-6 hidden lg:block' />*/}
+      <div className='col-span-4 md:col-span-3 mr-2 md:mr-6'>
         {/* TODO: Store total product */}
         <p className='text-xs md:text-base'><span className='font-semibold'>{'24'}</span> Products</p>
         {/* TODO: Store rating */}
@@ -33,8 +33,8 @@ export default function StoreCard({shop, hideView = false}) {
           <p className="ml-2 text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400">(3)</p>
         </div>
       </div>
-      <div className='border border-neutral-100 mr-2 md:mr-6 hidden lg:block' />
-      <div className='flex items-center'>
+      {/*<div className='border border-neutral-100 mr-2 md:mr-6 hidden lg:block' />*/}
+      <div className='col-span-12 md:col-span-4 flex items-center mt-3 md:mt-0'>
         <FontAwesomeIcon className='text-sky-500 pr-2 md:pr-4 w-6 h-6 md:w-8 md:h-8' icon={faLocationDot} size='2x' />
         <p className='text-xs md:text-base'>{shop.address}</p>
       </div>
