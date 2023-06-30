@@ -156,8 +156,8 @@ function ShopProfile() {
 
   return (
 
-    <div className="bg-gray-300 p-10 w-4/5 absolute top-0 right-0 h-screen">
-      <h1 className="text-center mb-10 text-2xl font-bold">Shop Profile</h1>
+    <div className="bg-gray-200 p-4 col-span-9 min-h-screen">
+      <h1 className="text-center mb-5 text-2xl font-bold">Shop Profile</h1>
 
       <div className=" relative overflow-x-auto shadow-md sm:rounded-lg">
         <div className="pt-7 pb-14 px-16 bg-white">

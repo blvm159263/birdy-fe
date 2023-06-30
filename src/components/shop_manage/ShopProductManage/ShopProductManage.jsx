@@ -42,9 +42,9 @@ function ShopProductManage() {
     fetchProductForShop();
   };
   return (
-    <div className="bg-gray-200 min-h-screen py-10 px-6 w-4/5 absolute top-0 right-0">
+    <div className="bg-gray-200 p-4 col-span-9 min-h-screen">
       <ShopProductEditModal onEditSuccess={fetchProductForShop} />
-      <h1 className="text-2xl text-center font-bold mb-10">Product Management</h1>
+      <h1 className="text-2xl text-center font-bold mb-5">Product Management</h1>
 
       {/* Search bar */}
       <ShopManageProductSearchBar/>

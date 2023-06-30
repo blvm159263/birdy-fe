@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef, useContext } from "react"
+import React, {useContext, useEffect, useRef, useState} from "react"
 import shopApi from "../../api/shopApi"
 import orderApi from "../../api/orderApi";
-import { Table, Tag, Badge, Steps, Button, Modal, Radio, Space } from 'antd';
-import { NotificationContext } from "../../context/NotificationProvider"
-import { LoginContext } from "../../context/LoginProvider";
-import { set } from "date-fns";
+import {Badge, Button, Modal, Radio, Space, Steps, Table, Tag} from 'antd';
+import {NotificationContext} from "../../context/NotificationProvider"
+import {LoginContext} from "../../context/LoginProvider";
 
 function ShopOrderManage() {
   const openNotificationWithIcon = useContext(NotificationContext);
@@ -322,8 +321,8 @@ function ShopOrderManage() {
   }
 
   return (
-    <div className="bg-gray-300 p-10 w-4/5 absolute top-0 h-screen right-0">
-      <h1 className="text-2xl text-center font-bold mb-10">Order Manage</h1>
+    <div className="bg-gray-200 p-4 col-span-9 min-h-screen">
+      <h1 className="text-2xl text-center font-bold mb-5">Order Manage</h1>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
         <div className="p-4 bg-white">
