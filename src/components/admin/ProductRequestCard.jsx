@@ -11,6 +11,8 @@ export default function ProductRequestCard({product}) {
       if(response.status === 200) {
         openNotificationWithIcon('success', 'Approved product ' + product.productName);
       }
+    }).catch((error) => {
+      openNotificationWithIcon('error', 'Error while approving product');
     })
   }
 
