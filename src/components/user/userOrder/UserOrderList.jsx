@@ -10,7 +10,7 @@ import {
 import UserOrderDetail from "./UserOrderDetail"
 import Feedback from "./Feedback"
 
-function UserOrderList({ orderid, order, setIsPopupOpen, isPopupOpen }) {
+function UserOrderList({ orderid, isDone }) {
   // const dispatch = useDispatch()
   // const [product, setProduct] = useState([])
   const [orderDetail, setOrderDetail] = useState([])
@@ -48,7 +48,11 @@ function UserOrderList({ orderid, order, setIsPopupOpen, isPopupOpen }) {
         orderDetail.map((detail) => (
           <div key={detail.id}>
             <div className="flex justify-between py-2 border-b">
-              <UserOrderDetail orderid={orderid} detail={detail} />
+              <UserOrderDetail
+                isDone={isDone}
+                orderid={orderid}
+                detail={detail}
+              />
             </div>
           </div>
         ))}

@@ -23,6 +23,7 @@ function UserAllOrder() {
   const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
   const orderFeedbacked = useSelector((state) => state.user.orderFeedbacked)
   // console.log(orderFeedbacked)
+  const isDone = true
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   const dispatch = useDispatch()
@@ -126,6 +127,7 @@ function UserAllOrder() {
                 isPopupOpen={isPopupOpen}
                 orderid={order.id}
                 order={order}
+                isDone={order.state === "DONE" ? isDone : !isDone}
               />
               <div className="flex justify-between py-3 border-b">
                 <p className="">
@@ -149,12 +151,12 @@ function UserAllOrder() {
                       Buy Again
                     </button>
 
-                    <button
+                    {/* <button
                       className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
                       onClick={() => setIsPopupOpen(order.id)}
                     >
                       Feedback
-                    </button>
+                    </button> */}
                   </>
                 ) : (
                   ""

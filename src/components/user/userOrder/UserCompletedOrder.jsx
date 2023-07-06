@@ -8,6 +8,8 @@ import { getAllOrder } from "../../../features/user/userSlice"
 
 function UserCompletedOrder() {
   const { userid } = useParams()
+  const isDone = true
+
   const userOrder = useSelector((state) => state.user.userOrder)
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
   // // const [userOrder, setUserOrder] = useState()
@@ -70,7 +72,11 @@ function UserCompletedOrder() {
                 </p>
               </div>
             </div>
-            <UserOrderList key={order.id} orderid={order.id} />
+            <UserOrderList
+              orderid={order.id}
+              order={order}
+              isDone={order.state === "DONE" ? isDone : !isDone}
+            />
             <div className="flex justify-between py-3 border-b">
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
@@ -78,9 +84,9 @@ function UserCompletedOrder() {
               <p>Total Price: ${order.total.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
-              <button className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500">
+              {/* <button className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500">
                 Feedback
-              </button>
+              </button> */}
               <button className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500">
                 Buy Again
               </button>
