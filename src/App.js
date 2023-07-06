@@ -1,7 +1,13 @@
-import { BrowserRouter, Route, Routes, useNavigate, Navigate } from "react-router-dom"
-import { FloatButton } from 'antd';
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useNavigate,
+  Navigate,
+} from "react-router-dom"
+import { FloatButton } from "antd"
 import "./App.css"
-import "./style.scss";
+import "./style.scss"
 // Components
 import Layout from "./layouts/Layout"
 import HomePage from "./pages/HomePage"
@@ -29,7 +35,7 @@ import HomeChat from "./pages/HomeChat"
 import { useEffect, useContext, useState } from "react"
 import storageService from "./api/storage"
 import jwtDecode from "jwt-decode"
-import {LoginContext} from "./context/LoginProvider"
+import { LoginContext } from "./context/LoginProvider"
 import AllFeaturedPage from "./pages/AllFeaturedPage"
 import ShopHomeSubPage from "./components/store/ShopHomeSubPage"
 import ShopAllProductsSubPage from "./components/store/ShopAllProductsSubPage"
@@ -43,19 +49,21 @@ import UserDeliveryOrder from "./components/user/userOrder/UserDeliveryOrder"
 import UserCompletedOrder from "./components/user/userOrder/UserCompletedOrder"
 import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
 import UserAllOrder from "./components/user/userOrder/UserAllOrder"
-import AdminDashboard from "./components/admin/subpages/AdminDashboard";
-import AdminSubPageType from "./constants/AdminSubPageType";
-import AdminAllShops from "./components/admin/subpages/AdminAllShops";
-import AdminNewShopRequests from "./components/admin/subpages/AdminNewShopRequests";
-import AdminProductRequests from "./components/admin/subpages/AdminProductRequests";
-import { ChatContext } from "./context/ChatContext";
-import shopApi from "./api/shopApi";
-import { useDispatch, useSelector } from "react-redux";
-import userApi from "./api/userApi";
-import { getUser } from "./features/user/userSlice";
+import AdminDashboard from "./components/admin/subpages/AdminDashboard"
+import AdminSubPageType from "./constants/AdminSubPageType"
+import AdminAllShops from "./components/admin/subpages/AdminAllShops"
+import AdminNewShopRequests from "./components/admin/subpages/AdminNewShopRequests"
+import AdminProductRequests from "./components/admin/subpages/AdminProductRequests"
+import { ChatContext } from "./context/ChatContext"
+import shopApi from "./api/shopApi"
+import { useDispatch, useSelector } from "react-redux"
+import userApi from "./api/userApi"
+import { getUser } from "./features/user/userSlice"
+import WishList from "./components/wishList/WishList"
 
 function App() {
-  const { isLogin, setIsLogin, setRole, role, setShopId } = useContext(LoginContext)
+  const { isLogin, setIsLogin, setRole, role, setShopId } =
+    useContext(LoginContext)
   const userInformation = useSelector((state) => state.user.userInformation)
   const dispatch = useDispatch()
   const { setIsChatOpen, isChatOpen } = useContext(ChatContext)
@@ -76,30 +84,32 @@ function App() {
         setIsLogin(true)
         setRole(token.role)
         if (token.role === "SHOP") {
-          shopApi.getShopInformationByPhoneNumber(token.sub)
+          shopApi
+            .getShopInformationByPhoneNumber(token.sub)
             .then((res) => {
-              console.log(res.data);
+              console.log(res.data)
               setShopId(res.data.id)
-            }).catch((err) => {
+            })
+            .catch((err) => {
               console.log(err)
             })
         } else {
-          userApi.getUserByPhoneNumber(token.sub).then((res) => {
-           dispatch(getUser(res.data))
-          }
-          ).catch((err) => {
-            console.log(err)
-          }
-          )
+          userApi
+            .getUserByPhoneNumber(token.sub)
+            .then((res) => {
+              dispatch(getUser(res.data))
+            })
+            .catch((err) => {
+              console.log(err)
+            })
         }
       }
     }
   }, [])
 
   const showChat = () => {
-    setIsChatOpen(true);
-  };
-
+    setIsChatOpen(true)
+  }
 
   return (
     <>
@@ -115,6 +125,7 @@ function App() {
                   <Route path=":searchType" element={<SearchPage />} />
                 </Route>
                 <Route path="/detail-item/:id" element={<DetailItemPage />} />
+                <Route path="/wishlist" element={<WishList />} />
                 <Route path="/cart">
                   <Route index element={<CartPage />} />
                   <Route path="/cart/checkout" element={<CheckoutPage />} />
@@ -179,7 +190,8 @@ function App() {
                 </Route>
                 <Route path="*" element={<NoPage />} />
               </Route>
-            </>)}
+            </>
+          )}
           {role === "SHOP" && (
             <>
               <Route path="/" element={<ShopLayout />}>
@@ -197,33 +209,45 @@ function App() {
 
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path={AdminSubPageType.DASHBOARD.path} element={<AdminDashboard />} />
-            <Route path={AdminSubPageType.ALL_SHOPS.path} element={<AdminAllShops />} />
-            <Route path={AdminSubPageType.NEW_SHOP_REQUESTS.path} element={<AdminNewShopRequests />} />
-            <Route path={AdminSubPageType.NEW_PRODUCT_REQUESTS.path} element={<AdminProductRequests />} />
+            <Route
+              path={AdminSubPageType.DASHBOARD.path}
+              element={<AdminDashboard />}
+            />
+            <Route
+              path={AdminSubPageType.ALL_SHOPS.path}
+              element={<AdminAllShops />}
+            />
+            <Route
+              path={AdminSubPageType.NEW_SHOP_REQUESTS.path}
+              element={<AdminNewShopRequests />}
+            />
+            <Route
+              path={AdminSubPageType.NEW_PRODUCT_REQUESTS.path}
+              element={<AdminProductRequests />}
+            />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>
-      </BrowserRouter >
+      </BrowserRouter>
 
-
-      {isLogin && <>
-        {isChatOpen ?
-          <HomeChat setIsChatOpen={setIsChatOpen} />
-          :
-          <FloatButton
-            shape="circle"
-            badge={{
-              dot: true,
-            }}
-            style={{
-              right: 24,
-            }}
-            onClick={showChat}
-          />}
-
-      </>
-      }
+      {isLogin && (
+        <>
+          {isChatOpen ? (
+            <HomeChat setIsChatOpen={setIsChatOpen} />
+          ) : (
+            <FloatButton
+              shape="circle"
+              badge={{
+                dot: true,
+              }}
+              style={{
+                right: 24,
+              }}
+              onClick={showChat}
+            />
+          )}
+        </>
+      )}
     </>
   )
 }

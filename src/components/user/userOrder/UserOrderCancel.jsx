@@ -17,24 +17,25 @@ function UserOrderCancel() {
 
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
-    await orderApi
-      .getAllOrderByUserId(userid)
-      .then((response) => {
-        dispatch(getAllOrder(response.data))
-        // setUserOrder(response.data)
-        // console.log(userOrder)
-      })
-      .catch((e) => console.log(e))
+    if (userid) {
+      orderApi
+        .getAllOrderByUserId(userid)
+        .then((response) => {
+          dispatch(getAllOrder(response.data))
+          // setUserOrder(response.data)
+          // console.log(userOrder)
+        })
+        .catch((e) => console.log(e))
+    }
   }
-
+  const cancelOrder =
+    userOrder && userOrder.filter((order) => order.state === "CANCELED")
   useEffect(() => {
     fetchUserOrder(userid)
-  }, [])
+  }, [userid])
   // useEffect(() => {
   //   setTotal(totalPrice)
   // }, [totalPrice])
-  const cancelOrder =
-    userOrder && userOrder.filter((order) => order.state === "CANCELED")
 
   return (
     <div>
@@ -74,8 +75,13 @@ function UserOrderCancel() {
               </p>
               <p>Total Price: ${order.total.toFixed(2)}</p>
             </div>
-            <div className="py-2 flex justify-end">
+            <div className="py-2 flex justify-between">
               {/* <button className="px-2 py-1 border rounded-md">Feedback</button> */}
+              <div>
+                {" "}
+                <span className="font-bold">Canceled reason:</span> "
+                {order.comment}"
+              </div>
               <button className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500">
                 Buy Again
               </button>

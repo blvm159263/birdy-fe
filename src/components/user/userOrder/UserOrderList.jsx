@@ -11,12 +11,12 @@ import UserOrderDetail from "./UserOrderDetail"
 import Feedback from "./Feedback"
 
 function UserOrderList({ orderid, order, setIsPopupOpen, isPopupOpen }) {
-  const dispatch = useDispatch()
-  const [product, setProduct] = useState([])
+  // const dispatch = useDispatch()
+  // const [product, setProduct] = useState([])
   const [orderDetail, setOrderDetail] = useState([])
-  const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
+  // const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
 
-  const [totalPrice, setTotalPrice] = useState(0)
+  // const [totalPrice, setTotalPrice] = useState(0)
   const fetchOrderDetail = async () => {
     await orderApi.getAllOrderDetailsByOrderId(orderid).then((response) => {
       // const order = {
@@ -26,7 +26,7 @@ function UserOrderList({ orderid, order, setIsPopupOpen, isPopupOpen }) {
       setOrderDetail(response.data)
 
       // dispatch(getOrderDetail(order))
-      // console.log(orderDetail)
+      // console.log("orderdetail", orderDetail)
     })
   }
   // console.log(ordercode)
@@ -52,13 +52,13 @@ function UserOrderList({ orderid, order, setIsPopupOpen, isPopupOpen }) {
             </div>
           </div>
         ))}
-      {isPopupOpen === orderid ? (
+      {/* {isPopupOpen === orderid ? (
         <Feedback
           detail={orderDetail}
           ordercode={order.code}
           setIsPopupOpen={setIsPopupOpen}
         />
-      ) : null}
+      ) : null} */}
     </div>
   )
 }

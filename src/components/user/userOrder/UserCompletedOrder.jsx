@@ -17,26 +17,27 @@ function UserCompletedOrder() {
 
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
-    await orderApi
-      .getAllOrderByUserId(userid)
-      .then((response) => {
-        dispatch(getAllOrder(response.data))
-        // setUserOrder(response.data)
-        // console.log(userOrder)
-      })
-      .catch((e) => console.log(e))
+    if (userid) {
+      orderApi
+        .getAllOrderByUserId(userid)
+        .then((response) => {
+          dispatch(getAllOrder(response.data))
+          // setUserOrder(response.data)
+          // console.log(userOrder)
+        })
+        .catch((e) => console.log(e))
+    }
   }
-
-  useEffect(() => {
-    fetchUserOrder(userid)
-    // setTotal(totalPrice)
-  }, [])
 
   const completedOrder =
     userOrder &&
     userOrder.filter(
       (order) => order.state === "DONE" && order.paymentStatus === "PAID"
     )
+  useEffect(() => {
+    fetchUserOrder(userid)
+    // setTotal(totalPrice)
+  }, [userid])
 
   return (
     <div>
