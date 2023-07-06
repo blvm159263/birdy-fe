@@ -5,8 +5,12 @@ const adminApi = {
         const url = '/admin/products'
         return axiosClient.get(url, { params }  )
     },
+    declineProductById(id) {
+        const url = `/admin/product/${id}/decline`;
+        return axiosClient.get(url);
+    },
     approveProductById(id) {
-        const url = `/admin/product/${id}/update`;
+        const url = `/admin/product/${id}/approve`;
         return axiosClient.get(url);
     },
 };

@@ -16,6 +16,7 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist"
+import { adminReducer } from "../features/admin/adminSlice"
 
 const persistConfig = {
   key: "root",
@@ -31,6 +32,7 @@ export const store = configureStore({
     cart: persistedReducer,
     user: userReducer,
     shop: shopReducer,
+    admin: adminReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
