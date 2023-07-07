@@ -198,8 +198,8 @@ function App() {
                 <Route path="/" element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<ShopDashboard />} />
                 <Route path="profile" element={<ShopProfile />} />
-                <Route path="products" element={<ShopProductManage />} />
                 <Route path="orders" element={<ShopOrderManage />} />
+                <Route path="products" element={<ShopProductManage />} />
                 <Route path="product/new" element={<CreateProduct />} />
               </Route>
             </>

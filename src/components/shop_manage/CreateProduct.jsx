@@ -237,11 +237,11 @@ function CreateProduct() {
             // description: values.find((item) => item.key === 'description')?.value || null,
             description: des === "" ? null : des,
             brandName: values.find((item) => item.key === "brand")?.value || null,
-            state: 1,
+            state: 0,
             categoryId: getCategoryId(),
             categoryName: category,
             shopId: shopId,
-            shopName: "shop 1",
+            shopName: "shop name",
         }
 
         const listFile = []
@@ -268,6 +268,7 @@ function CreateProduct() {
             })
             .catch((err) => {
                 console.log(err)
+                openNotificationWithIcon("Failed", "Image size is too big!")
             })
     }
 

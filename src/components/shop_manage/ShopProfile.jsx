@@ -94,7 +94,7 @@ function ShopProfile() {
     }).catch((err) => {
       console.log(err);
     })
-  }, [updateStatus]);
+  }, [updateStatus, shopId]);
 
   const onSubmit = (data) => {
     // console.log(data);

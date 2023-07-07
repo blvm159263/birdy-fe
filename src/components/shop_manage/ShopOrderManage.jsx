@@ -59,7 +59,7 @@ function ShopOrderManage() {
       setUpdateStatus(false)
     }
     fetchOrder()
-  }, [search, sort, payment, state, page, updateStatus])
+  }, [search, sort, payment, state, page, updateStatus, shopId])
 
   // const getPage = (current) => {
   //   setPage(current);
