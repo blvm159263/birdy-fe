@@ -56,6 +56,14 @@ const userApi = {
     console.log(params)
     return axiosClient.put(url, params)
   },
+  addReport(data){
+    const url = `/users/report`
+    return axiosClient.post(url, data)
+  },
+  getReport(userId, productId){
+    const url = `/users/${userId}/product/${productId}/report`
+    return axiosClient.get(url)
+  }
 }
 
 export default userApi

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react"
-import { Rate } from "antd"
+import { Rate, Modal, Radio, Space } from "antd"
 import { useDispatch } from "react-redux"
 import { addToCart } from "../../../features/cart/cartSlice"
 import { useNavigate } from "react-router-dom"
@@ -8,6 +8,20 @@ import userApi from "../../../api/userApi"
 import storageService from "../../../api/storage"
 import jwtDecode from "jwt-decode"
 import { set } from "date-fns"
+import { is } from "date-fns/locale"
+
+const reasonList = [
+  "Sản phẩm bị cấm buôn bán (động vật hoang dã, 18+,...)",
+  "Hàng giả, hàng nhái",
+  "Sản phẩm không rõ nguồn gốc, xuất xứ",
+  "Hình ảnh sản phẩm không rõ ràng",
+  "Sản phẩm có hình ảnh, nội dung phản cảm hoặc có thể gây phản cảm",
+  "Sản phẩm có dấu hiệu lừa đảo",
+  "Tên sản phẩm (Name) không phù hợp với hình ảnh sản phẩm",
+  "Sản phẩm có dấu hiệu tăng đơn ảo",
+  "Khác",
+];
+
 
 function ProductOverviewAction({ product }) {
   const openNotificationWithIcon = useContext(NotificationContext)
@@ -15,6 +29,8 @@ function ProductOverviewAction({ product }) {
   const [quantity, setQuantity] = useState(1)
   const [wishlist, setWishlist] = useState()
   const [userId, setUserId] = useState()
+  const [modalOpen, setModalOpen] = useState(false)
+  const [reason, setReason] = useState("");
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const onUpdateQuantity = (value) => {
@@ -94,9 +110,70 @@ function ProductOverviewAction({ product }) {
     }
   }
 
+  const handReport = () => {
+    setModalOpen(true);
+  }
+
+  const onChange = (e) => {
+    console.log(e.target.value);
+    setReason(e.target.value);
+  };
+
+  const onSubmit = async () => {
+    if (!userId) {
+      openNotificationWithIcon(
+        "Please login",
+        "Please login to add to wishlist!"
+      )
+      return
+    }
+    let isExited = false
+    await userApi.getReport(userId, product.id).then((res) => {
+      if (res.data) {
+        openNotificationWithIcon(
+          "Report",
+          "You have already reported this product!"
+        )
+        isExited = true
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+    if(isExited) {
+      return
+    }
+
+    const report = {
+      userId: userId,
+      fullName: null,
+      productId: product.id,
+      productName: product.productName,
+      reason: reason,
+      createDate: null,
+      status: true,
+    }
+    await userApi.addReport(report).then((res) => {
+      openNotificationWithIcon(
+        "Report",
+        "Report Successfully!"
+      )
+    }).catch((err) => {
+      openNotificationWithIcon(
+        "Fail",
+        "Report Fail!"
+      )
+      console.log(err)
+    })
+
+    setModalOpen(false);
+  }
+
   return (
     <div className="lg:p-14 sm: p-5 lg:w-1/2 sm: w-full">
-      <h1 className="text-2xl font-bold">{product.productName}</h1>
+      <h1 className="text-2xl font-bold">
+        {product.productName}
+        <button onClick={handReport} className="ml-40 font-normal text-sm">Tố cáo</button>
+      </h1>
       <div
         style={{
           background: "#fafafa",
@@ -187,6 +264,28 @@ function ProductOverviewAction({ product }) {
           BUY NOW
         </button>
       </div>
+      <Modal
+        style={{
+          top: 100,
+          width: 1000,
+        }}
+        open={modalOpen}
+        onOk={() => { onSubmit() }}
+        onCancel={() => setModalOpen(false)}
+        cancelButtonProps={{ className: 'bg-white-500 hover:bg-red-700 text-black font-bold py-2 px-4 rounded-full text-center pb-7' }}
+        okButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-center pb-7' }}
+      >
+        <div className='font-bold text-lg pb-3 border-b-2'>Lý do</div>
+
+        <Radio.Group className='mt-6 ' onChange={onChange}>
+          <Space direction="vertical">
+            {reasonList.map((reason, index) => (
+              <Radio key={index} className='w-full pb-3 border-b-2' value={reason}>{reason}</Radio>
+            ))
+            }
+          </Space>
+        </Radio.Group>
+      </Modal>
     </div>
   )
 }
