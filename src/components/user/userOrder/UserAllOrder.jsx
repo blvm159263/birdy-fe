@@ -12,6 +12,7 @@ import Feedback from "./Feedback"
 import { SelectionChatContext } from "../../../context/SelectionChatContext"
 import { async } from "q"
 import shopApi from "../../../api/shopApi"
+import paymentApi from "../../../api/paymentApi"
 import { ChatContext } from "../../../context/ChatContext"
 import { NotificationContext } from "../../../context/NotificationProvider"
 function UserAllOrder() {
@@ -39,6 +40,13 @@ function UserAllOrder() {
         })
         .catch((e) => console.log(e))
     }
+  }
+
+  const handlePayment = async (order) => {
+    var amount = (order.total * 23000).toFixed(0);
+    await paymentApi.getQRMomo({ amount: amount, orderId: order.code }).then(res => {
+      window.location.href = res.data.payUrl;
+  })
   }
 
   const handleUpdateState = (id, state, comment) => {
@@ -188,7 +196,7 @@ function UserAllOrder() {
                   <>
                     <button
                       className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                      // onClick={() => setIsPopupOpen(order.id)}
+                      onClick={() => handlePayment(order)}
                     >
                       PAY THE ORDER
                     </button>
