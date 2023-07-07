@@ -4,10 +4,10 @@ import { Outlet } from "react-router-dom"
 import ShopManageHeader from "../components/shop_manage/ShopManageHeader";
 
 function ShopLayout() {
-  
+
   return (
     <>
-      <ShopManageHeader/>
+      <ShopManageHeader />
       <div className='grid grid-cols-12'>
         <Sidebar />
         <Outlet />
