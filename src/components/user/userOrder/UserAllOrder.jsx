@@ -11,7 +11,6 @@ import {
 import Feedback from "./Feedback"
 import { SelectionChatContext } from "../../../context/SelectionChatContext"
 import { async } from "q"
-import { Button, Modal } from 'antd';
 import shopApi from "../../../api/shopApi"
 import { ChatContext } from "../../../context/ChatContext"
 import { NotificationContext } from "../../../context/NotificationProvider"
@@ -27,27 +26,7 @@ function UserAllOrder() {
   const isDone = true
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cancelId, setCancelId] = useState();
-  const showModal = (id) => {
-    setCancelId(id);
-    setIsModalOpen(true);
-  };
 
-  const handleOk = async () => {
-    orderApi.editOrderState(cancelId, "CANCELED", "Huy order").then((res) => {
-      openNotificationWithIcon("Cancel order successfully", "You have cancelled order successfully");
-      fetchUserOrder();
-    }).catch((e) => {
-      openNotificationWithIcon("Cancel order failed", "You have cancelled order failed")
-      });
-    setIsModalOpen(false);
-    
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   const dispatch = useDispatch()
   const fetchUserOrder = async () => {

@@ -34,8 +34,7 @@ export default function NavBar() {
     let token = storageService.getAccessToken()
     if (token) {
       token = jwtDecode(token)
-    }
-    await userApi
+      await userApi
       .getUserByPhoneNumber(token.sub)
       .then((response) => {
         dispatch(getUser(response.data))
@@ -44,6 +43,8 @@ export default function NavBar() {
       .catch((error) => {
         console.log(error)
       })
+    }
+    
   }
 
   const fetchWishlist = () => {

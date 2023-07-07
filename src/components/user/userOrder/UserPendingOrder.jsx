@@ -5,6 +5,7 @@ import UserOrderList from "./UserOrderList"
 import UserOrderDetail from "./UserOrderDetail"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllOrder } from "../../../features/user/userSlice"
+import paymentApi from "../../../api/paymentApi"
 
 function UserPendingOrder() {
   const { userid } = useParams()
@@ -41,6 +42,13 @@ function UserPendingOrder() {
         })
         .catch((e) => console.log(e))
     }
+  }
+
+  const handlePayment = async (order) => {
+    var amount = (order.total * 23000).toFixed(0);
+    await paymentApi.getQRMomo({ amount: amount, orderId: order.code }).then(res => {
+      window.location.href = res.data.payUrl;
+  })
   }
 
   // useEffect(() => {
@@ -94,7 +102,9 @@ function UserPendingOrder() {
               <p>Total Price: ${order.total.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
-              <button className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500">
+              <button className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
+              onClick={() => handlePayment(order)}
+              >
                 PAY THE ORDER
               </button>
               <button
