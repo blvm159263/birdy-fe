@@ -15,21 +15,27 @@ import shopApi from "../../../api/shopApi"
 import paymentApi from "../../../api/paymentApi"
 import { ChatContext } from "../../../context/ChatContext"
 import { NotificationContext } from "../../../context/NotificationProvider"
+import { ExclamationCircleFilled } from "@ant-design/icons"
+import { Modal } from "antd"
+import TextArea from "antd/es/input/TextArea"
 function UserAllOrder() {
   const { setUser, handleSelect } = useContext(SelectionChatContext)
   const { setIsChatOpen } = useContext(ChatContext)
   const userInformation = useSelector((state) => state.user.userInformation)
   const userOrder = useSelector((state) => state.user.userOrder)
-  // const totalPrice = useSelector((state) => state.user.totalPriceList)
-  const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
-  const orderFeedbacked = useSelector((state) => state.user.orderFeedbacked)
-  // console.log(orderFeedbacked)
+  // const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
+  // const orderFeedbacked = useSelector((state) => state.user.orderFeedbacked)
+  const [error, setError] = useState(null)
+  const openNotificationWithIcon = useContext(NotificationContext)
   const isDone = true
+  const [comment, setComment] = useState("")
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [selectedOrderId, setSelectedOrderId] = useState(null)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
-
-
   const dispatch = useDispatch()
+  const { confirm } = Modal
+
   const fetchUserOrder = async () => {
     if (userInformation) {
       await orderApi
@@ -38,28 +44,87 @@ function UserAllOrder() {
           dispatch(getAllOrder(response.data))
           // setUserOrder(response.data)
         })
-        .catch((e) => console.log(e))
+        .catch((e) => {
+          console.log(e)
+          setError(e)
+        })
     }
   }
 
   const handlePayment = async (order) => {
-    var amount = (order.total * 23000).toFixed(0);
-    await paymentApi.getQRMomo({ amount: amount, orderId: order.code }).then(res => {
-      window.location.href = res.data.payUrl;
-  })
+    var amount = (order.total * 23000).toFixed(0)
+    await paymentApi
+      .getQRMomo({ amount: amount, orderId: order.code })
+      .then((res) => {
+        window.location.href = res.data.payUrl
+      })
+  }
+  const handleCancelOrder = (id) => {
+    setSelectedOrderId(id)
+    setIsModalVisible(true)
   }
 
-  const handleUpdateState = (id, state, comment) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to change state of order?"
-    )
-    if (confirmed) {
+  const handleModalConfirm = () => {
+    if (selectedOrderId) {
       orderApi
-        .editOrderState(id, state, comment)
-        .then((response) => console.log(response.data))
+        .editOrderState(selectedOrderId, "CANCELED", comment)
+        .then((response) => {
+          console.log(response.data)
+          openNotificationWithIcon("Cancel the order complete!!!")
+          fetchUserOrder()
+        })
         .catch((e) => console.log(e))
+    }
+    setIsModalVisible(false)
+    setComment("")
+  }
 
-      fetchUserOrder()
+  const handleModalCancel = () => {
+    setIsModalVisible(false)
+    setComment("")
+  }
+
+  const showPromiseConfirm = () => {
+    return new Promise((resolve, reject) => {
+      confirm({
+        title: "Did you received the order?",
+        icon: <ExclamationCircleFilled />,
+        content: `Click "OK" to confirm`,
+        onOk() {
+          return new Promise((resolve) => {
+            setTimeout(resolve, 1000)
+          })
+            .then(() => {
+              resolve(true)
+            })
+            .catch(() => {
+              console.log("Oops errors!")
+              reject(false)
+            })
+        },
+        onCancel() {
+          resolve(false)
+        },
+      })
+    })
+  }
+
+  const handleUpdateState = async (id, state, comment) => {
+    try {
+      const confirmed = await showPromiseConfirm()
+      if (confirmed) {
+        orderApi
+          .editOrderState(id, state, comment)
+          .then((response) => {
+            console.log(response.data)
+            openNotificationWithIcon("Update state complete!!!")
+          })
+          .catch((e) => console.log(e))
+
+        await fetchUserOrder()
+      }
+    } catch (error) {
+      console.log("Oops errors!")
     }
   }
 
@@ -93,6 +158,11 @@ function UserAllOrder() {
       handleSelect(user)
       setIsChatOpen(true)
     })
+  }
+
+  if (error && error.response && error.response.status === 404) {
+    // Handle 404 error, e.g., show a message or perform an action
+    return <p className="p-4">No order found.</p>
   }
 
   return (
@@ -201,11 +271,27 @@ function UserAllOrder() {
                       PAY THE ORDER
                     </button>
                     <button
-                      onClick={() => handleCancel(order.id, "CANCELED")}
+                      onClick={() => handleCancelOrder(order.id)}
                       className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500"
                     >
                       Cancel
                     </button>
+                    <Modal
+                      title="Are you sure?"
+                      visible={isModalVisible}
+                      onCancel={handleModalCancel}
+                      onOk={handleModalConfirm}
+                      okText="Confirm"
+                      cancelText="Cancel"
+                    >
+                      <p>Are you sure you want to cancel the order?</p>
+                      <p>Please enter a reason:</p>
+                      <TextArea
+                        rows={4}
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                      />
+                    </Modal>
                   </>
                 ) : (
                   ""
