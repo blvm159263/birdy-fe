@@ -17,19 +17,32 @@ function UserPendingOrder() {
 
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
-    await orderApi
-      .getAllOrderByUserId(userid)
-      .then((response) => {
-        dispatch(getAllOrder(response.data))
-        // setUserOrder(response.data)
-        // console.log(userOrder)
-      })
-      .catch((e) => console.log(e))
+    if (userid) {
+      orderApi
+        .getAllOrderByUserId(userid)
+        .then((response) => {
+          dispatch(getAllOrder(response.data))
+          // setUserOrder(response.data)
+          // console.log(userOrder)
+        })
+        .catch((e) => console.log(e))
+    }
   }
 
-  useEffect(() => {
-    fetchUserOrder(userid)
-  }, [])
+  const handleUpdateState = (id, state) => {
+    const confirmed = window.confirm("Are you sure you want to cancel order?")
+    if (confirmed) {
+      const comment = prompt("Reason?")
+      orderApi
+        .editOrderState(id, state, comment)
+        .then((response) => {
+          console.log(response.data)
+          fetchUserOrder(userid)
+        })
+        .catch((e) => console.log(e))
+    }
+  }
+
   // useEffect(() => {
   //   setTotal(totalPrice)
   // }, [totalPrice])
@@ -39,6 +52,9 @@ function UserPendingOrder() {
       (order) => order.state === "PENDING" && order.paymentStatus === "PENDING"
     )
 
+  useEffect(() => {
+    fetchUserOrder(userid)
+  }, [userid, pendingOrder, userOrder])
   return (
     <div>
       {userOrder &&
@@ -78,7 +94,13 @@ function UserPendingOrder() {
               <p>Total Price: ${order.total.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
-              <button className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500">
+              <button className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500">
+                PAY THE ORDER
+              </button>
+              <button
+                onClick={() => handleUpdateState(order.id, "CANCELED")}
+                className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500"
+              >
                 Cancel
               </button>
             </div>

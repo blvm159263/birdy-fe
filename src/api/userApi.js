@@ -29,6 +29,12 @@ const userApi = {
     const url = `/users/${data.userId}/addresses`
     return axiosClient.post(url, data)
   },
+
+  getWishlistByUserId(userId) {
+    const url = `/wishlists/user/${userId}`
+    return axiosClient.get(url)
+  },
+
   getWishlist(userId, productId) {
     const url = `/users/${userId}/wishlist/${productId}`
     return axiosClient.get(url)

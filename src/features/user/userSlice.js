@@ -1,11 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit"
+import orderApi from "../../api/orderApi"
 
 const initialState = {
   userInformation: null,
   userAddress: null,
   userOrder: null,
+  wishlist: null,
   userOrderDetail: [],
   totalPriceList: [],
+  orderFeedbacked: [],
 }
 
 export const userSlice = createSlice({
@@ -50,10 +53,30 @@ export const userSlice = createSlice({
         userAddress: action.payload,
       }
     },
+    getOrderFeedbacked: (state, action) => {
+      state.orderFeedbacked = [...state.orderFeedbacked, action.payload]
+    },
     addNewAddressSlice: (state, action) => {
       return {
         ...state,
         userAddress: action.payload,
+      }
+    },
+
+    getWishlist: (state, action) => {
+      return {
+        ...state,
+        wishlist: action.payload,
+      }
+    },
+
+    deleteItemWishList: (state, action) => {
+      const updatedWishlist = state.wishlist.filter(
+        (item) => item.productId !== action.payload
+      )
+      return {
+        ...state,
+        wishlist: updatedWishlist,
       }
     },
   },
@@ -66,6 +89,9 @@ export const {
   getAllOrder,
   getOrderTotalPrice,
   getOrderDetail,
+  getOrderFeedbacked,
+  getWishlist,
+  deleteItemWishList,
 } = userSlice.actions
 
 export default userSlice.reducer

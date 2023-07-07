@@ -4,7 +4,10 @@ import orderApi from "../../../api/orderApi"
 import UserOrderList from "./UserOrderList"
 import UserOrderDetail from "./UserOrderDetail"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllOrder } from "../../../features/user/userSlice"
+import {
+  getAllOrder,
+  updateStateReceived,
+} from "../../../features/user/userSlice"
 import Feedback from "./Feedback"
 import { SelectionChatContext } from "../../../context/SelectionChatContext"
 import { async } from "q"
@@ -13,15 +16,15 @@ import shopApi from "../../../api/shopApi"
 import { ChatContext } from "../../../context/ChatContext"
 import { NotificationContext } from "../../../context/NotificationProvider"
 function UserAllOrder() {
-
-  const openNotificationWithIcon = useContext(NotificationContext)
-  const { setUser, handleSelect } = useContext(SelectionChatContext);
-  const { setIsChatOpen } = useContext(ChatContext);
+  const { setUser, handleSelect } = useContext(SelectionChatContext)
+  const { setIsChatOpen } = useContext(ChatContext)
   const userInformation = useSelector((state) => state.user.userInformation)
   const userOrder = useSelector((state) => state.user.userOrder)
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
   const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
-
+  const orderFeedbacked = useSelector((state) => state.user.orderFeedbacked)
+  // console.log(orderFeedbacked)
+  const isDone = true
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,13 +60,40 @@ function UserAllOrder() {
         })
         .catch((e) => console.log(e))
     }
+  }
 
+  const handleUpdateState = (id, state, comment) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to change state of order?"
+    )
+    if (confirmed) {
+      orderApi
+        .editOrderState(id, state, comment)
+        .then((response) => console.log(response.data))
+        .catch((e) => console.log(e))
+
+      fetchUserOrder()
+    }
+  }
+
+  const handleCancel = (id, state) => {
+    const confirmed = window.confirm("Are you sure you want to cancel order?")
+    if (confirmed) {
+      const comment = prompt("Reason?")
+
+      orderApi
+        .editOrderState(id, state, comment)
+        .then((response) => console.log(response.data))
+        .catch((e) => console.log(e))
+
+      fetchUserOrder()
+    }
   }
   // console.log(orderDetailProduct)
   useEffect(() => {
     fetchUserOrder()
     // setTotal(totalPrice)
-  }, [userInformation])
+  }, [userInformation, userOrder])
 
   const setUserChat = async (shopId) => {
     await shopApi.getShopInformationByShopId(shopId).then((res) => {
@@ -71,10 +101,10 @@ function UserAllOrder() {
         phoneNumber: res.data.phoneNumber,
         fullName: res.data.shopName,
         avatarUrl: res.data.avatarUrl,
-      };
-      setUser(user);
-      handleSelect(user);
-      setIsChatOpen(true);
+      }
+      setUser(user)
+      handleSelect(user)
+      setIsChatOpen(true)
     })
   }
 
@@ -88,10 +118,12 @@ function UserAllOrder() {
                 <div className="flex items-center">
                   <h2 className="font-bold text-gray-300 mr-2">#{order.id}</h2>
                   <p className="font-bold mr-2">{order.code}</p>
-                  <button onClick={() => {
-                    setUserChat(order.shopId);
-                  }}
-                    className="mr-2 px-2 py-1 border rounded-md text-white bg-sky-300">
+                  <button
+                    onClick={() => {
+                      setUserChat(order.shopId)
+                    }}
+                    className="mr-2 px-2 py-1 border rounded-md text-white bg-sky-300"
+                  >
                     Chat
                   </button>
                   <Link
@@ -102,7 +134,7 @@ function UserAllOrder() {
                   </Link>
                 </div>
                 <div className="flex">
-                  <p className="text-orange-400">
+                  <p className="text-red-500">
                     <span className="text-gray-400">ORDER STATUS:</span>{" "}
                     {order.state} !!!
                   </p>
@@ -118,6 +150,7 @@ function UserAllOrder() {
                 isPopupOpen={isPopupOpen}
                 orderid={order.id}
                 order={order}
+                isDone={order.state === "DONE" ? isDone : !isDone}
               />
               <div className="flex justify-between py-3 border-b">
                 <p className="">
@@ -126,40 +159,69 @@ function UserAllOrder() {
                 </p>
                 <p>Total Price: ${order.total.toFixed(2)}</p>
               </div>
-              <div className="py-2 flex justify-end">
-                {order.state === "PENDING" &&
-                  order.paymentStatus === "PENDING" ? (
-                  <>
-                    <button className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500"
-                      onClick={() => showModal(order.id)}
-                    >
-                      Cancel
-                    </button>
-                    <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                      Do you want to cancel this order {"(ID: " + cancelId ? cancelId : "" + ")"} ?
-                    </Modal>
-                  </>
+              <div className="py-2 relative flex justify-end">
+                {order.state === "CANCELED" ? (
+                  <div className="absolute left-0">
+                    <span className="font-bold">Canceled reason:</span> "
+                    {order.comment}"
+                  </div>
                 ) : (
+                  ""
+                )}
+                {order.state === "DONE" && order.paymentStatus === "PAID" ? (
                   <>
-                    {order.state !== "CANCELED" ? (
-                      <button
-                        className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                        onClick={() => setIsPopupOpen(order.id)}
-                        disabled={
-                          order.state === "PENDING" &&
-                          order.paymentStatus === "PAID"
-                        }
-                      >
-                        Feedback
-                      </button>
-                    ) : (
-                      ""
-                    )}
-
                     <button className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500">
                       Buy Again
                     </button>
+
+                    {/* <button
+                      className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
+                      onClick={() => setIsPopupOpen(order.id)}
+                    >
+                      Feedback
+                    </button> */}
                   </>
+                ) : (
+                  ""
+                )}
+
+                {order.state === "CANCELED" ? (
+                  <button className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500">
+                    Buy Again
+                  </button>
+                ) : (
+                  ""
+                )}
+
+                {order.state === "PENDING" && order.paymentStatus === "PAID" ? (
+                  <button
+                    className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500"
+                    onClick={() => handleUpdateState(order.id, "DONE", ".")}
+                  >
+                    RECEIVED
+                  </button>
+                ) : (
+                  ""
+                )}
+
+                {order.state === "PENDING" &&
+                order.paymentStatus === "PENDING" ? (
+                  <>
+                    <button
+                      className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
+                      // onClick={() => setIsPopupOpen(order.id)}
+                    >
+                      PAY THE ORDER
+                    </button>
+                    <button
+                      onClick={() => handleCancel(order.id, "CANCELED")}
+                      className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  ""
                 )}
               </div>
             </div>

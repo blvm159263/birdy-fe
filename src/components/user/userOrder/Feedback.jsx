@@ -1,151 +1,70 @@
+import {
+  faComment,
+  faMessage,
+  faStar,
+} from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import "./Feedback.css"
-import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
-import orderApi from "../../../api/orderApi"
-import productApi from "../../../api/productApi"
-import { getOrderDetail } from "../../../features/user/userSlice"
+import React, { useState } from "react"
 
-function Feedback({ setIsPopupOpen, ordercode, detail }) {
-  const [hoverd, setHovered] = useState() // used for when hoved on star
-  const [rated, setRated] = useState(0)
-  const [comment, setComment] = useState("")
-  const [orderDetail, setOrderDetail] = useState()
-  const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
-  const [products, setProducts] = useState([])
-  const handleCommentChange = (event) => {
-    setComment(event.target.value)
-  }
-  console.log("detail", detail)
-
-  // const fetchProduct = async() => {
-  //   await productApi.getProductById()
-  // }
-
-  // let arrtmp = []
-
-  // useEffect(() => {
-  //   arrtmp.push(detail)
-  // }, [detail])
-  // console.log(arrtmp)
-  // const handleSetRated = (value) => {
-  //   setRated(value)
-  // }
-  // const handleSetHovered = (value) => {
-  //   setHovered(value)
-  // }
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    // Reset the form
-    // setRating(0)
-    setComment("")
-    setIsPopupOpen(false)
-  }
-
-  useEffect(() => {
-    const fetchProductDetails = async () => {
-      const productIds = detail.map((item) => item.productId)
-      const productResponses = await Promise.all(
-        productIds.map((productId) => productApi.getProductById(productId))
-      )
-      const products = productResponses.map((response) => response.data)
-      setProducts(products)
-    }
-
-    fetchProductDetails()
-  }, [detail])
-  console.log("products", products)
-
-  // useEffect(() => {
-  //   if (orderDetail && orderDetail.data && orderDetail.data.id)
-  //     fetchOrderDetail(order.id)
-  // }, [order, orderDetailProduct])
-
-  // useEffect(() => {
-  //   if (orderDetail && orderDetail.data && orderDetail.data.id) {
-  //     fetchProductOfOrder(orderDetail.data.id)
-  //   }
-  // }, [orderDetail])
-
+function Feedback() {
+  const [rating, setRating] = useState(0)
+  const [hover, setHover] = useState(0)
+  const [isComment, setIsComment] = useState(false)
   return (
-    <div className="fixed z-50 overflow-hidden lg:w-full sm: w-full p-4  md:inset-0 h-[calc(100%-1rem)] max-h-full flex justify-center items-center inset-0 bg-gray-100 bg-opacity-5">
-      <form className="w-4/5 bg-white p-2">
-        <div className="border-b-2 py-4">
-          <h1 className=" text-center font-bold text-2xl ">Feedback</h1>
-          <p className="font-bold px-4">Order: {ordercode}</p>
+    <div>
+      <div>
+        <div className="star-rating flex justify-end">
+          {[...Array(5)].map((star, index) => {
+            index += 1
+            return (
+              <svg
+                aria-hidden="true"
+                type="button"
+                key={index}
+                className={`${
+                  index <= (hover || rating)
+                    ? "text-yellow-400"
+                    : "text-gray-300"
+                }
+                    cursor-pointer w-5 h-5`}
+                onClick={() => setRating(index)}
+                onMouseEnter={() => setHover(index)}
+                onMouseLeave={() => setHover(rating)}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <title>{index}th star</title>
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+              </svg>
+            )
+          })}
         </div>
-
-        {detail.map((item, index) => (
-          <div>
-            <div className="h-auto py-3 px-2 justify-between flex border-b border-b-black">
-              <div className="w-20 h-20">
-                <img
-                  src={products[index]?.imageMain}
-                  alt=""
-                  className="w-full h-full"
-                />
-              </div>
-              <p>{item.productName}</p>
-              <div className="flex flex-col items-center">
-                <h1 className="text-md font-semibold">Rating</h1>
-                <div className="flex star-container">
-                  {[...Array(5)].map((star, i) => (
-                    <span
-                      key={i + 1}
-                      onMouseOver={() => {
-                        setHovered(i)
-                      }}
-                      onMouseOut={() => {
-                        setHovered(rated)
-                      }}
-                      onClick={() => {
-                        setRated(i + 1)
-                      }}
-                      className={i <= hoverd ? "hovered" : ""}
-                    >
-                      ★
-                    </span>
-                  ))}
-                  rate: {rated}
-                </div>
-              </div>
-              <div>
-                <div className="flex-col">
-                  <label
-                    className="block text-md font-semibold"
-                    htmlFor="comment"
-                  >
-                    Comment
-                  </label>
-                  <textarea
-                    name="comment"
-                    id="comment"
-                    className="border-2"
-                    cols="50"
-                    rows="5"
-                  ></textarea>
-                </div>
-              </div>
-            </div>
+      </div>
+      <div className="flex items-end flex-col">
+        <button
+          className="text-sm text-blue-400"
+          onClick={() => setIsComment(!isComment)}
+        >
+          <FontAwesomeIcon icon={faComment} /> Comment
+        </button>
+        {isComment && (
+          <div className="flex flex-col">
+            <textarea
+              className="border mb-1 text-sm"
+              placeholder="Write your comment!"
+              name=""
+              id=""
+              cols="35"
+              rows="5"
+            ></textarea>
+            <button className="text-sm text-blue-500">
+              <FontAwesomeIcon icon={faMessage} />
+              Submit feedback
+            </button>
           </div>
-        ))}
-
-        <div className="flex justify-end">
-          <button
-            className="mt-2 right-0 border border-white rounded-md bg-sky-400 text-white px-5 py-1 hover:bg-white hover:text-sky-400 hover:border-sky-400 mr-2"
-            onClick={handleSubmit}
-          >
-            Send
-          </button>
-          <button
-            className="mt-2 right-0 border border-white rounded-md bg-red-400 text-white px-5 py-1 hover:bg-white hover:text-red-400 hover:border-red-400"
-            onClick={() => setIsPopupOpen(false)}
-          >
-            Close
-          </button>
-        </div>
-      </form>
+        )}
+      </div>
     </div>
   )
 }

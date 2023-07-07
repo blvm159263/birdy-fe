@@ -1,18 +1,23 @@
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
+import { faCartShopping, faHeart } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import SearchBar from "../features/search/SearchBar"
 import SearchType from "../constants/SearchType"
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import jwtDecode from "jwt-decode"
 import storageService from "../api/storage"
 import { LoginContext } from "../context/LoginProvider"
 import { useDispatch, useSelector } from "react-redux"
 import { resetAllState } from "../features/search/searchSlice"
+import userApi from "../api/userApi"
+import { getUser, getWishlist } from "../features/user/userSlice"
 
 export default function NavBar() {
   const { isLogin, setIsLogin, setRole } = useContext(LoginContext)
   const navigate = useNavigate()
+  const userInformation = useSelector((state) => state.user.userInformation)
+  const wishList = useSelector((state) => state.user.wishlist)
+
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const cartCount = useSelector((state) => state.cart.items.length)
   const dispatch = useDispatch()
@@ -24,6 +29,39 @@ export default function NavBar() {
     navigate("/")
     window.location.reload()
   }
+
+  const fetchUser = async () => {
+    let token = storageService.getAccessToken()
+    if (token) {
+      token = jwtDecode(token)
+    }
+    await userApi
+      .getUserByPhoneNumber(token.sub)
+      .then((response) => {
+        dispatch(getUser(response.data))
+        // setIsLoading(false)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const fetchWishlist = () => {
+    if (userInformation) {
+      userApi
+        .getWishlistByUserId(userInformation.id)
+        .then((response) => dispatch(getWishlist(response.data)))
+        .catch((e) => console.log(e))
+    }
+  }
+
+  useEffect(() => {
+    fetchUser()
+  }, [])
+  useEffect(() => {
+    fetchWishlist()
+  }, [wishList])
+  // console.log(wishList)
 
   const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu)
 
@@ -81,7 +119,22 @@ export default function NavBar() {
             </li>
           </ul>
         </div>
-        <div className="flex">
+        <div className="flex items-center">
+          {isLogin && (
+            <Link
+              className="block p-2.5 mr-1 text-white relative"
+              to="/wishlist"
+            >
+              <FontAwesomeIcon
+                icon={faHeart}
+                size="1x"
+                style={{ color: "#e41b1b" }}
+              />
+              <span className="cart-count absolute bottom-1.5 -right-1.5 text-center text-xs h-4 w-4 rounded-full bg-orange-500">
+                {wishList ? wishList.length : "0"}
+              </span>
+            </Link>
+          )}
           <Link
             to="/cart"
             className="block p-2.5 mr-1 text-white relative"
@@ -128,8 +181,8 @@ export default function NavBar() {
               <Link
                 to={`/search/${SearchType.ALL_PRODUCT.text}`}
                 onClick={() => {
-                  dispatch(resetAllState());
-                  toggleMobileMenu();
+                  dispatch(resetAllState())
+                  toggleMobileMenu()
                 }}
               >
                 All Products
@@ -139,8 +192,8 @@ export default function NavBar() {
               <Link
                 to={`/search/${SearchType.BIRD.text}`}
                 onClick={() => {
-                  dispatch(resetAllState());
-                  toggleMobileMenu();
+                  dispatch(resetAllState())
+                  toggleMobileMenu()
                 }}
               >
                 Birds
@@ -150,8 +203,8 @@ export default function NavBar() {
               <Link
                 to={`/search/${SearchType.ACCESSORY.text}`}
                 onClick={() => {
-                  dispatch(resetAllState());
-                  toggleMobileMenu();
+                  dispatch(resetAllState())
+                  toggleMobileMenu()
                 }}
               >
                 Accessories
@@ -161,8 +214,8 @@ export default function NavBar() {
               <Link
                 to={`/search/${SearchType.FOOD.text}`}
                 onClick={() => {
-                  dispatch(resetAllState());
-                  toggleMobileMenu();
+                  dispatch(resetAllState())
+                  toggleMobileMenu()
                 }}
               >
                 Foods

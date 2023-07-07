@@ -17,27 +17,44 @@ function UserDeliveryOrder() {
 
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
-    await orderApi
-      .getAllOrderByUserId(userid)
-      .then((response) => {
-        dispatch(getAllOrder(response.data))
-        // setUserOrder(response.data)
-        // console.log(userOrder)
-      })
-      .catch((e) => console.log(e))
+    if (userid) {
+      orderApi
+        .getAllOrderByUserId(userid)
+        .then((response) => {
+          dispatch(getAllOrder(response.data))
+          // setUserOrder(response.data)
+          // console.log(userOrder)
+        })
+        .catch((e) => console.log(e))
+    }
   }
 
-  useEffect(() => {
-    fetchUserOrder(userid)
-  }, [])
-  // useEffect(() => {
-  //   setTotal(totalPrice)
-  // }, [totalPrice])
+  const handleUpdateState = (id, state, comment) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to change state of order?"
+    )
+    if (confirmed) {
+      orderApi
+        .editOrderState(id, state, comment)
+        .then((response) => console.log(response.data))
+        .catch((e) => console.log(e))
+
+      fetchUserOrder()
+    }
+  }
+
   const deliveryOrder =
     userOrder &&
     userOrder.filter(
       (order) => order.state === "PENDING" && order.paymentStatus === "PAID"
     )
+
+  useEffect(() => {
+    fetchUserOrder(userid)
+  }, [deliveryOrder, userid])
+  // useEffect(() => {
+  //   setTotal(totalPrice)
+  // }, [totalPrice])
 
   return (
     <div>
@@ -79,16 +96,10 @@ function UserDeliveryOrder() {
             </div>
             <div className="py-2 flex justify-end">
               <button
-                className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                disabled
-              >
-                Feedback
-              </button>
-              <button
+                onClick={() => handleUpdateState(order.id, "DONE", ".")}
                 className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500"
-                disabled
               >
-                Buy Again
+                RECEIVED
               </button>
             </div>
           </div>
