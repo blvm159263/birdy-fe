@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import orderApi from "../../../api/orderApi"
 import UserOrderList from "./UserOrderList"
 import UserOrderDetail from "./UserOrderDetail"
-import { Button, Modal } from 'antd';
 import { useDispatch, useSelector } from "react-redux"
 import { getAllOrder } from "../../../features/user/userSlice"
-import { NotificationContext } from "../../../context/NotificationProvider"
+
 function UserPendingOrder() {
   const { userid } = useParams()
   const userOrder = useSelector((state) => state.user.userOrder)
@@ -15,28 +14,6 @@ function UserPendingOrder() {
 
   // // const [userOrder, setUserOrder] = useState()
   // const [total, setTotal] = useState([])
-  const openNotificationWithIcon = useContext(NotificationContext)
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cancelId, setCancelId] = useState();
-  const showModal = (id) => {
-    setCancelId(id);
-    setIsModalOpen(true);
-  };
-
-  const handleOk = async () => {
-    orderApi.editOrderState(cancelId, "CANCELED", "Huy order").then((res) => {
-      openNotificationWithIcon("Cancel order successfully", "You have cancelled order successfully");
-      fetchUserOrder();
-    }).catch((e) => {
-      openNotificationWithIcon("Cancel order failed", "You have cancelled order failed")
-      });
-    setIsModalOpen(false);
-    
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   const dispatch = useDispatch()
   const fetchUserOrder = async (userid) => {
@@ -101,16 +78,9 @@ function UserPendingOrder() {
               <p>Total Price: ${order.total.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
-              <>
-                <button className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500"
-                  onClick={() => showModal(order.id)}
-                >
-                  Cancel
-                </button>
-                <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                  Do you want to cancel this order {"(ID: " + cancelId ? cancelId : "" + ")"} ?
-                </Modal>
-              </>
+              <button className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500">
+                Cancel
+              </button>
             </div>
           </div>
         ))}
