@@ -6,6 +6,7 @@ import format from "date-fns/format";
 import shopApi from "../../api/shopApi";
 import { NotificationContext } from "../../context/NotificationProvider";
 import { LoginContext } from "../../context/LoginProvider";
+import ChangeAddressModal from "./ChangeAddressModal";
 
 
 const getBase64 = (file) =>
@@ -32,6 +33,7 @@ function ShopProfile() {
   const [createDate, setCreateDate] = useState('');
   const [url, setUrl] = useState('');
   const ref = useRef(null);
+  const [address, setAddress] = useState()
 
 
   const handleCancel = () => setPreviewOpen(false);
@@ -91,15 +93,18 @@ function ShopProfile() {
 
       const dateformat = getDate(res.data[0].createDate);
       setCreateDate(dateformat);
+
+      setAddress(res.data[0].address);
     }).catch((err) => {
       console.log(err);
     })
-  }, [updateStatus, shopId]);
+  }, [updateStatus, shopId, shop.address]);
 
   const onSubmit = (data) => {
     // console.log(data);
     const params = {
       shopName: data[0],
+      address: address,
       shopImage: shopAvar[0]?.originFileObj || null,
     }
     console.log(params);
@@ -258,15 +263,8 @@ function ShopProfile() {
                     </label>
                   </div>
                   <div className="w-full pl-6">
-                    <span className="text-sm text-black">{shop.address}</span>
-                    {/* <span className="text-sm text-black">73/40, April 30th street, Trung Dung Ward,<br /> Bien Hoa city, Dong Nai province </span> */}
-                    {/* <input
-                      type="text"
-                      id="phone"
-                      name="phone"
-                      placeholder="shop phone"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
-                    /> */}
+                    <span className="text-sm text-black mr-2">{address}</span>
+                    <ChangeAddressModal setAddress={setAddress}/>
                   </div>
                 </div>
 

@@ -41,6 +41,7 @@ const shopApi = {
     editProfile(id, params) {
         const data = new FormData();
         data.append('shopName', params.shopName);
+        data.append('address', params.address);
         data.append('shopImage', params.shopImage);
         const url = '/shops/' + id + "/update";
         const config = {

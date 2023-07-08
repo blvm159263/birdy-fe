@@ -209,6 +209,7 @@ function App() {
 
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
+            <Route path="*" element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
             <Route
               path={AdminSubPageType.DASHBOARD.path}
               element={<AdminDashboard />}
@@ -225,7 +226,6 @@ function App() {
               path={AdminSubPageType.NEW_PRODUCT_REQUESTS.path}
               element={<AdminProductRequests />}
             />
-            <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
