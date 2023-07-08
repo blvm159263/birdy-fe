@@ -5,23 +5,29 @@ import ImageCarousel from "../components/ImageCarousel"
 import ProductCardList from "../components/product/ProductCardList"
 import { useDispatch } from "react-redux"
 import { resetAllState } from "../features/search/searchSlice"
+import { Spin } from "antd"
 
 const imageUrls = [
-  "https://i.pinimg.com/736x/b1/92/87/b192870538036f95ffc468da4874164e.jpg",
-  "https://mir-s3-cdn-cf.behance.net/project_modules/1400/efbe3278294215.5cbb998d594ed.jpg",
+  "https://i.ytimg.com/vi/z9yAcZF9hFY/maxresdefault.jpg",
+  "https://www.popoptiq.com/wp-content/uploads/2013/10/freebirds-newtrailer.jpg",
   "https://m.media-amazon.com/images/S/aplus-media-library-service-media/b0f02d10-ee7e-4727-8d69-241cf26d5995.__CR0,0,970,600_PT0_SX970_V1___.jpg",
 ]
 
 export default function HomePage() {
   const [products, setProducts] = useState([])
   const dispatch = useDispatch()
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
+    setProducts([]);
+    setLoading(true);
+
     productApi
       .getLandingPageProducts()
       .then((response) => {
         setProducts(response.data)
         console.log(response.data)
+        setLoading(false)
       })
       .catch((error) => console.log(error))
   }, [])
@@ -54,7 +60,15 @@ export default function HomePage() {
               <span className="text-orange-500">Feature</span> Product
             </h1>
           </div>
-          <ProductCardList products={products} />
+
+          {/* Loading icon */}
+          {isLoading &&
+            <div className='flex justify-center items-center h-[200px]'>
+              <Spin size='large'/>
+            </div>
+          }
+
+          {!isLoading && <ProductCardList products={products} />}
           <Link
             onClick={() => dispatch(resetAllState())}
             to="/search/all-products"
