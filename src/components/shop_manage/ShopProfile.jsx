@@ -33,6 +33,7 @@ function ShopProfile() {
   const [createDate, setCreateDate] = useState('');
   const [url, setUrl] = useState('');
   const ref = useRef(null);
+  const [address, setAddress] = useState()
 
 
   const handleCancel = () => setPreviewOpen(false);
@@ -92,15 +93,18 @@ function ShopProfile() {
 
       const dateformat = getDate(res.data[0].createDate);
       setCreateDate(dateformat);
+
+      setAddress(res.data[0].address);
     }).catch((err) => {
       console.log(err);
     })
-  }, [updateStatus, shopId]);
+  }, [updateStatus, shopId, shop.address]);
 
   const onSubmit = (data) => {
     // console.log(data);
     const params = {
       shopName: data[0],
+      address: address,
       shopImage: shopAvar[0]?.originFileObj || null,
     }
     console.log(params);
@@ -259,8 +263,8 @@ function ShopProfile() {
                     </label>
                   </div>
                   <div className="w-full pl-6">
-                    <span className="text-sm text-black mr-2">{shop.address}</span>
-                    <ChangeAddressModal/>
+                    <span className="text-sm text-black mr-2">{address}</span>
+                    <ChangeAddressModal setAddress={setAddress}/>
                   </div>
                 </div>
 

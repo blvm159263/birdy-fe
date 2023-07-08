@@ -3,7 +3,7 @@ import { City, State } from "country-state-city";
 import { useEffect } from "react";
 import { useState } from "react";
 
-export default function ChangeAddressModal() {
+export default function ChangeAddressModal({setAddress}) {
   const [isOpen, setOpen] = useState(false);
   const provinces = State.getStatesOfCountry("VN");
   const [cities, setCities] = useState(null);
@@ -32,7 +32,8 @@ export default function ChangeAddressModal() {
 
   const onConfirm = () => {
     const fullAddress = addressDetail + ', ' + city + ', ' + province;
-    console.log("Here is the new address: " + fullAddress);
+    setAddress(fullAddress);
+    setOpen(false);
   };
 
   useEffect(() => {});
