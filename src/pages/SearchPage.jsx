@@ -16,6 +16,7 @@ import StoreCardList from "../components/store/StoreCardList"
 import Pagination from "../features/search/Pagination"
 import SortBar from "../features/search/SortBar"
 import {ControlOutlined} from "@ant-design/icons";
+import { Spin } from "antd"
 
 export default function SearchPage() {
   const searchText = useSelector((state) => state.search.searchText)
@@ -32,8 +33,11 @@ export default function SearchPage() {
   const [shops, setShops] = useState([])
   const [totalPage, setTotalPage] = useState(1)
   const { searchType } = useParams()
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
+    setProducts([]);
+    setLoading(true);
     let isStillInPage = true
     setOldSearchText(searchText)
     dispatch(updateSearchType(searchType))
@@ -83,6 +87,7 @@ export default function SearchPage() {
         } else {
           console.log("Leave page, cancel load data")
         }
+        setLoading(false)
       })
       .catch((error) => console.log(error))
 
@@ -176,8 +181,15 @@ export default function SearchPage() {
         {/* Products List */}
         <ProductCardList products={products} />
 
+        {/* Loading icon */}
+        {isLoading &&
+          <div className='flex justify-center items-center h-[400px]'>
+            <Spin size='large'/>
+          </div>
+        }
+
         {/* No Product Found */}
-        {products.length === 0 ? (
+        {!isLoading && products.length === 0 ? (
           <div className="px-8 py-16">
             <img
               className="w-64 h-64 mx-auto"

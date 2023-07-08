@@ -4,7 +4,7 @@ import ProductOverviewAction from "./ProductOverviewAction"
 
 function ProductOverview({ product }) {
   return (
-    <div className="bg-white w-full rounded-md lg:py-4 sm: py-1 lg:px-10 sm: px-0 flex lg:flex-row sm: flex-col">
+    <div className="bg-white rounded-md shadow grid grid-cols-12 gap-4 lg:gap-8 p-4 lg:p-8 mb-2">
       <ProductOverviewImg product={product} />
       <ProductOverviewAction product={product} />
     </div>
