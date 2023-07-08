@@ -1,10 +1,11 @@
 import React from "react"
 import { useState } from "react"
+import ReactQuill from "react-quill"
 
 function ProductDetails({ product }) {
   return (
-    <div className="bg-white p-7 grow  lg:w-3/5 sm:w-full rounded-md lg:mb-0 sm: mb-3">
-      <h1 className="text-3xl font-bold text-left mb-5">Product Details</h1>
+    <div className="bg-white col-span-12 lg:col-span-8 p-4 lg:p-8 rounded-md shadow">
+      <h1 className="text-2xl font-bold text-left mb-5">Product Details</h1>
       {product.categoryId === 1 ? (
         <div>
           <div id="detail" className="flex justify-between w-1/3 mb-5">
@@ -54,7 +55,12 @@ function ProductDetails({ product }) {
       <p id="description" className="mb-3">
         <span className="font-bold">Description: </span>
       </p>
-      <div dangerouslySetInnerHTML={{ __html: product.description }} />
+      <ReactQuill
+        className="text-gray-900 text-sm"
+        theme="bubble"
+        value={product.description}
+        readOnly
+      />
     </div>
   )
 }

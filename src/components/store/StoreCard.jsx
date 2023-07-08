@@ -1,11 +1,21 @@
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Spin } from 'antd'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function StoreCard({shop, hideView = false}) {
+  
+  if(shop == null) {
+    return (
+      <div className='flex justify-center items-center h-[100px]'>
+        <Spin size='large'/>
+      </div>
+    )
+  }
+
   return (
-    <div className='storeCard grid grid-cols-12 bg-white rounded-sm py-4 px-2 md:px-6'>
+    <div className='storeCard grid grid-cols-12 bg-white rounded-md py-4 px-2 md:px-6 shadow'>
       <div className='col-span-8 md:col-span-5 flex mr-2 md:mr-6'>
         <img className='w-10 h-10 md:w-12 md:h-12 mb-4' src="/assets/images/avatar-empty.png" alt="avatar" />
         <div className='ml-2 mr-2 md:mr-6'>
@@ -13,8 +23,8 @@ export default function StoreCard({shop, hideView = false}) {
           <p className='text-xs md:text-base'>@{shop.shopName}</p>
         </div>
         <div className={hideView ? 'self-center' : 'flex-grow'}>
-          <Link to="/search" className='block bg-gradient-to-r from-blue-500 to-sky-500 text-center rounded-sm py-1 px-2 font-semibold text-white text-xs md:text-sm mb-1'>Chat</Link>
-          {hideView ? '' : <Link to={`/view-shop/${shop.id}`} className='block bg-gradient-to-r from-blue-500 to-sky-500 text-center rounded-sm py-1 px-2 w-full font-semibold text-white text-xs md:text-sm'>View</Link>}
+          <Link to="/search" className='block bg-gradient-to-r from-blue-500 to-sky-500 hover:brightness-125 active:brightness-110 duration-150 text-center rounded-sm py-1 px-2 font-semibold text-white text-xs md:text-sm mb-1'>Chat</Link>
+          {hideView ? '' : <Link to={`/view-shop/${shop.id}`} className='block bg-gradient-to-r from-blue-500 to-sky-500 hover:brightness-125 active:brightness-110 duration-150 text-center rounded-sm py-1 px-2 w-full font-semibold text-white text-xs md:text-sm'>View</Link>}
         </div>
       </div>
       {/*<div className='border border-neutral-100 mr-2 md:mr-6 hidden lg:block' />*/}
