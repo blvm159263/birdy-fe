@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setGender } from "../../../features/user/userSlice"
 import isLoadingPage from "../../loading/isLoadingPage"
 import userApi from "../../../api/userApi"
+import { Radio } from "antd"
+import { NotificationContext } from "../../../context/NotificationProvider"
 
 function UserInfor({ isLoading }) {
   const userInformation = useSelector((state) => state.user.userInformation)
-  const dispatch = useDispatch()
-  const [selectedGender, setSelectedGender] = useState(null)
-  const handleSaveInformation = (e) => [e.preventDefault()]
-  // console.log(userInformation)
+  const openNotificationWithIcon = useContext(NotificationContext)
 
   const [user, setUser] = useState({
     id: null,
@@ -25,7 +24,6 @@ function UserInfor({ isLoading }) {
 
   useEffect(() => {
     if (userInformation) {
-      setSelectedGender(parseInt(userInformation.gender, 10))
       setUser((prevUser) => ({
         ...prevUser,
         id: userInformation.id || "",
@@ -34,12 +32,12 @@ function UserInfor({ isLoading }) {
         email: userInformation.email || "",
         dob: userInformation.dob || "",
         createDate: userInformation.createDate || "",
-        gender: parseInt(userInformation.gender, 10) || null,
+        gender: userInformation.gender || null,
         avatarUrl: userInformation.avatarUrl || null,
         phoneNumber: userInformation.phoneNumber || "",
       }))
     }
-    console.log(userInformation)
+    console.log("userApi", userInformation)
   }, [userInformation])
 
   const handleChange = (evt) => {
@@ -48,36 +46,29 @@ function UserInfor({ isLoading }) {
     setUser((prevState) => ({
       ...prevState,
       [name]: value,
+      gender: value,
     }))
 
     console.log("update", user)
+    console.log("update", user.gender)
     // console.log(typeof value, name)
-  }
-
-  const handleResetForm = () => {
-    setUser({
-      id: "",
-      accountId: "",
-      fullName: "",
-      email: "",
-      dob: "",
-      createDate: "",
-      gender: null,
-      avatarUrl: null,
-      phoneNumber: "",
-    })
   }
 
   const updateUser = (user) => {
     userApi
       .updateUserInformation(user)
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        console.log(response.data)
+        setTimeout(() => {
+          openNotificationWithIcon("Update Information completed !!!")
+        }, 500)
+      })
       .catch((e) => console.log(e))
   }
 
   useEffect(() => {
     setUser(user)
-    // console.log(user)
+    console.log("newUser", user)
   }, [user])
 
   const handleUpdateInfor = (e) => {
@@ -149,84 +140,18 @@ function UserInfor({ isLoading }) {
                       Gender
                     </label>
                   </td>
-                  {/* <td className="flex">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="1"
-                      id="male"
-                      className="mr-3"
-                    />{" "}
-                    <label className="mr-4" htmlFor="male">
-                      Male
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      className="mr-3"
-                      value="2"
-                      id="female"
-                    />{" "}
-                    <label className="mr-4" htmlFor="female">
-                      Female
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      id="other"
-                      className="mr-3"
-                    />
-                    <label htmlFor="other">Other</label>
-                  </td> */}
-                  {/* <td className="flex">
-                    <input
-                      type="radio"
-                      name="gender"
-                      id="male"
-                      value={1}
-                      className="mr-3"
-                      checked={selectedGender === "1"}
+
+                  <>
+                    <Radio.Group
+                      value={user.gender}
+                      buttonStyle="solid"
                       onChange={handleChange}
-                    />
-                    <label className="mr-4" htmlFor="male">
-                      Male
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value={2}
-                      className="mr-3"
-                      id="female"
-                      checked={selectedGender === "2"}
-                      onChange={handleChange}
-                    />
-                    <label className="mr-4" htmlFor="female">
-                      Female
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value={3}
-                      id="other"
-                      className="mr-3"
-                      checked={selectedGender === "3"}
-                      onChange={handleChange}
-                    />
-                    <label htmlFor="other">Other</label>
-                  </td> */}
-                  <select
-                    name="gender"
-                    value={selectedGender}
-                    onChange={handleChange}
-                    className="border rounded-md"
-                  >
-                    <option value={0} disabled>
-                      Select Gender
-                    </option>
-                    <option value={1}>Male</option>
-                    <option value={2}>Female</option>
-                    <option value={3}>Other</option>
-                  </select>
+                    >
+                      <Radio.Button value={1}>Male</Radio.Button>
+                      <Radio.Button value={2}>Female</Radio.Button>
+                      <Radio.Button value={3}>Other</Radio.Button>
+                    </Radio.Group>
+                  </>
                 </tr>
               </tbody>
             </table>
