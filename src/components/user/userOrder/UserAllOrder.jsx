@@ -30,8 +30,10 @@ function UserAllOrder() {
   const isDone = true
   const [comment, setComment] = useState("")
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isModalPaymentVisible, setIsModalPaymentVisible] = useState(false)
   const [selectedOrderId, setSelectedOrderId] = useState(null)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [orderPay, setOrderPay] = useState(null)
 
   const dispatch = useDispatch()
   const { confirm } = Modal
@@ -51,14 +53,34 @@ function UserAllOrder() {
     }
   }
 
-  const handlePayment = async (order) => {
-    var amount = (order.total * 23000).toFixed(0)
+  const handlePayment = async () => {
+    if(orderPay === null) return
+    var amount = (orderPay.total * 23000).toFixed(0)
     await paymentApi
-      .getQRMomo({ amount: amount, orderId: order.code })
+      .getQRMomo({ amount: amount, orderId: orderPay.code })
       .then((res) => {
         window.location.href = res.data.payUrl
       })
   }
+
+  const handlePaymentFromBalance = async () => {
+    if(orderPay === null) return
+    console.log(orderPay.id);
+    if (userInformation.balance < orderPay.total) {
+      openNotificationWithIcon("Error", "Your balance is not enough!!!")
+      return
+    }
+    await orderApi.payOrder(orderPay.id, userInformation.id, orderPay.total).then((res) => {
+      openNotificationWithIcon("Success", "Payment success!!!")
+      fetchUserOrder()
+      setIsModalPaymentVisible(false)
+    }).catch((e) => {
+      console.log(e)
+      openNotificationWithIcon("Error", "Payment failed!!!")
+    }
+    )
+  }
+
   const handleCancelOrder = (id) => {
     setSelectedOrderId(id)
     setIsModalVisible(true)
@@ -83,6 +105,11 @@ function UserAllOrder() {
     setIsModalVisible(false)
     setComment("")
   }
+
+  const handleModalPaymentCancel = () => {
+    setIsModalPaymentVisible(false)
+  }
+
 
   const showPromiseConfirm = () => {
     return new Promise((resolve, reject) => {
@@ -145,7 +172,7 @@ function UserAllOrder() {
   useEffect(() => {
     fetchUserOrder()
     // setTotal(totalPrice)
-  }, [userInformation, userOrder])
+  }, [])
 
   const setUserChat = async (shopId) => {
     await shopApi.getShopInformationByShopId(shopId).then((res) => {
@@ -225,7 +252,7 @@ function UserAllOrder() {
                 ) : (
                   ""
                 )}
-                {order.state === "DONE" && order.paymentStatus === "PAID" ? (
+                {order.state === "DONE" && order.paymentStatus === "PAID" || order.state === "CANCELED" ? (
                   <>
                     <button className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500">
                       Buy Again
@@ -242,15 +269,7 @@ function UserAllOrder() {
                   ""
                 )}
 
-                {order.state === "CANCELED" ? (
-                  <button className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500">
-                    Buy Again
-                  </button>
-                ) : (
-                  ""
-                )}
-
-                {order.state === "PENDING" && order.paymentStatus === "PAID" ? (
+                {order.state === "Delivery" && order.paymentStatus === "PAID" ? (
                   <button
                     className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500"
                     onClick={() => handleUpdateState(order.id, "DONE", ".")}
@@ -262,14 +281,42 @@ function UserAllOrder() {
                 )}
 
                 {order.state === "PENDING" &&
-                order.paymentStatus === "PENDING" ? (
+                  order.paymentStatus === "PENDING" ? (
                   <>
                     <button
                       className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                      onClick={() => handlePayment(order)}
+                      onClick={() => {
+                        setOrderPay(order)
+                        setIsModalPaymentVisible(true)
+                      }
+                      }
                     >
                       PAY THE ORDER
                     </button>
+                    <Modal
+                      title="Choose payment method?"
+                      visible={isModalPaymentVisible}
+                      onCancel={handleModalPaymentCancel}
+                      cancelText="Cancel"
+                      okButtonProps={{ style: { display: "none" } }}
+                    >
+                      <button
+                        className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
+                        onClick={handlePaymentFromBalance}>
+                        Thanh toán bằng số dư
+                      </button>
+                      <button
+                        className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
+                        onClick={handlePayment}>
+                        Thanh toán bằng Momo QR code
+                      </button>
+                    </Modal>
+                  </>
+                ) : (
+                  ""
+                )}
+                {order.state === "PENDING" ? (
+                  <>
                     <button
                       onClick={() => handleCancelOrder(order.id)}
                       className="border border-red-500 bg-red-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-red-500 hover:border-red-500"
@@ -296,6 +343,7 @@ function UserAllOrder() {
                 ) : (
                   ""
                 )}
+
               </div>
             </div>
           </div>

@@ -59,9 +59,9 @@ export default function NavBar() {
   useEffect(() => {
     fetchUser()
   }, [])
-  useEffect(() => {
-    fetchWishlist()
-  }, [wishList])
+  // useEffect(() => {
+  //   fetchWishlist()
+  // }, [wishList])
   // console.log(wishList)
 
   const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu)
