@@ -65,7 +65,7 @@ export default function ProductRequestCard({ product }) {
       />
       <div className="p-3">
         <div className="flex justify-between">
-          <p className="font-bold text-lg">{product.productName}</p>
+          <p className="font-bold text-lg w-28 truncate">{product.productName}</p>
           <p className="font-black text-orange-500">${product.unitPrice}</p>
         </div>
         <div className="flex justify-between">

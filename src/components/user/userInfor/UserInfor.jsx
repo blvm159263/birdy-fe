@@ -1,16 +1,67 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setGender } from "../../../features/user/userSlice"
 import isLoadingPage from "../../loading/isLoadingPage"
 import userApi from "../../../api/userApi"
+import {
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  Avatar,
+  Button,
+  Upload
+} from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import { NotificationContext } from "../../../context/NotificationProvider"
+import moment from "moment"
+import storageService from "../../../api/storage"
+import { useNavigate } from "react-router-dom"
+import jwtDecode from "jwt-decode"
+
+const { Option } = Select;
+const formItemLayout = {
+  labelCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 8,
+    },
+  },
+  wrapperCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 16,
+    },
+  },
+};
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
+const tailLayout = {
+  wrapperCol: {
+    offset: 8,
+    span: 16,
+  },
+};
 
 function UserInfor({ isLoading }) {
   const userInformation = useSelector((state) => state.user.userInformation)
-  const dispatch = useDispatch()
-  const [selectedGender, setSelectedGender] = useState(null)
-  const handleSaveInformation = (e) => [e.preventDefault()]
-  // console.log(userInformation)
-
+  const openNotificationWithIcon = useContext(NotificationContext)
+  const navigate = useNavigate()
+  const [form] = Form.useForm();
   const [user, setUser] = useState({
     id: null,
     accountId: "",
@@ -21,26 +72,10 @@ function UserInfor({ isLoading }) {
     gender: null,
     avatarUrl: null,
     phoneNumber: "",
+    balance: null,
   })
+  const [avatar, setAvatar] = useState()
 
-  useEffect(() => {
-    if (userInformation) {
-      setSelectedGender(parseInt(userInformation.gender, 10))
-      setUser((prevUser) => ({
-        ...prevUser,
-        id: userInformation.id || "",
-        accountId: userInformation.accountId || "",
-        fullName: userInformation.fullName || "",
-        email: userInformation.email || "",
-        dob: userInformation.dob || "",
-        createDate: userInformation.createDate || "",
-        gender: parseInt(userInformation.gender, 10) || null,
-        avatarUrl: userInformation.avatarUrl || null,
-        phoneNumber: userInformation.phoneNumber || "",
-      }))
-    }
-    console.log(userInformation)
-  }, [userInformation])
 
   const handleChange = (evt) => {
     const { value, name } = evt.target
@@ -48,195 +83,259 @@ function UserInfor({ isLoading }) {
     setUser((prevState) => ({
       ...prevState,
       [name]: value,
+      gender: value,
     }))
 
     console.log("update", user)
+    console.log("update", user.gender)
     // console.log(typeof value, name)
-  }
-
-  const handleResetForm = () => {
-    setUser({
-      id: "",
-      accountId: "",
-      fullName: "",
-      email: "",
-      dob: "",
-      createDate: "",
-      gender: null,
-      avatarUrl: null,
-      phoneNumber: "",
-    })
   }
 
   const updateUser = (user) => {
     userApi
       .updateUserInformation(user)
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        console.log(response.data)
+        setTimeout(() => {
+          openNotificationWithIcon("Update Information completed !!!")
+        }, 500)
+      })
       .catch((e) => console.log(e))
   }
 
   useEffect(() => {
-    setUser(user)
-    // console.log(user)
-  }, [user])
+    let token = storageService.getAccessToken()
+    if (token) {
+      token = jwtDecode(token)
+      userApi.getUserByPhoneNumber(token.sub).then((response) => {
+        setUser(response.data)
+        form.setFieldsValue({
+          fullName: response.data.fullName,
+          phoneNumber: response.data.phoneNumber,
+          email: response.data.email,
+          dob: moment(response.data.dob, 'YYYY-MM-DD'),
+          gender: response.data.gender === 1 ? "Male" : "Female",
+        })
+        setAvatar(response.data.avatarUrl)
+      }
+      ).catch((e) => {
+        console.log(e)
+      })
+    } else {
+      navigate("/login")
+    }
+  }, [])
 
   const handleUpdateInfor = (e) => {
     e.preventDefault()
     updateUser(user)
   }
 
+  const onReset = () => {
+    form.setFieldsValue({
+      fullName: user.fullName,
+      phoneNumber: user.phoneNumber,
+      email: user.email,
+      dob: moment(user.dob, 'YYYY-MM-DD'),
+      gender: user.gender === 1 ? "Male" : "Female",
+    })
+  }
+
+  const onFinish = async (values) => {
+    console.log('Received values of form: ', values);
+    console.log('dob: ' + values.dob.format('YYYY-MM-DD'));
+    var isExistedEmail = false;
+    await userApi.isEmailExist(user.id, values.email).then((response) => {
+      console.log(response.data);
+      isExistedEmail = response.data;
+    }).catch((e) => {
+      console.log(e);
+    });
+    if (isExistedEmail) {
+      openNotificationWithIcon('Email is existed !!!');
+      return;
+    }
+    const userTmp = {
+      id: user.id,
+      fullName: values.fullName,
+      email: values.email,
+      dob: values.dob.format('YYYY-MM-DD'),
+      createDate: user.createDate,
+      gender: values.gender === "Male" ? 1 : 0,
+      avatarUrl: user.avatarUrl,
+      accountId: user.accountId,
+      phoneNumber: user.phoneNumber,
+      balance: null,
+    }
+    await userApi.updateUserInformation(userTmp).then((response) => {
+      console.log(response.data);
+      openNotificationWithIcon('Completed', 'Update information successfully !!!');
+      setUser(userTmp);
+    }
+    ).catch((e) => {
+      console.log(e);
+    }
+    );
+  }
+
+   const handleChangeAvatar = (info) => {
+    userApi.uploadAvatar(user.id, {file: info.file.originFileObj}).then((response) => {
+      console.log(response.data);
+      setUser((prevState) => ({
+        ...prevState,
+        avatarUrl: response.data,
+      }));
+      setAvatar(response.data);
+    }
+    ).catch((e) => {
+      console.log(e);
+    }
+    );
+   }
+
   return (
     <div className="w-5/6 bg-white">
-      <h1 className="py-6 text-center text-2xl font-bold">Your Information</h1>
+      <h1 className="py-6 text-center text-2xl font-bold">Thông tin</h1>
       <hr />
       {isLoading ? (
         <isLoadingPage />
       ) : (
-        <div>
-          <form className="py-10 px-16">
-            <table className="table-auto border-separate border-spacing-y-4">
-              <tbody>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="">
-                      Nickname
-                    </label>
-                  </td>
-                  <td>
-                    <p>{user.email}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="username">
-                      Username
-                    </label>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      id="fullName"
-                      value={user.fullName}
-                      onChange={handleChange}
-                      name="fullName"
-                      className="border rounded-md"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="">
-                      Email
-                    </label>
-                  </td>
-                  <td>
-                    <p>{userInformation && userInformation.email}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="">
-                      Phone
-                    </label>
-                  </td>
-                  <td>
-                    <p>{userInformation && userInformation.phoneNumber}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="gender">
-                      Gender
-                    </label>
-                  </td>
-                  {/* <td className="flex">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="1"
-                      id="male"
-                      className="mr-3"
-                    />{" "}
-                    <label className="mr-4" htmlFor="male">
-                      Male
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      className="mr-3"
-                      value="2"
-                      id="female"
-                    />{" "}
-                    <label className="mr-4" htmlFor="female">
-                      Female
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      id="other"
-                      className="mr-3"
-                    />
-                    <label htmlFor="other">Other</label>
-                  </td> */}
-                  {/* <td className="flex">
-                    <input
-                      type="radio"
-                      name="gender"
-                      id="male"
-                      value={1}
-                      className="mr-3"
-                      checked={selectedGender === "1"}
-                      onChange={handleChange}
-                    />
-                    <label className="mr-4" htmlFor="male">
-                      Male
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value={2}
-                      className="mr-3"
-                      id="female"
-                      checked={selectedGender === "2"}
-                      onChange={handleChange}
-                    />
-                    <label className="mr-4" htmlFor="female">
-                      Female
-                    </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value={3}
-                      id="other"
-                      className="mr-3"
-                      checked={selectedGender === "3"}
-                      onChange={handleChange}
-                    />
-                    <label htmlFor="other">Other</label>
-                  </td> */}
-                  <select
-                    name="gender"
-                    value={selectedGender}
-                    onChange={handleChange}
-                    className="border rounded-md"
-                  >
-                    <option value={0} disabled>
-                      Select Gender
-                    </option>
-                    <option value={1}>Male</option>
-                    <option value={2}>Female</option>
-                    <option value={3}>Other</option>
-                  </select>
-                </tr>
-              </tbody>
-            </table>
-            <button
-              onClick={handleUpdateInfor}
-              className="px-3 py-1 border-2 border-sky-500 rounded-md bg-sky-500 text-white hover:border-white"
+        <div className='grid grid-cols-9'>
+          <div className="col-span-6">
+            <Form
+              {...formItemLayout}
+              form={form}
+              style={{
+                maxWidth: 600,
+                padding: 40,
+              }}
+              onFinish={onFinish}
+            // initialValues={{
+            //   fullName: userInformation?.fullName,
+            //   phoneNumber: userInformation?.phoneNumber,
+            //   email: userInformation?.email,
+            //   dob: moment(userInformation?.dob, 'YYYY-MM-DD'),
+            //   gender: userInformation?.gender===1 ? "Male": "Female",
+            // }}
             >
-              Save
-            </button>
-          </form>
+
+              <Form.Item
+                name="fullName"
+                label="Họ và tên"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Hãy nhập Họ tên!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                name="phoneNumber"
+                label="Số điện thoại"
+              >
+                <Input readOnly disabled />
+              </Form.Item>
+
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[
+                  {
+                    type: 'email',
+                    message: 'Email không hợp lệ!',
+                  },
+                  {
+                    required: true,
+                    message: 'Hãy nhập Email!',
+                    whitespace: false,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                name="dob"
+                label="Ngày sinh"
+                rules={[
+                  {
+                    type: 'object',
+                    required: true,
+                    message: 'Hãy nhập ngày sinh!',
+                  },
+                ]}
+              >
+                <DatePicker />
+              </Form.Item>
+
+              <Form.Item
+                name="gender"
+                label="Giới tính"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Select
+                  placeholder="Chọn giới tính"
+                //onChange={onGenderChange}
+                allowClear={false}
+                >
+                  <Option value="Male">Name</Option>
+                  <Option value="Female">Nữ</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item {...tailLayout}>
+                <Button style={{ marginRight: 10 }} type="primary" htmlType="submit">
+                  Cập nhật
+                </Button>
+                <Button htmlType="button" onClick={onReset}>
+                  Xóa
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+          <div className="col-span-3 h-full">
+            <Avatar
+              style={{
+                margin: 'auto',
+                display: 'block',
+                verticalAlign: 'middle',
+                marginTop: '50px',
+              }}
+              size={{
+                xs: 40,
+                sm: 64,
+                md: 80,
+                lg: 100,
+                xl: 120,
+                xxl: 140,
+              }}
+              src={avatar? avatar : ""}
+            />
+            <Upload
+              name="file"
+              onChange={handleChangeAvatar}
+              showUploadList={false}
+            >
+              <Button
+                style={{
+                  margin: 'auto',
+                  display: 'block',
+                  verticalAlign: 'middle',
+                  marginTop: '50px',
+                  marginLeft: '100px',
+                }}
+                icon={<UploadOutlined />}
+              >
+                Tải ảnh lên
+              </Button>
+            </Upload>
+          </div>
         </div>
       )}
     </div>

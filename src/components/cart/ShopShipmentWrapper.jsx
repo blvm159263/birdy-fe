@@ -73,7 +73,7 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
         return (
             <div className="bg-white rounded-sm mt-4 flex justify-between gap-4 items-center text-center p-2 drop-shadow-sm">
                 <div className="col-span-7 font-bold">
-                    Shipment Type:
+                    Phương thức giao hàng
                     <Select
                         className="ml-4"
                         onChange={(value) => {
@@ -83,7 +83,7 @@ function ShopShipmentWrapper({ user, shipmentIds, setShipmentIds, shopId, addres
                             label: shipment.shipmentTypeName,
                             value: shipment.id,
                         }))}
-                        placeholder="Shipment Type"
+                        placeholder="Chọn phương thức"
                     />
                 </div>
                 <div className="col-span-2">

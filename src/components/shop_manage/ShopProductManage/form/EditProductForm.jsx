@@ -90,7 +90,7 @@ export default function EditProductForm({onEditSuccess}) {
         onEditSuccess();
       }
     }).catch((error) => {
-      openNotificationWithIcon('Error', 'Error while edit product!');
+      openNotificationWithIcon('Error', 'Image size is too big!');
       console.log(error);
     })
   }

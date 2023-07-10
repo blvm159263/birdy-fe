@@ -124,7 +124,7 @@ function App() {
                   <Route path=":searchType" element={<SearchPage />} />
                 </Route>
                 <Route path="/detail-item/:id" element={<DetailItemPage />} />
-                <Route path="/wishlist" element={<WishList />} />
+                {role === "USER"? (<Route path="/wishlist" element={<WishList />} />) : ''}
                 <Route path="/cart">
                   <Route index element={<CartPage />} />
                   <Route path="/cart/checkout" element={<CheckoutPage />} />
@@ -208,6 +208,7 @@ function App() {
 
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
+            <Route path="*" element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
             <Route
               path={AdminSubPageType.DASHBOARD.path}
               element={<AdminDashboard />}
@@ -224,7 +225,6 @@ function App() {
               path={AdminSubPageType.NEW_PRODUCT_REQUESTS.path}
               element={<AdminProductRequests />}
             />
-            <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

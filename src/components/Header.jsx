@@ -59,9 +59,9 @@ export default function NavBar() {
   useEffect(() => {
     fetchUser()
   }, [])
-  useEffect(() => {
-    fetchWishlist()
-  }, [wishList])
+  // useEffect(() => {
+  //   fetchWishlist()
+  // }, [wishList])
   // console.log(wishList)
 
   const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu)
@@ -91,7 +91,7 @@ export default function NavBar() {
                 to={`/search/${SearchType.ALL_PRODUCT.text}`}
                 onClick={() => dispatch(resetAllState())}
               >
-                All Products
+                Tất cả
               </Link>
             </li>
             <li>
@@ -99,7 +99,7 @@ export default function NavBar() {
                 to={`/search/${SearchType.BIRD.text}`}
                 onClick={() => dispatch(resetAllState())}
               >
-                Birds
+                Chim
               </Link>
             </li>
             <li>
@@ -107,7 +107,7 @@ export default function NavBar() {
                 to={`/search/${SearchType.ACCESSORY.text}`}
                 onClick={() => dispatch(resetAllState())}
               >
-                Accessories
+                Phụ kiện
               </Link>
             </li>
             <li>
@@ -115,7 +115,7 @@ export default function NavBar() {
                 to={`/search/${SearchType.FOOD.text}`}
                 onClick={() => dispatch(resetAllState())}
               >
-                Foods
+                Thức ăn
               </Link>
             </li>
           </ul>
@@ -186,7 +186,7 @@ export default function NavBar() {
                   toggleMobileMenu()
                 }}
               >
-                All Products
+                Tất cả
               </Link>
             </li>
             <li>
@@ -197,7 +197,7 @@ export default function NavBar() {
                   toggleMobileMenu()
                 }}
               >
-                Birds
+                Chim
               </Link>
             </li>
             <li>
@@ -208,7 +208,7 @@ export default function NavBar() {
                   toggleMobileMenu()
                 }}
               >
-                Accessories
+                Phụ kiện
               </Link>
             </li>
             <li>
@@ -219,15 +219,15 @@ export default function NavBar() {
                   toggleMobileMenu()
                 }}
               >
-                Foods
+                Thức ăn
               </Link>
             </li>
             <hr />
             <li>
-              <Link to="/login">Sign in</Link>
+              <Link to="/login">Đăng nhập</Link>
             </li>
             <li>
-              <Link to="/shop-login">Sell product</Link>
+              <Link to="/shop-login">Bán sản phẩm</Link>
             </li>
           </ul>
         </div>
@@ -235,23 +235,23 @@ export default function NavBar() {
           {isLogin ? (
             <>
               <Link to="/user" className="px-2 pt-1">
-                PROFILE
+                Hồ sơ
               </Link>
               <span className="px-2 pt-[0.2rem]">|</span>
               <span
                 onClick={onLogout}
                 className="px-2 pt-[0.2rem] cursor-pointer"
               >
-                Log Out
+                Đăng xuất
               </span>
             </>
           ) : (
             <>
               <Link to="/shop-login" className="px-2 pt-1 mr-2">
-                SELL PRODUCT
+                Bán sản phẩm
               </Link>
               <Link to="/login" className="px-2 pt-1">
-                SIGN IN
+                Đăng nhập
               </Link>
             </>
           )}

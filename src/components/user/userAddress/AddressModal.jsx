@@ -80,10 +80,10 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
         onSubmit={handleAddAddress}
         className=" bg-white p-10 lg:h-2/4 lg:w-2/5 sm: w-full flex lg:flex-col sm: flex-col lg:items-between sm: items-center"
       >
-        <h1 className="text-center font-bold text-2xl mb-5">Add new Address</h1>
+        <h1 className="text-center font-bold text-2xl mb-5">Thêm địa chỉ</h1>
         <div className="w-full flex lg:flex-nowrap sm: flex-wrap justify-between mb-5">
           <label className="lg:w-1/5 md: full sm: w-full" htmlFor="name">
-            Name
+            Tên
           </label>
           <input
             className="rounded-md border lg:w-4/5 md: w-full sm:w-full text-black"
@@ -95,7 +95,7 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
         </div>
         <div className="w-full flex lg:flex-nowrap sm: flex-wrap justify-between mb-5">
           <label className="lg:w-1/5 md: w-full sm:w-full" htmlFor="address">
-            Address
+            Địa chỉ
           </label>
           <input
             className="rounded-md lg:w-4/5 md: w-full sm:w-full border text-black"
@@ -113,12 +113,12 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
             onChange={handleChange}
             checked={newAddress.isDefault}
           />
-          <label htmlFor="">Set as default address</label>
+          <label htmlFor="">Đặt làm mặc định</label>
         </div>
 
         <div className="flex justify-end">
           <button className="text-sky-500 hover:text-sky-300" type="submit">
-            Add
+            Thêm
           </button>
           <button
             className="ml-4 text-red-500 hover:text-red-300"
@@ -127,7 +127,7 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
               setUpdated(false)
             }}
           >
-            Close
+            Đóng
           </button>
         </div>
       </form>

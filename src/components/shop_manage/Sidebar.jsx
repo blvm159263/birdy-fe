@@ -4,6 +4,9 @@ import {Menu} from "antd"
 import storageService from "../../api/storage"
 import {LoginContext} from "../../context/LoginProvider"
 import shopApi from "../../api/shopApi"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { setUpdated } from "../../features/shops/shopSlice"
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -113,6 +116,8 @@ function Sidebar() {
   const { setIsLogin, setRole, shopId } = useContext(LoginContext)
   const [shop, setShop] = useState()
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
+  const updated = useSelector(state => state.shop.updated)
 
   const navigate = useNavigate()
   const onLogout = () => {
@@ -136,9 +141,10 @@ function Sidebar() {
   }
 
   useEffect(() => {
+    updated && dispatch(setUpdated(false));
     fetchShop();
     // handlePath();
-  }, [shopId])
+  }, [shopId, updated])
 
 
   const handlePath = function () {

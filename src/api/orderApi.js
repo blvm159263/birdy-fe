@@ -21,6 +21,14 @@ const orderApi = {
         const url = `/orders/edit/${id}?state=${state}&comment=${comment}`
         return axiosClient.patch(url)
     },
+    payOrder(orderId, userId, amount){
+        const url = `/orders/${orderId}/user/${userId}/payment?amount=${amount}`
+        return axiosClient.put(url)
+    },
+    paymentCheckout(code, userId, amount){
+        const url = `/orders/payment?amount=${amount}&code=${code}&userId=${userId}`
+        return axiosClient.put(url)
+    }
 }
 
 export default orderApi

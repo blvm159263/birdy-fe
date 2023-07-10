@@ -6,6 +6,9 @@ import format from "date-fns/format";
 import shopApi from "../../api/shopApi";
 import { NotificationContext } from "../../context/NotificationProvider";
 import { LoginContext } from "../../context/LoginProvider";
+import ChangeAddressModal from "./ChangeAddressModal";
+import { useDispatch } from "react-redux";
+import { setUpdated } from "../../features/shops/shopSlice";
 
 
 const getBase64 = (file) =>
@@ -32,6 +35,8 @@ function ShopProfile() {
   const [createDate, setCreateDate] = useState('');
   const [url, setUrl] = useState('');
   const ref = useRef(null);
+  const [address, setAddress] = useState();
+  const dispatch = useDispatch();
 
 
   const handleCancel = () => setPreviewOpen(false);
@@ -91,15 +96,18 @@ function ShopProfile() {
 
       const dateformat = getDate(res.data[0].createDate);
       setCreateDate(dateformat);
+
+      setAddress(res.data[0].address);
     }).catch((err) => {
       console.log(err);
     })
-  }, [updateStatus, shopId]);
+  }, [updateStatus, shopId, shop.address]);
 
   const onSubmit = (data) => {
     // console.log(data);
     const params = {
       shopName: data[0],
+      address: address,
       shopImage: shopAvar[0]?.originFileObj || null,
     }
     console.log(params);
@@ -108,6 +116,7 @@ function ShopProfile() {
       if (res.status === 200) {
         // alert('Update success!');
         setUpdateStatus(true);
+        dispatch(setUpdated(true));
         openNotificationWithIcon('Success!', 'Update Shop Profile successfully!');
       }
     }).catch((err) => {
@@ -228,6 +237,19 @@ function ShopProfile() {
                     <label
                       className="pr-2 block text-right text-sm font-medium text-gray-400"
                     >
+                      Balance
+                    </label>
+                  </div>
+                  <div className="w-full pl-6">
+                    <span className="text-sm text-black">$ {shop?.balance?.toFixed(2) || '0.00'}</span>
+                  </div>
+                </div>
+
+                <div className="mb-14 flex items-center">
+                  <div className="w-1/5">
+                    <label
+                      className="pr-2 block text-right text-sm font-medium text-gray-400"
+                    >
                       Create Date
                     </label>
                   </div>
@@ -258,15 +280,8 @@ function ShopProfile() {
                     </label>
                   </div>
                   <div className="w-full pl-6">
-                    <span className="text-sm text-black">{shop.address}</span>
-                    {/* <span className="text-sm text-black">73/40, April 30th street, Trung Dung Ward,<br /> Bien Hoa city, Dong Nai province </span> */}
-                    {/* <input
-                      type="text"
-                      id="phone"
-                      name="phone"
-                      placeholder="shop phone"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 hover:border-blue-500 focus:outline-none focus:shadow-outline block w-full p-2.5"
-                    /> */}
+                    <span className="text-sm text-black mr-2">{address}</span>
+                    <ChangeAddressModal setAddress={setAddress}/>
                   </div>
                 </div>
 

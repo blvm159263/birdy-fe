@@ -56,7 +56,7 @@ function AddressSelectionModal({ user, setAddress, setModalOpen, modalOpen }) {
                 cancelButtonProps={{ className: 'bg-white-500 hover:bg-red-700 text-black font-bold py-2 px-4 rounded-full text-center pb-7' }}
                 okButtonProps={{ className: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-center pb-7' }}
             >
-                <div className='font-bold text-lg pb-3 border-b-2'>My addresses</div>
+                <div className='font-bold text-lg pb-3 border-b-2'>Địa chỉ của tôi</div>
 
                 <Radio.Group className='mt-6 ' onChange={onChange} value={value}>
                     <Space direction="vertical">
@@ -64,7 +64,7 @@ function AddressSelectionModal({ user, setAddress, setModalOpen, modalOpen }) {
                             <Radio key={address.id} className='w-full pb-3 border-b-2' value={address}>{address.address}</Radio>
                         ))
                         }
-                        <Button onClick={onNew} className='mt-4 outline-dashed outline-1' >New address</Button>
+                        <Button onClick={onNew} className='mt-4 outline-dashed outline-1' >Thêm mới</Button>
                     </Space>
                 </Radio.Group>
             </Modal>

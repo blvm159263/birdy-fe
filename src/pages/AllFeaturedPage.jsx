@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import ProductCardList from "../components/product/ProductCardList";
 import productApi from "../api/productApi";
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import Pagination from "../features/search/Pagination";
 
-export default function() {
+export default function () {
   const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const page = useSelector(state => state.search.page);
@@ -13,15 +13,15 @@ export default function() {
     let isStillInPage = true;
 
     // Call api to get all feature product
-    productApi.getAllFeaturedProduct({page: page}).then((response) => {
-        if (isStillInPage) {
-          setProducts(response.data[0]);
-          setTotalPage(response.data[1]);
-          console.log(response.data);
-        } else {
-          console.log('Leave page, cancel load data');
-        }
-      })
+    productApi.getAllFeaturedProduct({ page: page }).then((response) => {
+      if (isStillInPage) {
+        setProducts(response.data[0]);
+        setTotalPage(response.data[1]);
+        console.log(response.data);
+      } else {
+        console.log('Leave page, cancel load data');
+      }
+    })
       .catch((error) => console.log(error));
 
     return () => {
@@ -36,7 +36,7 @@ export default function() {
         <div className="flex justify-center py-4">
           <img className="h-6" src="/assets/images/logo-orange.png" alt="logo" />
           <h1 className="font-bold text-2xl mx-4">
-            <span className="text-orange-500">Feature</span> Product
+            <span className="text-orange-500">Sản phẩm</span> nổi bật
           </h1>
         </div>
 
@@ -51,7 +51,7 @@ export default function() {
         ) : ''}
 
         {/* Pagination */}
-        <Pagination totalPage={totalPage}/>
+        <Pagination totalPage={totalPage} />
       </section>
     </div>
   )
