@@ -9,7 +9,7 @@ const AdminSubPageType = {
     path: "product-requests"
   },
   PRODUCT_REPORTS: {
-    path: "shop-requests"
+    path: "product-reports"
   },
   ALL_USERS: {
     path: "all-users"

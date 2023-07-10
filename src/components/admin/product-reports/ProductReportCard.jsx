@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import adminApi from "../../../api/adminApi";
 import { NotificationContext } from "../../../context/NotificationProvider";
-import { openProductRequestDetailModal } from "../../../features/admin/adminSlice";
+import { openProductReportModal, openProductRequestDetailModal } from "../../../features/admin/adminSlice";
 import { triggerSearch } from "../../../features/search/searchSlice";
 
 export default function ProductReportCard({ report }) {
@@ -14,7 +14,7 @@ export default function ProductReportCard({ report }) {
   const { product } = report;
 
   function onViewDetail(e) {
-    // dispatch(openProductRequestDetailModal(product));
+    dispatch(openProductReportModal(report));
   }
 
   return (

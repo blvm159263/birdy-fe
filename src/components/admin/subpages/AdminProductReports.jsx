@@ -6,6 +6,7 @@ import AdminSubPageType from "../../../constants/AdminSubPageType";
 import { setCurrentAdminSubPage } from "../../../features/ui/uiSlice";
 import ProductReportList from "../product-reports/ProductReportList";
 import adminApi from "../../../api/adminApi";
+import ProductReportModal from "../product-reports/ProductReportModal";
 
 export default function AdminProductReports() {
   const [reports, setReports] = useState([]);
@@ -44,6 +45,8 @@ export default function AdminProductReports() {
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </div>
       )}
+
+      <ProductReportModal/>
     </div>
   )
 }
