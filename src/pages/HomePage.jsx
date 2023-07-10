@@ -42,7 +42,7 @@ export default function HomePage() {
             alt="logo"
           />
           <h1 className="font-bold text-2xl mx-4">
-            <span className="text-sky-500">Browse</span> Now
+            <span className="text-sky-500">Khám Phá</span> Ngay
           </h1>
         </div>
         <ImageCarousel imageUrls={imageUrls} />
@@ -57,7 +57,7 @@ export default function HomePage() {
               alt="logo"
             />
             <h1 className="font-bold text-2xl mx-4">
-              <span className="text-orange-500">Feature</span> Product
+              <span className="text-orange-500">Sản Phẩm</span> Nổi Bật
             </h1>
           </div>
 
@@ -71,10 +71,10 @@ export default function HomePage() {
           {!isLoading && <ProductCardList products={products} />}
           <Link
             onClick={() => dispatch(resetAllState())}
-            to="/search/all-products"
+            to="/all-featured"
             className="self-center rounded-sm bg-orange-500 text-white px-4 py-1 block mx-auto my-10"
           >
-            SEE MORE
+            XEM THÊM
           </Link>
         </div>
       </section>
@@ -83,21 +83,20 @@ export default function HomePage() {
         <div className="container mx-auto flex flex-col py-4 pb-12">
           <div className="flex flex-col justify-center items-center py-6">
             <h1 className="text-white font-bold text-2xl mx-4">
-              <span className="text-orange-500">Keep</span> in{" "}
-              <span className="text-orange-500">Touch</span>
+              <span className="text-orange-500">Kết nối</span> với{" "}
+              <span className="text-orange-500">chúng tôi</span>
             </h1>
             <p className="my-8 text-white">
-              Subscribe to our weekly newsletter and receive exclusive offers on
-              products you love!
+              Hãy để lại liên lạc của bạn để nhận được những thông tin mới nhất!
             </p>
             <div className="flex rounded-sm overflow-hidden w-full max-w-lg">
               <input
                 className="p-2 px-6 w-full"
                 type="text"
-                placeholder="Email Address"
+                placeholder="Địa chỉ email của bạn"
               />
               <button className="bg-orange-500 p-2 px-6 font-bold text-xs">
-                SUBSCRIBE
+                Gửi
               </button>
             </div>
           </div>

@@ -195,7 +195,7 @@ function UserInfor({ isLoading }) {
 
   return (
     <div className="w-5/6 bg-white">
-      <h1 className="py-6 text-center text-2xl font-bold">Your Information</h1>
+      <h1 className="py-6 text-center text-2xl font-bold">Thông tin</h1>
       <hr />
       {isLoading ? (
         <isLoadingPage />
@@ -221,11 +221,11 @@ function UserInfor({ isLoading }) {
 
               <Form.Item
                 name="fullName"
-                label="Full Name"
+                label="Họ và tên"
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your fullName!',
+                    message: 'Hãy nhập Họ tên!',
                   },
                 ]}
               >
@@ -234,14 +234,7 @@ function UserInfor({ isLoading }) {
 
               <Form.Item
                 name="phoneNumber"
-                label="Phone Number"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your password!',
-                  },
-                ]}
-                hasFeedback
+                label="Số điện thoại"
               >
                 <Input readOnly disabled />
               </Form.Item>
@@ -252,11 +245,11 @@ function UserInfor({ isLoading }) {
                 rules={[
                   {
                     type: 'email',
-                    message: 'The input is not valid E-mail!',
+                    message: 'Email không hợp lệ!',
                   },
                   {
                     required: true,
-                    message: 'Please input your Email!',
+                    message: 'Hãy nhập Email!',
                     whitespace: false,
                   },
                 ]}
@@ -266,12 +259,12 @@ function UserInfor({ isLoading }) {
 
               <Form.Item
                 name="dob"
-                label="Birthday"
+                label="Ngày sinh"
                 rules={[
                   {
                     type: 'object',
                     required: true,
-                    message: 'Please input your Birthday!',
+                    message: 'Hãy nhập ngày sinh!',
                   },
                 ]}
               >
@@ -280,7 +273,7 @@ function UserInfor({ isLoading }) {
 
               <Form.Item
                 name="gender"
-                label="Gender"
+                label="Giới tính"
                 rules={[
                   {
                     required: true,
@@ -288,20 +281,20 @@ function UserInfor({ isLoading }) {
                 ]}
               >
                 <Select
-                  placeholder="Select your gender"
+                  placeholder="Chọn giới tính"
                 //onChange={onGenderChange}
-                //allowClear
+                allowClear={false}
                 >
-                  <Option value="Male">Male</Option>
-                  <Option value="Female">Female</Option>
+                  <Option value="Male">Name</Option>
+                  <Option value="Female">Nữ</Option>
                 </Select>
               </Form.Item>
               <Form.Item {...tailLayout}>
                 <Button style={{ marginRight: 10 }} type="primary" htmlType="submit">
-                  Submit
+                  Cập nhật
                 </Button>
                 <Button htmlType="button" onClick={onReset}>
-                  Reset
+                  Xóa
                 </Button>
               </Form.Item>
             </Form>
@@ -339,7 +332,7 @@ function UserInfor({ isLoading }) {
                 }}
                 icon={<UploadOutlined />}
               >
-                Click to Upload
+                Tải ảnh lên
               </Button>
             </Upload>
           </div>

@@ -25,19 +25,19 @@ export default function CartPage() {
             <input type='checkbox' checked={selected} onChange={() => selected ? dispatch(deSelectAllItems()) : dispatch(selectAllItems())}/>
           </div>
           <div className="col-span-3 text-left font-bold">
-            Product
+            Sản phẩm
           </div>
           <div className='col-span-1'>
-            Type
+            Loại
           </div>
           <div className='col-span-1'>
-            Price
+            Giá
           </div>
           <div className='col-span-1'>
-            Quantity
+            Số lượng
           </div>
           <div className='col-span-1 font-bold'>
-            Total
+            Tổng
           </div>
           <div className='col-span-1'>
           </div>
@@ -51,20 +51,20 @@ export default function CartPage() {
             <input type='checkbox' checked={selected} onChange={() => selected ? dispatch(deSelectAllItems()) : dispatch(selectAllItems())}/>
           </div>
           <div className="col-span-1 text-left">
-            Choose All
+            Chọn tất cả
           </div>
           <div className="col-span-2 text-red-500 font-bold">
             {totalSelectedProduct === 0 ?
-              <span className='text-neutral-500'>Delete Selected</span> :
-              <button onClick={() => dispatch(setShowCartDeleteAllSelectedModal(true))}>Delete Selected</button>}
+              <span className='text-neutral-500'>Xóa sản phẩm đang chọn</span> :
+              <button onClick={() => dispatch(setShowCartDeleteAllSelectedModal(true))}>Xóa sản phẩm đang chọn</button>}
           </div>
           <div className="col-span-3">
-            Total (<span className='font-bold'>{totalSelectedProduct}</span> products): <span className='font-bold'>${totalSelectedPrice.toFixed(2)}</span>
+            Tổng (<span className='font-bold'>{totalSelectedProduct}</span> sản phẩm): <span className='font-bold'>${totalSelectedPrice.toFixed(2)}</span>
           </div>
           <div className="col-span-2">
             {totalSelectedProduct === 0 ?
-            (<span className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
-            (<Link to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</Link>)}
+            (<span className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Thánh toán</span>) :
+            (<Link to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Thánh toán</Link>)}
           </div>
         </div>
       </section>

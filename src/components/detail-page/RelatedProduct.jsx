@@ -55,14 +55,14 @@ function RelatedProduct({ product }) {
 
   return (
     <div className="bg-white p-4 lg:p-8 mt-2 rounded-md shadow">
-      <h1 className="text-2xl font-bold text-left mb-5">Related Products</h1>
+      <h1 className="text-2xl font-bold text-left mb-5">Sản phẩm liên quan</h1>
       <ProductCardList products={allProducts.slice(0, 5)} />
       <div className="py-10 text-center">
         <Link
           to={`/search/${(categoryId === 1 && 'birds') || (categoryId === 2 && 'accessories') || (categoryId === 3 && 'foods')}`}
           className="underline hover:text-sky-500 active:text-sky-600 duration-150"
         >
-          View all related products
+          Xem tất cả
         </Link>
       </div>
     </div>

@@ -41,7 +41,7 @@ function UserAddress() {
     return (
       <div className="w-5/6 bg-white">
         <div className="flex justify-between items-center py-4 px-10">
-          <h1 className=" text-center text-2xl font-bold">Address</h1>
+          <h1 className=" text-center text-2xl font-bold">Địa chỉ</h1>
           <button
             onClick={() => {
               setIsAddNew(!isAddNew)
@@ -49,13 +49,13 @@ function UserAddress() {
             }}
             className="rounded-md py-3 px-2 text-white bg-sky-400"
           >
-            + Add new Address
+            + Thêm địa chỉ mới
           </button>
         </div>
         <hr />
 
         <div className="py-4 px-6">
-          <p>No address found</p>
+          <p>Không có địa chỉ</p>
         </div>
 
         {isAddNew && (
@@ -75,7 +75,7 @@ function UserAddress() {
   return (
     <div className="w-5/6 bg-white">
       <div className="flex justify-between items-center py-4 px-10">
-        <h1 className=" text-center text-2xl font-bold">Address</h1>
+        <h1 className=" text-center text-2xl font-bold">Địa chỉ</h1>
         <button
           onClick={() => {
             setIsAddNew(!isAddNew)
@@ -83,7 +83,7 @@ function UserAddress() {
           }}
           className="rounded-md py-3 px-2 text-white bg-sky-400"
         >
-          + Add new Address
+          + Thêm địa chỉ mới
         </button>
       </div>
       <hr />
@@ -146,7 +146,7 @@ function UserAddress() {
                 </div>
                 <p>{item.address}</p>
                 {item.isDefault && (
-                  <p className="text-red-400">Default Address</p>
+                  <p className="text-red-400">Địa chỉ mặc định</p>
                 )}
               </div>
               <div className="flex flex-col items-end">
@@ -157,7 +157,7 @@ function UserAddress() {
                     setUpdated(false)
                   }}
                 >
-                  Update
+                  Cập nhật
                 </button>
               </div>
               {isUpdate === item.id && (

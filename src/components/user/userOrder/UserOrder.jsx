@@ -10,14 +10,14 @@ function UserOrder() {
   console.log("render UserOrder");
   return (
     <div className="bg-white w-4/5">
-      <h1 className="text-center py-2 text-2xl font-bold">User Order</h1>
+      <h1 className="text-center py-2 text-2xl font-bold">Đơn hàng của bạn</h1>
       <hr />
       <div className="flex items-center justify-evenly py-1">
-        <Link to="">All Orders</Link>
-        <Link to="pending">Pending</Link>
-        <Link to="delivery">Delivery</Link>
-        <Link to="completed">Completed</Link>
-        <Link to="canceled">Canceled</Link>
+        <Link to="">Tất cả </Link>
+        <Link to="pending">Đang chờ</Link>
+        <Link to="delivery">Đang vận chuyển</Link>
+        <Link to="completed">Hoàn tất</Link>
+        <Link to="canceled">Đã hủy</Link>
       </div>
       <hr />
       <div>

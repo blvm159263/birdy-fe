@@ -174,7 +174,7 @@ export default function CheckoutPage() {
             <section className='container mx-auto'>
                 <div className='grid grid-cols-7 text-center bg-white rounded-sm p-2'>
                     <div className="col-span-3 text-left font-bold">
-                        Shipping address
+                        Địa chỉ giao hàng
                     </div>
                 </div>
                 <div className='grid grid-cols-7 text-center bg-white rounded-sm p-2'>
@@ -186,7 +186,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className='col-span-1 underline text-cyan-500'>
                         <Button type="link" onClick={() => setModalOpen(true)}>
-                            Change
+                            Đổi
                         </Button>
                         <AddressSelectionModal user={user} address={address} setAddress={setAddress} setModalOpen={setModalOpen} modalOpen={modalOpen} />
                     </div>
@@ -194,19 +194,19 @@ export default function CheckoutPage() {
 
                 <div className='grid grid-cols-7 text-center bg-white rounded-sm p-2 mt-3'>
                     <div className="col-span-3 text-left font-bold">
-                        Product
+                        Sản phẩm
                     </div>
                     <div className='col-span-1'>
-                        Type
+                        Loại
                     </div>
                     <div className='col-span-1'>
-                        Price
+                        Giá
                     </div>
                     <div className='col-span-1'>
-                        Quantity
+                        Số lượng
                     </div>
                     <div className='col-span-1 font-bold'>
-                        Total
+                        Tổng
                     </div>
                 </div>
                 {shopIds.map(shopId => {
@@ -221,7 +221,7 @@ export default function CheckoutPage() {
 
                 <div className="bg-white rounded-sm mt-4 flex justify-between gap-4 items-center text-center p-2 drop-shadow-sm">
                     <div className="col-span-6 font-bold">
-                        Payment method:
+                        Phương thức thanh toán:
                         <Select
                             className="ml-4"
                             onChange={(value) => {
@@ -243,15 +243,15 @@ export default function CheckoutPage() {
 
                 <div className='bg-white rounded-sm mt-4 flex justify-between gap-4 items-center text-center p-2 drop-shadow-sm'>
                     <div className="col-span-3">
-                        Total (<span className='font-bold'>{totalSelectedProduct}</span> products):
+                        Tổng (<span className='font-bold'>{totalSelectedProduct}</span> sản phẩm):
                     </div>
                     <div className="col-span-6">
                         <span className='font-bold'>${totalSelectedPrice.toFixed(2)} + ${totalShipment.toFixed(2)} = ${(totalSelectedPrice + totalShipment).toFixed(2)}</span>
                     </div>
                     <div className="col-span-2">
                         {(totalSelectedProduct === 0 || shipmentIds.length !== shopIds.length || address === null) ?
-                            (<span to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Checkout</span>) :
-                            (<button to="/cart/checkout" onClick={onCheckout} className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Checkout</button>)}
+                            (<span to="/cart/checkout" className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-400'>Thanh toán</span>) :
+                            (<button to="/cart/checkout" onClick={onCheckout} className='py-1 px-4 w-full rounded-sm text-white bg-gradient-to-r from-sky-500 via-sky-600 to-sky-400'>Thanh toán</button>)}
                     </div>
                 </div>
             </section>
