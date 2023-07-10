@@ -116,14 +116,14 @@ function ShopOrderManage() {
 
   // test
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      align: 'center',
-      width: 80,
-      // sorter: (a, b) => a.id - b.id,
-      // sorter: true,
-    },
+    // {
+    //   title: 'ID',
+    //   dataIndex: 'id',
+    //   align: 'center',
+    //   width: 80,
+    //   // sorter: (a, b) => a.id - b.id,
+    //   // sorter: true,
+    // },
     {
       title: 'Order Date',
       dataIndex: 'date',
@@ -137,12 +137,17 @@ function ShopOrderManage() {
     {
       title: 'Total',
       dataIndex: 'total',
-      width: 150,
+      width: 120,
+    },
+    {
+      title: 'Income',
+      dataIndex: 'income',
+      width: 120,
     },
     {
       title: 'Payment',
       dataIndex: 'payment',
-      width: 150
+      width: 100
     },
     {
       title: 'Status',
@@ -222,13 +227,23 @@ function ShopOrderManage() {
     }
   }
 
+  const getColorIncome = (status) => {
+    switch (status) {
+      case 'PENDING':
+        return '#d9d9d9'
+      case 'PAID':
+        return '#78d431'
+    }
+  }
+
   const data = shopOrders.map((order, index) => {
     return {
       key: index + 1,
-      id: order.id,
+      // id: order.id,
       date: order.orderDate,
       name: <p className="w-full truncate" >{order.customer}</p>,
       total: '$' + order.total,
+      income: <span style={{ color: getColorIncome(order.paymentStatus), fontWeight: "bold" }}>{'$' + (order.total * 0.98).toFixed(2)}</span>,
       payment: order.paymentMethod.toUpperCase(),
       status: <Tag color={getColorTag(order.paymentStatus)}>{order.paymentStatus}</Tag>,
       shipping: <Badge status={getColorBadge(order.state)} text={order.state} />,

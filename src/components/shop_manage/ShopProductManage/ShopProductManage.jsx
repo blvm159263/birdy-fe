@@ -78,7 +78,7 @@ function ShopProductManage() {
       <div className="flex gap-2">
         {/* Category bar */}
         <ul className="category-bar flex h-full gap-1 items-baseline">
-          <p className="font-bold pr-2">Category:</p>
+          {/* <p className="font-bold pr-2">Category:</p> */}
           <li><button onClick={() => changeSearchCategory('ALL_PRODUCTS')} className={`rounded p-2 ${searchCategory === 'ALL_PRODUCTS' ? 'text-white bg-sky-500 font-bold shadow' : 'border border-neutral-300'}`}>All product</button></li>
           <li><button onClick={() => changeSearchCategory('LATEST')} className={`rounded p-2 ${searchCategory === 'LATEST' ? 'text-white bg-sky-500 font-bold shadow' : 'border border-neutral-300'}`}>Latest</button></li>
           <li><button onClick={() => changeSearchCategory('BIRDS')} className={`rounded p-2 ${searchCategory === 'BIRDS' ? 'text-white bg-sky-500 font-bold shadow' : 'border border-neutral-300'}`}>Birds</button></li>
