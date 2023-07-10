@@ -233,6 +233,19 @@ function ShopProfile() {
                     <label
                       className="pr-2 block text-right text-sm font-medium text-gray-400"
                     >
+                      Balance
+                    </label>
+                  </div>
+                  <div className="w-full pl-6">
+                    <span className="text-sm text-black">$ {shop?.balance?.toFixed(2) || '0.00'}</span>
+                  </div>
+                </div>
+
+                <div className="mb-14 flex items-center">
+                  <div className="w-1/5">
+                    <label
+                      className="pr-2 block text-right text-sm font-medium text-gray-400"
+                    >
                       Create Date
                     </label>
                   </div>
