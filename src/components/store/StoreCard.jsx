@@ -25,8 +25,13 @@ export default function StoreCard({ shop, hideView = false }) {
           </div>
         </div>
         <div className={hideView ? 'self-center w-32 md:w-36' : ''}>
-          <Link to="/search" className='w-14 lg:w-28 block bg-gradient-to-r from-blue-500 to-sky-500 hover:brightness-125 active:brightness-110 duration-150 text-center rounded-sm py-1 px-2 font-semibold text-white text-xs md:text-sm mb-1'>Chat</Link>
-          {hideView ? '' : <Link to={`/view-shop/${shop.id}`} className='block bg-gradient-to-r from-blue-500 to-sky-500 hover:brightness-125 active:brightness-110 duration-150 text-center rounded-sm py-1 px-2 w-full font-semibold text-white text-xs md:text-sm'>View</Link>}
+          <Link to="/search" className='w-14 lg:w-28 block bg-gradient-to-r from-blue-500 to-sky-500 hover:brightness-125 active:brightness-110 duration-150 text-center rounded-sm py-1 px-2 font-semibold text-white text-xs md:text-sm mb-1'>
+            Chat
+          </Link>
+          {hideView ? '' :
+            <Link to={`/view-shop/${shop.id}`} className='block bg-gradient-to-r from-blue-500 to-sky-500 hover:brightness-125 active:brightness-110 duration-150 text-center rounded-sm py-1 px-2 w-full font-semibold text-white text-xs md:text-sm'>
+              View
+            </Link>}
         </div>
       </div>
       {/*<div className='border border-neutral-100 mr-2 md:mr-6 hidden lg:block' />*/}
