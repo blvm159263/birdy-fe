@@ -8,6 +8,10 @@ const paymentApi = {
     getQRMomoIndividual(params) {
         const url = '/payment/momo/individual';
         return axiosClient.get(url, {params});
+    },
+    getQRMomoRecharge(params) {
+        const url = '/payment/momo/recharge';
+        return axiosClient.get(url, {params});
     }
 };
 
