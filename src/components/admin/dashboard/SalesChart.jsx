@@ -1,4 +1,8 @@
+import { Select } from "antd";
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import adminApi from "../../../api/adminApi";
 
 // TODO: API for admin dashboard
 /*
@@ -26,18 +30,25 @@ response:
 }
 */
 export default function SalesChart() {
-  const chartData = [
-    {
-      name: "Total orders",
-      type: "column",
-      data: [1, 5,2,6],
-    },
-    {
-      name: "Total orders price",
-      type: "line",
-      data: [23, 42, 35, 27, 43, 22, 17, 31, 22, 22, 12, 16],
-    },
-  ];
+  const [years, setYears] = useState([]);
+  const [year, setYear] = useState(null);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    adminApi.getAllYears()
+      .then((response) => {
+        setYears(response.data);
+        console.log(response.data);
+      })
+
+    if (year) {
+      adminApi.getChartDataByYear(year)
+        .then((response) => {
+          setData(response.data);
+          console.log(response.data);
+        })
+    }
+  }, [year])
 
   const chartOptions = {
     chart: {
@@ -47,33 +58,23 @@ export default function SalesChart() {
     stroke: {
       width: [0, 4],
     },
-    title: {
-      text: "Total sales",
-    },
     dataLabels: {
       enabled: true,
       enabledOnSeries: [1],
     },
     labels: [
-      "01 Jan 2001",
-      "02 Jan 2001",
-      "03 Jan 2001",
-      "04 Jan 2001",
-      "05 Jan 2001",
-      "06 Jan 2001",
-      "07 Jan 2001",
-      "08 Jan 2001",
-      "09 Jan 2001",
-      "10 Jan 2001",
-      "11 Jan 2001",
-      "12 Jan 2001",
-      "13 Jan 2001",
-      "14 Jan 2001",
-      "15 Jan 2001",
-      "16 Jan 2001",
-      "17 Jan 2001",
-      "18 Jan 2001",
-      "19 Jan 2001",
+      "Tháng 1",
+      "Tháng 2",
+      "Tháng 3",
+      "Tháng 4",
+      "Tháng 5",
+      "Tháng 6",
+      "Tháng 7",
+      "Tháng 8",
+      "Tháng 9",
+      "Tháng 10",
+      "Tháng 11",
+      "Tháng 12",
     ],
     xaxis: {
       type: "datetime",
@@ -93,5 +94,29 @@ export default function SalesChart() {
     ],
   };
 
-  return <ReactApexChart options={chartOptions} series={chartData}></ReactApexChart>;
+  return (
+    <div className="bg-gradient-to-br from-green-300 via-green-400 to-green-300">
+      <div className="flex">
+        <h2 className="font-semibold text-xl">Sales graph</h2>
+        <Select
+          defaultValue={dayjs().year()}
+          onChange={value => setYear(value)}
+          options={years}
+        />
+      </div>
+      {data && <ReactApexChart options={chartOptions}
+        series={[
+          {
+            name: "Total orders",
+            type: "column",
+            data: data.dataOrders,
+          },
+          {
+            name: "Total orders price",
+            type: "line",
+            data: data.dataRevenue,
+          },
+        ]}></ReactApexChart>}
+    </div>
+  );
 }

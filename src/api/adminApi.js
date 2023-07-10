@@ -13,6 +13,14 @@ const adminApi = {
         const url = `/admin/product/${id}/approve`;
         return axiosClient.get(url);
     },
+    getAllYears() {
+        const url = `/admin/chart/all-years`;
+        return axiosClient.get(url);
+    },
+    getChartDataByYear(year) {
+        const url = `/admin/chart/data/${year}`;
+        return axiosClient.get(url);
+    }
 };
 
 export default adminApi;
