@@ -56,8 +56,9 @@ function UserAllOrder() {
   const handlePayment = async () => {
     if(orderPay === null) return
     var amount = (orderPay.total * 23000).toFixed(0)
+    const orderCp = (orderPay.code + orderPay.id).toString()
     await paymentApi
-      .getQRMomo({ amount: amount, orderId: orderPay.code })
+      .getQRMomoIndividual({ amount: amount, orderId: orderCp })
       .then((res) => {
         window.location.href = res.data.payUrl
       })

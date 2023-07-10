@@ -67,11 +67,16 @@ function UserPendingOrder() {
 
   const handlePayment = async () => {
     var amount = (orderPay.total * 23000).toFixed(0)
+    const orderCp = (orderPay.code + orderPay.id).toString()
     await paymentApi
-      .getQRMomo({ amount: amount, orderId: orderPay.code })
+      .getQRMomoIndividual({ amount: amount, orderId: orderCp })
       .then((res) => {
         window.location.href = res.data.payUrl
-      })
+      }).catch((e) => {
+        console.log(e)
+        openNotificationWithIcon("Error", "Momo is maintained!!!")
+      }
+      )
   }
 
   const handlePaymentFromBalance = async () => {

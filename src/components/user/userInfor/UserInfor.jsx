@@ -3,8 +3,54 @@ import { useDispatch, useSelector } from "react-redux"
 import { setGender } from "../../../features/user/userSlice"
 import isLoadingPage from "../../loading/isLoadingPage"
 import userApi from "../../../api/userApi"
-import { Radio } from "antd"
+import {
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  Avatar,
+  Button
+} from 'antd';
 import { NotificationContext } from "../../../context/NotificationProvider"
+import { format } from "date-fns"
+import moment from "moment"
+const { Option } = Select;
+const formItemLayout = {
+  labelCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 8,
+    },
+  },
+  wrapperCol: {
+    xs: {
+      span: 24,
+    },
+    sm: {
+      span: 16,
+    },
+  },
+};
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
+const tailLayout = {
+  wrapperCol: {
+    offset: 8,
+    span: 16,
+  },
+};
 
 function UserInfor({ isLoading }) {
   const userInformation = useSelector((state) => state.user.userInformation)
@@ -20,6 +66,7 @@ function UserInfor({ isLoading }) {
     gender: null,
     avatarUrl: null,
     phoneNumber: "",
+    balance: null,
   })
 
   useEffect(() => {
@@ -76,6 +123,26 @@ function UserInfor({ isLoading }) {
     updateUser(user)
   }
 
+  const onReset = () => {
+  }
+
+  const onFinish = (values) => {
+    console.log('Received values of form: ', values);
+    console.log('dob: ' + values.dob.format('YYYY-MM-DD'));
+    const userTmp = {
+      id: userInformation.id,
+      fullName: values.fullName,
+      email: values.email,
+      dob:  values.dob.format('YYYY-MM-DD'),
+      createDate: userInformation.createDate,
+      gender: values.gender == "Male" ? 1 : 0,
+      avatarUrl: userInformation.avatarUrl,
+      accountId: userInformation.accountId,
+      phoneNumber: userInformation.phoneNumber,
+      balance: null,
+    }
+  }
+
   return (
     <div className="w-5/6 bg-white">
       <h1 className="py-6 text-center text-2xl font-bold">Your Information</h1>
@@ -83,85 +150,131 @@ function UserInfor({ isLoading }) {
       {isLoading ? (
         <isLoadingPage />
       ) : (
-        <div>
-          <form className="py-10 px-16">
-            <table className="table-auto border-separate border-spacing-y-4">
-              <tbody>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="">
-                      Nickname
-                    </label>
-                  </td>
-                  <td>
-                    <p>{user.email}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="username">
-                      Username
-                    </label>
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      id="fullName"
-                      value={user.fullName}
-                      onChange={handleChange}
-                      name="fullName"
-                      className="border rounded-md"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="">
-                      Email
-                    </label>
-                  </td>
-                  <td>
-                    <p>{userInformation && userInformation.email}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="">
-                      Phone
-                    </label>
-                  </td>
-                  <td>
-                    <p>{userInformation && userInformation.phoneNumber}</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label className="text-gray-500 mr-20" htmlFor="gender">
-                      Gender
-                    </label>
-                  </td>
-
-                  <>
-                    <Radio.Group
-                      value={user.gender}
-                      buttonStyle="solid"
-                      onChange={handleChange}
-                    >
-                      <Radio.Button value={1}>Male</Radio.Button>
-                      <Radio.Button value={2}>Female</Radio.Button>
-                      <Radio.Button value={3}>Other</Radio.Button>
-                    </Radio.Group>
-                  </>
-                </tr>
-              </tbody>
-            </table>
-            <button
-              onClick={handleUpdateInfor}
-              className="px-3 py-1 border-2 border-sky-500 rounded-md bg-sky-500 text-white hover:border-white"
+        <div className='grid grid-cols-9'>
+          <div className="col-span-6">
+            <Form
+              {...formItemLayout}
+              style={{
+                maxWidth: 600,
+                padding: 40,
+              }}
+              onFinish={onFinish}
+              initialValues={{
+                fullName: userInformation?.fullName,
+                phoneNumber: userInformation?.phoneNumber,
+                email: userInformation?.email,
+                dob: moment(userInformation?.dob, 'YYYY-MM-DD'),
+                gender: userInformation?.gender===1 ? "Male": "Female",
+              }}
             >
-              Save
-            </button>
-          </form>
+
+              <Form.Item
+                name="fullName"
+                label="Full Name"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your fullName!',
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                name="phoneNumber"
+                label="Phone Number"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please input your password!',
+                  },
+                ]}
+                value={userInformation.phoneNumber}
+                hasFeedback
+              >
+                <Input readOnly disabled />
+              </Form.Item>
+
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
+                  {
+                    required: true,
+                    message: 'Please input your Email!',
+                    whitespace: false,
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item
+                name="dob"
+                label="Birthday"
+                rules={[
+                  {
+                    type: 'object',
+                    required: true,
+                    message: 'Please input your Birthday!',
+                  },
+                ]}
+              >
+                <DatePicker />
+              </Form.Item>
+
+              <Form.Item
+                name="gender"
+                label="Gender"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Select
+                  placeholder="Select your gender"
+                //onChange={onGenderChange}
+                //allowClear
+                >
+                  <Option value="Male">Male</Option>
+                  <Option value="Female">Female</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item {...tailLayout}>
+                <Button style={{marginRight: 10}} type="primary" htmlType="submit">
+                  Submit
+                </Button>
+                <Button htmlType="button" onClick={onReset}>
+                  Reset
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+          <div className="col-span-3 h-full">
+            <Avatar
+              style={{
+                margin: 'auto',
+                display: 'block',
+                verticalAlign: 'middle',
+                marginTop: '50px',
+              }}
+              size={{
+                xs: 40,
+                sm: 64,
+                md: 80,
+                lg: 100,
+                xl: 120,
+                xxl: 140,
+              }}
+              src={userInformation.avatarUrl}
+            />
+          </div>
         </div>
       )}
     </div>
