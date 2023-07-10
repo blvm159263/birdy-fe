@@ -125,7 +125,7 @@ function App() {
                   <Route path=":searchType" element={<SearchPage />} />
                 </Route>
                 <Route path="/detail-item/:id" element={<DetailItemPage />} />
-                <Route path="/wishlist" element={<WishList />} />
+                {role === "USER"? (<Route path="/wishlist" element={<WishList />} />) : ''}
                 <Route path="/cart">
                   <Route index element={<CartPage />} />
                   <Route path="/cart/checkout" element={<CheckoutPage />} />

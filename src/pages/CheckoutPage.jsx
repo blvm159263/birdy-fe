@@ -220,7 +220,7 @@ export default function CheckoutPage() {
                 })}
 
                 <div className="bg-white rounded-sm mt-4 flex justify-between gap-4 items-center text-center p-2 drop-shadow-sm">
-                    <div className="col-span-7 font-bold">
+                    <div className="col-span-6 font-bold">
                         Payment method:
                         <Select
                             className="ml-4"
@@ -236,9 +236,9 @@ export default function CheckoutPage() {
                             placeholder="Payment method"
                         />
                     </div>
-                    {/* <div className="col-span-2">
-                        <span className="font-bold mr-16">${shipmentPrice.toFixed(3)}</span>
-                    </div> */}
+                    <div className="col-span-3">
+                        <span className="font-bold mr-16">Số dư hiện tại:    ${user?.balance.toFixed(3)}</span>
+                    </div>
                 </div>
 
                 <div className='bg-white rounded-sm mt-4 flex justify-between gap-4 items-center text-center p-2 drop-shadow-sm'>

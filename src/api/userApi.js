@@ -35,8 +35,8 @@ const userApi = {
     return axiosClient.get(url)
   },
 
-  getWishlist(userId, productId) {
-    const url = `/users/${userId}/wishlist/${productId}`
+  getWishlist(userId) {
+    const url = `/wishlists/user/${userId}`
     return axiosClient.get(url)
   },
   addWishlist(userId, productId) {
@@ -63,6 +63,18 @@ const userApi = {
   getReport(userId, productId){
     const url = `/users/${userId}/product/${productId}/report`
     return axiosClient.get(url)
+  },
+  isEmailExist(userId, email) {
+    const url = `/users/${userId}/email/${email}`
+    return axiosClient.get(url)
+  },
+  uploadAvatar(userId, data) {
+    const url = `/users/${userId}/avatar`
+    return axiosClient.post(url, data,{
+      headers: {
+          "Content-Type": "multipart/form-data",
+      },
+  })
   }
 }
 

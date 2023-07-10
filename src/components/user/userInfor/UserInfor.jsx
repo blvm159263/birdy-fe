@@ -9,11 +9,16 @@ import {
   Input,
   Select,
   Avatar,
-  Button
+  Button,
+  Upload
 } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import { NotificationContext } from "../../../context/NotificationProvider"
-import { format } from "date-fns"
 import moment from "moment"
+import storageService from "../../../api/storage"
+import { useNavigate } from "react-router-dom"
+import jwtDecode from "jwt-decode"
+
 const { Option } = Select;
 const formItemLayout = {
   labelCol: {
@@ -55,7 +60,8 @@ const tailLayout = {
 function UserInfor({ isLoading }) {
   const userInformation = useSelector((state) => state.user.userInformation)
   const openNotificationWithIcon = useContext(NotificationContext)
-
+  const navigate = useNavigate()
+  const [form] = Form.useForm();
   const [user, setUser] = useState({
     id: null,
     accountId: "",
@@ -68,24 +74,8 @@ function UserInfor({ isLoading }) {
     phoneNumber: "",
     balance: null,
   })
+  const [avatar, setAvatar] = useState()
 
-  useEffect(() => {
-    if (userInformation) {
-      setUser((prevUser) => ({
-        ...prevUser,
-        id: userInformation.id || "",
-        accountId: userInformation.accountId || "",
-        fullName: userInformation.fullName || "",
-        email: userInformation.email || "",
-        dob: userInformation.dob || "",
-        createDate: userInformation.createDate || "",
-        gender: userInformation.gender || null,
-        avatarUrl: userInformation.avatarUrl || null,
-        phoneNumber: userInformation.phoneNumber || "",
-      }))
-    }
-    console.log("userApi", userInformation)
-  }, [userInformation])
 
   const handleChange = (evt) => {
     const { value, name } = evt.target
@@ -114,9 +104,27 @@ function UserInfor({ isLoading }) {
   }
 
   useEffect(() => {
-    setUser(user)
-    console.log("newUser", user)
-  }, [user])
+    let token = storageService.getAccessToken()
+    if (token) {
+      token = jwtDecode(token)
+      userApi.getUserByPhoneNumber(token.sub).then((response) => {
+        setUser(response.data)
+        form.setFieldsValue({
+          fullName: response.data.fullName,
+          phoneNumber: response.data.phoneNumber,
+          email: response.data.email,
+          dob: moment(response.data.dob, 'YYYY-MM-DD'),
+          gender: response.data.gender === 1 ? "Male" : "Female",
+        })
+        setAvatar(response.data.avatarUrl)
+      }
+      ).catch((e) => {
+        console.log(e)
+      })
+    } else {
+      navigate("/login")
+    }
+  }, [])
 
   const handleUpdateInfor = (e) => {
     e.preventDefault()
@@ -124,24 +132,66 @@ function UserInfor({ isLoading }) {
   }
 
   const onReset = () => {
+    form.setFieldsValue({
+      fullName: user.fullName,
+      phoneNumber: user.phoneNumber,
+      email: user.email,
+      dob: moment(user.dob, 'YYYY-MM-DD'),
+      gender: user.gender === 1 ? "Male" : "Female",
+    })
   }
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log('Received values of form: ', values);
     console.log('dob: ' + values.dob.format('YYYY-MM-DD'));
+    var isExistedEmail = false;
+    await userApi.isEmailExist(user.id, values.email).then((response) => {
+      console.log(response.data);
+      isExistedEmail = response.data;
+    }).catch((e) => {
+      console.log(e);
+    });
+    if (isExistedEmail) {
+      openNotificationWithIcon('Email is existed !!!');
+      return;
+    }
     const userTmp = {
-      id: userInformation.id,
+      id: user.id,
       fullName: values.fullName,
       email: values.email,
-      dob:  values.dob.format('YYYY-MM-DD'),
-      createDate: userInformation.createDate,
-      gender: values.gender == "Male" ? 1 : 0,
-      avatarUrl: userInformation.avatarUrl,
-      accountId: userInformation.accountId,
-      phoneNumber: userInformation.phoneNumber,
+      dob: values.dob.format('YYYY-MM-DD'),
+      createDate: user.createDate,
+      gender: values.gender === "Male" ? 1 : 0,
+      avatarUrl: user.avatarUrl,
+      accountId: user.accountId,
+      phoneNumber: user.phoneNumber,
       balance: null,
     }
+    await userApi.updateUserInformation(userTmp).then((response) => {
+      console.log(response.data);
+      openNotificationWithIcon('Completed', 'Update information successfully !!!');
+      setUser(userTmp);
+    }
+    ).catch((e) => {
+      console.log(e);
+    }
+    );
   }
+
+   const handleChangeAvatar = (info) => {
+    userApi.uploadAvatar(user.id, {file: info.file.originFileObj}).then((response) => {
+      console.log(response.data);
+      setUser((prevState) => ({
+        ...prevState,
+        avatarUrl: response.data,
+      }));
+      setAvatar(response.data);
+    }
+    ).catch((e) => {
+      console.log(e);
+    }
+    );
+   }
 
   return (
     <div className="w-5/6 bg-white">
@@ -154,18 +204,19 @@ function UserInfor({ isLoading }) {
           <div className="col-span-6">
             <Form
               {...formItemLayout}
+              form={form}
               style={{
                 maxWidth: 600,
                 padding: 40,
               }}
               onFinish={onFinish}
-              initialValues={{
-                fullName: userInformation?.fullName,
-                phoneNumber: userInformation?.phoneNumber,
-                email: userInformation?.email,
-                dob: moment(userInformation?.dob, 'YYYY-MM-DD'),
-                gender: userInformation?.gender===1 ? "Male": "Female",
-              }}
+            // initialValues={{
+            //   fullName: userInformation?.fullName,
+            //   phoneNumber: userInformation?.phoneNumber,
+            //   email: userInformation?.email,
+            //   dob: moment(userInformation?.dob, 'YYYY-MM-DD'),
+            //   gender: userInformation?.gender===1 ? "Male": "Female",
+            // }}
             >
 
               <Form.Item
@@ -190,7 +241,6 @@ function UserInfor({ isLoading }) {
                     message: 'Please input your password!',
                   },
                 ]}
-                value={userInformation.phoneNumber}
                 hasFeedback
               >
                 <Input readOnly disabled />
@@ -247,7 +297,7 @@ function UserInfor({ isLoading }) {
                 </Select>
               </Form.Item>
               <Form.Item {...tailLayout}>
-                <Button style={{marginRight: 10}} type="primary" htmlType="submit">
+                <Button style={{ marginRight: 10 }} type="primary" htmlType="submit">
                   Submit
                 </Button>
                 <Button htmlType="button" onClick={onReset}>
@@ -272,8 +322,26 @@ function UserInfor({ isLoading }) {
                 xl: 120,
                 xxl: 140,
               }}
-              src={userInformation.avatarUrl}
+              src={avatar? avatar : ""}
             />
+            <Upload
+              name="file"
+              onChange={handleChangeAvatar}
+              showUploadList={false}
+            >
+              <Button
+                style={{
+                  margin: 'auto',
+                  display: 'block',
+                  verticalAlign: 'middle',
+                  marginTop: '50px',
+                  marginLeft: '100px',
+                }}
+                icon={<UploadOutlined />}
+              >
+                Click to Upload
+              </Button>
+            </Upload>
           </div>
         </div>
       )}
