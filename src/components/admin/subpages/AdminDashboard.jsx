@@ -13,7 +13,7 @@ export default function AdminDashboard() {
 
   return (
     <div id='admin-dashboard' className='p-2'>
-      <div className='rounded shadow bg-white p-2'>
+      <div className='rounded shadow bg-white p-4'>
         <h1 className='text-2xl font-bold'>Dashboard</h1>
         <SalesChart/>
       </div>

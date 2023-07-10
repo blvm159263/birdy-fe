@@ -1,4 +1,5 @@
-import { Select } from "antd";
+import { AppstoreAddOutlined, AppstoreOutlined, ShopOutlined, UserOutlined, DollarOutlined, InboxOutlined } from "@ant-design/icons";
+import { Select, Spin } from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
@@ -30,16 +31,18 @@ response:
 }
 */
 export default function SalesChart() {
-  const [years, setYears] = useState([]);
-  const [year, setYear] = useState(null);
+  const [years, setYears] = useState(null);
+  const [year, setYear] = useState(dayjs().year());
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    adminApi.getAllYears()
-      .then((response) => {
-        setYears(response.data);
-        console.log(response.data);
-      })
+    if (!years) {
+      adminApi.getAllYears()
+        .then((response) => {
+          setYears(response.data);
+          console.log(response.data);
+        })
+    }
 
     if (year) {
       adminApi.getChartDataByYear(year)
@@ -48,11 +51,11 @@ export default function SalesChart() {
           console.log(response.data);
         })
     }
-  }, [year])
+  }, [years, year])
 
   const chartOptions = {
     chart: {
-      height: 350,
+      height: '100%',
       type: "line",
     },
     stroke: {
@@ -76,47 +79,97 @@ export default function SalesChart() {
       "Tháng 11",
       "Tháng 12",
     ],
-    xaxis: {
-      type: "datetime",
-    },
     yaxis: [
       {
         title: {
-          text: "Total orders",
+          text: "Tổng số đơn",
         },
       },
       {
         opposite: true,
         title: {
-          text: "Total orders price",
+          text: "Doanh thu",
         },
       },
     ],
   };
 
-  return (
-    <div className="bg-gradient-to-br from-green-300 via-green-400 to-green-300">
-      <div className="flex">
-        <h2 className="font-semibold text-xl">Sales graph</h2>
-        <Select
-          defaultValue={dayjs().year()}
-          onChange={value => setYear(value)}
-          options={years}
-        />
+  if (!data) {
+    return (
+      <div className='flex justify-center items-center h-[80vh]'>
+        <Spin size='large' />
       </div>
-      {data && <ReactApexChart options={chartOptions}
-        series={[
-          {
-            name: "Total orders",
-            type: "column",
-            data: data.dataOrders,
-          },
-          {
-            name: "Total orders price",
-            type: "line",
-            data: data.dataRevenue,
-          },
-        ]}></ReactApexChart>}
+    )
+  }
+
+  return (
+    <div className="">
+      <div className="grid grid-cols-4 my-4 gap-2">
+        <div className="p-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">
+          <p className="font-bold text-2xl px-2">{data.totalProductRequests}</p>
+          <p className="text-sm">Pending product requests</p>
+          <AppstoreAddOutlined className="text-lg" />
+        </div>
+        <div className="p-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">
+          <p className="font-bold text-2xl px-2">{data.totalShop}</p>
+          <p className="text-sm">Active shops </p>
+          <ShopOutlined className="text-lg" />
+        </div>
+        <div className="p-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">
+          <p className="font-bold text-2xl px-2">{data.totalActiveProducts}</p>
+          <p className="text-sm">Active products</p>
+          <AppstoreOutlined className="text-lg" />
+        </div>
+        <div className="p-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">
+          <p className="font-bold text-2xl px-2">{data.totalUsers}</p>
+          <p className="text-sm">Users</p>
+          <UserOutlined className="text-lg" />
+        </div>
+      </div>
+      <div className="flex gap-8 pt-4">
+        <h2 className="font-bold text-xl">Tổng doanh số</h2>
+        <div className="flex items-center">
+          <p className="mr-2">Năm</p>
+          {years && <Select
+            defaultValue={dayjs().year().toString()}
+            onChange={value => setYear(value)}
+            value={year}
+            options={years.map(year => ({
+              value: year,
+              label: year,
+            }))}
+          />}
+        </div>
+      </div>
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-3">
+          <div className="p-4 mt-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-600">
+            <p className="font-bold text-2xl px-2">{data.dataOrders.reduce((total, num) => total + num)}</p>
+            <p className="text-sm">Tổng số đơn</p>
+            <InboxOutlined className="text-lg" />
+          </div>
+          <div className="p-4 mt-2 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-green-400 to-green-600">
+            <p className="font-bold text-2xl px-2">${data.dataRevenue.reduce((total, num) => total + num)}</p>
+            <p className="text-sm">Tổng doanh thu</p>
+            <DollarOutlined className="text-lg" />
+          </div>
+        </div>
+        <div className="col-span-9">
+          <ReactApexChart options={chartOptions}
+            series={[
+              {
+                name: "Tổng số đơn",
+                type: "column",
+                data: data.dataOrders,
+              },
+              {
+                name: "Doanh thu",
+                type: "line",
+                data: data.dataRevenue,
+              },
+            ]}></ReactApexChart>
+        </div>
+      </div>
     </div>
   );
 }

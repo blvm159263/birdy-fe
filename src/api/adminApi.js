@@ -20,7 +20,23 @@ const adminApi = {
     getChartDataByYear(year) {
         const url = `/admin/chart/data/${year}`;
         return axiosClient.get(url);
-    }
+    },
+    getAllProductReports() {
+        const url = `/admin/reports`;
+        return axiosClient.get(url);
+    },
+    getReportsByProductId(id) {
+        const url = `/admin/report/${id}`;
+        return axiosClient.get(url);
+    },
+    warningProductById(id) {
+        const url = `/admin/product/${id}/warning`;
+        return axiosClient.get(url);
+    },
+    deleteProductById(id) {
+        const url = `/admin/product/${id}/delete`;
+        return axiosClient.get(url);
+    },
 };
 
 export default adminApi;
