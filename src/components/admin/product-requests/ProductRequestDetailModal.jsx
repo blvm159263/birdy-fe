@@ -2,6 +2,8 @@ import { Modal } from "antd";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { closeProductRequestDetailModal } from "../../../features/admin/adminSlice";
+import ReactQuill from "react-quill";
+
 
 export default function ProductRequestDetailModal() {
   const isModalOpen = useSelector(
@@ -36,7 +38,14 @@ export default function ProductRequestDetailModal() {
               <p>Category: <span className="font-semibold">{product.categoryName}</span></p>
             </div>
           </div>
-          <div>{product.description}</div>
+          <div>
+            <ReactQuill
+              className="text-gray-900 text-sm"
+              theme="bubble"
+              value={product.description}
+              readOnly
+            />
+          </div>
         </>
       ) : (
         "No product"

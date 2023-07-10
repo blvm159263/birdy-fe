@@ -30,7 +30,8 @@ const initialState = {
     shopId: undefined,
     shopName: undefined,
   },
-  subImages: undefined
+  subImages: undefined,
+  updated: false,
 }
 
 // Async Thunk
@@ -56,6 +57,9 @@ export const shopSlice = createSlice({
   name: "shop",
   initialState,
   reducers: {
+    setUpdated: (state, action) => {
+      state.updated = action.payload;
+    },
     setEditId: (state, action) => {
       state.editId = action.payload;
     },
@@ -81,7 +85,7 @@ export const shopSlice = createSlice({
   },
 })
 
-export const { setEditId ,
+export const { setUpdated, setEditId,
   updateProductFormValues,
   resetAllState} = shopSlice.actions
 

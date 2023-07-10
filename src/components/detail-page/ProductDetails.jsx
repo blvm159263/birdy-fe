@@ -11,7 +11,7 @@ function ProductDetails({ product }) {
         <div id="detail" className="w-1/2 mb-5">
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Phân loại:</p>
             </div>
             <div>
@@ -20,7 +20,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Loài:</p>
             </div>
             <div>
@@ -29,7 +29,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Tuổi:</p>
             </div>
             <div>
@@ -38,7 +38,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Giới tính:</p>
             </div>
             <div>
@@ -49,7 +49,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Màu sắc:</p>
             </div>
             <div>
@@ -58,7 +58,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Trọng lượng:</p>
             </div>
             <div>
@@ -67,7 +67,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Kích thước:</p>
             </div>
             <div>
@@ -84,7 +84,7 @@ function ProductDetails({ product }) {
         <div id="detail" className="w-full mb-5">
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Phân loại:</p>
             </div>
             <div>
@@ -93,7 +93,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Màu sắc:</p>
             </div>
             <div>
@@ -102,7 +102,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Trọng lượng:</p>
             </div>
             <div>
@@ -115,7 +115,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Kích thước:</p>
             </div>
             <div>
@@ -124,7 +124,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Xuất xứ:</p>
             </div>
             <div>
@@ -134,7 +134,7 @@ function ProductDetails({ product }) {
 
           {product.categoryId === 2 && (
             <div className="flex justify-start">
-              <div className="text-left w-24">
+              <div className="text-left w-28">
                 <p className="font-bold">Chất liệu:</p>
               </div>
               <div>
@@ -144,7 +144,7 @@ function ProductDetails({ product }) {
           )}
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Nhãn hàng:</p>
             </div>
             <div>
@@ -153,7 +153,7 @@ function ProductDetails({ product }) {
           </div>
 
           <div className="flex justify-start">
-            <div className="text-left w-24">
+            <div className="text-left w-28">
               <p className="font-bold">Hết hạn:</p>
             </div>
             <div>

@@ -7,6 +7,8 @@ import shopApi from "../../api/shopApi";
 import { NotificationContext } from "../../context/NotificationProvider";
 import { LoginContext } from "../../context/LoginProvider";
 import ChangeAddressModal from "./ChangeAddressModal";
+import { useDispatch } from "react-redux";
+import { setUpdated } from "../../features/shops/shopSlice";
 
 
 const getBase64 = (file) =>
@@ -33,7 +35,8 @@ function ShopProfile() {
   const [createDate, setCreateDate] = useState('');
   const [url, setUrl] = useState('');
   const ref = useRef(null);
-  const [address, setAddress] = useState()
+  const [address, setAddress] = useState();
+  const dispatch = useDispatch();
 
 
   const handleCancel = () => setPreviewOpen(false);
@@ -113,6 +116,7 @@ function ShopProfile() {
       if (res.status === 200) {
         // alert('Update success!');
         setUpdateStatus(true);
+        dispatch(setUpdated(true));
         openNotificationWithIcon('Success!', 'Update Shop Profile successfully!');
       }
     }).catch((err) => {
