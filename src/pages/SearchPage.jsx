@@ -132,14 +132,14 @@ export default function SearchPage() {
         <section className="container mx-auto">
           <div className="flex justify-between mb-4">
             <p className="text-neutral-500">
-              Shop related to “
+              Các shop liên quan đến “
               <span className="text-orange-500">{oldSearchText}</span>”
             </p>
             <Link
               to="/search/all-shop"
               className="text-orange-500 text-lg font-semibold"
             >
-              See more{" "}
+              Xem thêm{" "}
               <FontAwesomeIcon
                 className="ml-1"
                 icon={faChevronRight}
@@ -160,7 +160,7 @@ export default function SearchPage() {
             <p className='text-lg font-bold mr-2'>{searchType}</p>
             {oldSearchText.length > 0 &&
               <span className="text-neutral-500">
-                Search result for “
+                Kết quả tìm kiếm cho “
                 <span className="text-orange-500">{oldSearchText}</span>”
               </span>
             }
@@ -171,7 +171,7 @@ export default function SearchPage() {
             }}
             className="bg-orange-500 text-white py-1 hover:bg-orange-400 active:bg-orange-500 duration-200 px-5 rounded text-sm md:text-lg font-semibold"
           >
-            <ControlOutlined /> Filter
+            <ControlOutlined /> Lọc
           </button>
         </div>
 

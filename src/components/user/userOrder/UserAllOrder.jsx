@@ -190,7 +190,7 @@ function UserAllOrder() {
 
   if (error && error.response && error.response.status === 404) {
     // Handle 404 error, e.g., show a message or perform an action
-    return <p className="p-4">No order found.</p>
+    return <p className="p-4">Không có đơn hàng.</p>
   }
 
   return (
@@ -215,17 +215,17 @@ function UserAllOrder() {
                     to={`/view-shop/${order.shopId}`}
                     className="px-2 py-1 border rounded-md text-white bg-sky-300"
                   >
-                    View Shop
+                    Xem của hàng
                   </Link>
                 </div>
                 <div className="flex">
                   <p className="text-red-500">
-                    <span className="text-gray-400">ORDER STATUS:</span>{" "}
+                    <span className="text-gray-400">Trạng thái:</span>{" "}
                     {order.state} !!!
                   </p>
                   <div className="mx-2 w-[1px]  h-4/5 bg-gray-200"></div>
                   <p className="text-sky-400">
-                    <span className="text-gray-400">PAYMENT STATUS:</span>{" "}
+                    <span className="text-gray-400">Trạng thái thanh toán:</span>{" "}
                     {order.paymentStatus}
                   </p>
                 </div>

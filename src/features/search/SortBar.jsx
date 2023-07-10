@@ -13,13 +13,13 @@ export default function SortBar({totalPage}) {
   return (
     <div className='sortByMenu flex justify-between items-center bg-gradient-to-r from-sky-500 to-blue-500 p-4 py-1 rounded-sm mb-6 text-xs md:text-base'>
       <div className='flex items-center flex-wrap gap-2'>
-        <p>Sort by</p>
-        <button onClick={() => dispatch(updateSortType(SortType.DEFAULT))} className={`${sortType === SortType.DEFAULT ? "text-white bg-orange-500" : "bg-white"} py-1 px-4 rounded-sm`}>Relevant</button>
-        <button onClick={() => dispatch(updateSortType(SortType.NEWEST))} className={`${sortType === SortType.NEWEST ? "text-white bg-orange-500" : "bg-white"} py-1 px-4 rounded-sm`}>Newest</button>
+        <p>Xếp theo:</p>
+        <button onClick={() => dispatch(updateSortType(SortType.DEFAULT))} className={`${sortType === SortType.DEFAULT ? "text-white bg-orange-500" : "bg-white"} py-1 px-4 rounded-sm`}>Liên quan</button>
+        <button onClick={() => dispatch(updateSortType(SortType.NEWEST))} className={`${sortType === SortType.NEWEST ? "text-white bg-orange-500" : "bg-white"} py-1 px-4 rounded-sm`}>Mới nhất</button>
         <select onChange={e => dispatch(updateSortType(e.target.value))} className={`${(sortType === SortType.DESC || sortType === SortType.ASC) ? "text-white bg-orange-500" : "bg-white"} py-1 px-4 rounded-sm focus:outline-0`}>
-          <option value={SortType.DEFAULT}>Price</option>
-          <option value={SortType.DESC}>Price: highest first</option>
-          <option value={SortType.ASC}>Price: lowest first</option>
+          <option value={SortType.DEFAULT}>Giá</option>
+          <option value={SortType.DESC}>Giá: cao nhất</option>
+          <option value={SortType.ASC}>Giá: thấp nhất</option>
         </select>
       </div>
       <div className='flex justify-center items-center gap-2 text-neutral-500 font-semibold py-4'>

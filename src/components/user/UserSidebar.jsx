@@ -47,7 +47,7 @@ function UserSidebar(isAtPage, handleChangePage) {
         </div>
         <p>{userInformation && userInformation.fullName}</p>
         <p>
-          Số dư hiện tại: $ {userInformation && userInformation.balance}
+          Số dư hiện tại: $ {userInformation && (userInformation.balance).toFixed(2)}
 
         </p>
         <Button className="mb-2 mt-2" type="dashed" onClick={showModal}>Nap tiền</Button>
@@ -78,7 +78,7 @@ function UserSidebar(isAtPage, handleChangePage) {
             className="flex items-center relative"
             onClick={() => setIsDropDown(!isDropDown)}
           >
-            <p>Your Account</p>
+            <p>Tài khoản</p>
             <span className="ml-2 w-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -98,14 +98,14 @@ function UserSidebar(isAtPage, handleChangePage) {
         {isDropDown && (
           <div className="flex flex-col items-start">
             <Link to="/user" className="p-3">
-              Profile
+              Thông tin
             </Link>
             <Link to="/user/address" className="p-3">
-              Address
+              Địa chỉ
             </Link>
           </div>
         )}
-        <Link to="/user/order">Your Order</Link>
+        <Link to="/user/order">Đơn hàng</Link>
       </div>
     </div>
   )

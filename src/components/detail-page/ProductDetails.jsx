@@ -6,13 +6,13 @@ import format from "date-fns/format"
 function ProductDetails({ product }) {
   return (
     <div className="bg-white col-span-12 lg:col-span-8 p-4 lg:p-8 rounded-md shadow">
-      <h1 className="text-2xl font-bold text-left mb-5">Product Details</h1>
+      <h1 className="text-2xl font-bold text-left mb-5">Thông tin sản phẩm</h1>
       {product.categoryId === 1 ? (
         <div id="detail" className="w-1/2 mb-5">
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Category:</p>
+              <p className="font-bold">Phân loại:</p>
             </div>
             <div>
               <p> {product.categoryName} </p>
@@ -21,7 +21,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Species:</p>
+              <p className="font-bold">Loài:</p>
             </div>
             <div>
               <p> {product.species || 'Không có'} </p>
@@ -30,7 +30,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Age:</p>
+              <p className="font-bold">Tuổi:</p>
             </div>
             <div>
               <p> {product.age || 'Không có'} </p>
@@ -39,18 +39,18 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Gender:</p>
+              <p className="font-bold">Giới tính:</p>
             </div>
             <div>
               {!product.gender && <p>Không có</p>}
-              {product.gender === 1 && <p>Male</p>}
-              {product.gender === 2 && <p>Felmale</p>}
+              {product.gender === 1 && <p>Đực</p>}
+              {product.gender === 2 && <p>Cái</p>}
             </div>
           </div>
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Color:</p>
+              <p className="font-bold">Màu sắc:</p>
             </div>
             <div>
               <p> {product.color || 'Không có'} </p>
@@ -59,7 +59,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Weight:</p>
+              <p className="font-bold">Trọng lượng:</p>
             </div>
             <div>
               {product.weight ? <p>{product.weight} grams</p> : <p>Không có</p>}
@@ -68,7 +68,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Size:</p>
+              <p className="font-bold">Kích thước:</p>
             </div>
             <div>
               <p> {product.size || 'Không có'} </p>
@@ -85,7 +85,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Category:</p>
+              <p className="font-bold">Phân loại:</p>
             </div>
             <div>
               <p> {product.categoryName} </p>
@@ -94,7 +94,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Color:</p>
+              <p className="font-bold">Màu sắc:</p>
             </div>
             <div>
               <p> {product.color || 'Không có'} </p>
@@ -103,7 +103,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Weight:</p>
+              <p className="font-bold">Trọng lượng:</p>
             </div>
             <div>
               {product.weight ? (
@@ -116,7 +116,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Size:</p>
+              <p className="font-bold">Kích thước:</p>
             </div>
             <div>
               <p> {product.size || 'Không có'} </p>
@@ -125,7 +125,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Made in:</p>
+              <p className="font-bold">Xuất xứ:</p>
             </div>
             <div>
               <p> {product.madeIn || 'Không có'} </p>
@@ -135,7 +135,7 @@ function ProductDetails({ product }) {
           {product.categoryId === 2 && (
             <div className="flex justify-start">
               <div className="text-left w-24">
-                <p className="font-bold">Material:</p>
+                <p className="font-bold">Chất liệu:</p>
               </div>
               <div>
                 <p> {product.material || 'Không có'} </p>
@@ -145,7 +145,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Brand:</p>
+              <p className="font-bold">Nhãn hàng:</p>
             </div>
             <div>
               <p> {product.brandName || 'Không có'} </p>
@@ -154,7 +154,7 @@ function ProductDetails({ product }) {
 
           <div className="flex justify-start">
             <div className="text-left w-24">
-              <p className="font-bold">Expired:</p>
+              <p className="font-bold">Hết hạn:</p>
             </div>
             <div>
               <p> {product.expDate ? format(new Date(product.expDate), 'dd/MM/yyyy') : 'Không có'} </p>
@@ -169,7 +169,7 @@ function ProductDetails({ product }) {
 
 
       <p id="description" className="mb-3">
-        <span className="font-bold">Description: </span>
+        <span className="font-bold">Mô tả chi tiết: </span>
       </p>
       <ReactQuill
         className="text-gray-900 text-sm"

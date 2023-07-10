@@ -4,13 +4,14 @@ import orderApi from "../../../api/orderApi"
 import UserOrderList from "./UserOrderList"
 import UserOrderDetail from "./UserOrderDetail"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllOrder } from "../../../features/user/userSlice"
+import { getAllOrder, getUser } from "../../../features/user/userSlice"
 import paymentApi from "../../../api/paymentApi"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import CommentModal from "./CommentModal"
 import { Modal, Input } from "antd"
 import { NotificationContext } from "../../../context/NotificationProvider"
 import { set } from "date-fns"
+import userApi from "../../../api/userApi"
 
 const { TextArea } = Input
 
@@ -37,6 +38,10 @@ function UserPendingOrder() {
         .catch((e) => {
           console.log(e)
         })
+        await userApi.getUserById(userInformation.id).then((res) => {
+          dispatch(getUser(res.data))
+        }
+        )
     }
   }
 

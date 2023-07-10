@@ -186,14 +186,12 @@ function ProductOverviewAction({ product }) {
       </div>
       <div className="my-4 mt-6">
         <p>
-          <span className="font-bold">Availability</span>:{" "}
-          <span className="font-semibold">{product.quantity}</span> left in
-          stock
+          <span className="font-semibold">{product.quantity}</span> sản phẩm có sẵn
         </p>
       </div>
       <div className="flex my-4 items-center">
         <p className="mr-6">
-          <span className="font-bold">Quantity</span>:
+          <span className="font-bold">Số lượng</span>:
         </p>
         <div className="flex border rounded shadow overflow-hidden">
           <button
@@ -231,7 +229,7 @@ function ProductOverviewAction({ product }) {
           }}
           className="grow shadow font-bold text-neutral-700 bg-sky-200 hover:bg-sky-300 active:bg-sky-200 rounded duration-150"
         >
-          ADD TO CART
+          Thêm vào giỏ hàng
         </button>
         <button
           className="w-12 h-12 shadow flex items-center justify-center bg-red-400 hover:brightness-125 active:brightness-110 rounded-md duration-150"
@@ -255,7 +253,7 @@ function ProductOverviewAction({ product }) {
           }}
           className="h-12 w-full rounded shadow bg-gradient-to-r from-blue-500 to-sky-500 text-white font-bold hover:brightness-125 active:brightness-110 duration-150"
         >
-          BUY NOW
+          Mua ngay
         </button>
       </div>
       <Modal

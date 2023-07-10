@@ -4,11 +4,13 @@ import orderApi from "../../../api/orderApi"
 import UserOrderList from "./UserOrderList"
 import UserOrderDetail from "./UserOrderDetail"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllOrder } from "../../../features/user/userSlice"
+import { getAllOrder, getUser } from "../../../features/user/userSlice"
+import userApi from "../../../api/userApi"
 
 function UserDeliveryOrder() {
   const { userid } = useParams()
   const userOrder = useSelector((state) => state.user.userOrder)
+  const userInformation = useSelector((state) => state.user.userInformation)
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
   // const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
 
@@ -16,16 +18,21 @@ function UserDeliveryOrder() {
   // const [total, setTotal] = useState([])
 
   const dispatch = useDispatch()
-  const fetchUserOrder = async (userid) => {
-    if (userid) {
-      orderApi
-        .getAllOrderByUserId(userid)
+  const fetchUserOrder = async () => {
+    if (userInformation) {
+      await orderApi
+        .getAllOrderByUserId(userInformation.id)
         .then((response) => {
           dispatch(getAllOrder(response.data))
           // setUserOrder(response.data)
-          // console.log(userOrder)
         })
-        .catch((e) => console.log(e))
+        .catch((e) => {
+          console.log(e)
+        })
+        await userApi.getUserById(userInformation.id).then((res) => {
+          dispatch(getUser(res.data))
+        }
+        )
     }
   }
 
@@ -46,12 +53,12 @@ function UserDeliveryOrder() {
   const deliveryOrder =
     userOrder &&
     userOrder.filter(
-      (order) => order.state === "PENDING" && order.paymentStatus === "PAID"
+      (order) => order.state === "DELIVERING"
     )
 
   useEffect(() => {
-    fetchUserOrder(userid)
-  }, [deliveryOrder, userid])
+    fetchUserOrder()
+  }, [])
   // useEffect(() => {
   //   setTotal(totalPrice)
   // }, [totalPrice])

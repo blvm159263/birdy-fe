@@ -24,13 +24,13 @@ export default function FilterSideBar() {
     <aside className={`fixed top-0 right-0 h-screen bg-white w-[350px] ${isShowing ? '' : 'translate-x-full'} transition-transform p-6`}>
       <div className='flex text-neutral-500 justify-between items-center'>
         <p></p>
-        <p className='font-bold'><ControlOutlined />  Filter</p>
+        <p className='font-bold'><ControlOutlined /> Bộ lọc</p>
         <button className='justify-self-end p-2' onClick={() => dispatch(toggleFilterSideBar())}><FontAwesomeIcon icon={faXmark} size='xl'/></button>
       </div>
       {/* <hr className='my-6'/> */}
       <div className='mt-7'>
         <div className='flex justify-between items-center'>
-          <p className='ml-4'><StarOutlined />  Rating</p>
+          <p className='ml-4'><StarOutlined />  Đánh giá</p>
           <button onClick={() => dispatch(toggleRatingFilter())} className='p-2'>{rating !== undefined ? <FontAwesomeIcon icon={faMinus}/> : <FontAwesomeIcon icon={faPlus}/>}</button>
         </div>
         {rating !== undefined ? (
@@ -41,7 +41,7 @@ export default function FilterSideBar() {
       </div>
       <div className='mt-7'>
         <div className='flex justify-between items-center'>
-          <p className='ml-4'><DollarOutlined />  Price range</p>
+          <p className='ml-4'><DollarOutlined />  Khoảng giá</p>
           <button onClick={() => dispatch(togglePriceFilter())} className='p-2'>{fromPrice !== undefined ? <FontAwesomeIcon icon={faMinus}/> : <FontAwesomeIcon icon={faPlus}/>}</button>
         </div>
         {fromPrice !== undefined ? (
