@@ -59,6 +59,7 @@ import AdminSubPageType from "./constants/AdminSubPageType"
 import { ChatContext } from "./context/ChatContext"
 import { getUser } from "./features/user/userSlice"
 import ShopLoginPage from "./pages/ShopLoginPage"
+import AdminLoginPage from "./components/admin/AdminLoginPage"
 
 function App() {
   const { isLogin, setIsLogin, setRole, role, setShopId } =
@@ -208,7 +209,7 @@ function App() {
 
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="*" element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
+            <Route index element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
             <Route
               path={AdminSubPageType.DASHBOARD.path}
               element={<AdminDashboard />}
@@ -226,6 +227,10 @@ function App() {
               element={<AdminProductRequests />}
             />
           </Route>
+          <Route
+            path={'/admin/login'}
+            element={<AdminLoginPage />}
+          />
         </Routes>
       </BrowserRouter>
 

@@ -79,7 +79,7 @@ export default function NavBar() {
             className="h-8 md:h-12 mr-3"
             alt="Birdy Logo"
           />
-          <span className="self-center text-xl md:text-3xl lg:text-4xl font-semibold whitespace-nowrap dark:text-white">
+          <span className="self-center text-xl md:text-3xl lg:text-4xl font-semibold whitespace-nowrap text-white">
             Birdy
           </span>
         </Link>
