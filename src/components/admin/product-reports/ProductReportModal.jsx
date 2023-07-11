@@ -1,5 +1,5 @@
-import { WarningOutlined } from "@ant-design/icons";
-import { Modal, Spin } from "antd";
+import { CheckCircleOutlined, WarningOutlined } from "@ant-design/icons";
+import { Modal, Popconfirm, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import adminApi from "../../../api/adminApi";
@@ -7,8 +7,11 @@ import { closeProductReportModal } from "../../../features/admin/adminSlice";
 import ProductDetails from "../../detail-page/ProductDetails";
 import ProductOverview from "../../detail-page/ProductOverview/ProductOverview";
 import Review from "../../detail-page/Review";
+import { useContext } from "react";
+import { NotificationContext } from "../../../context/NotificationProvider";
 
-export default function ProductReportModal() {
+export default function ProductReportModal({triggerReload}) {
+  const openNotificationWithIcon = useContext(NotificationContext);
   const isModalOpen = useSelector(
     (state) => state.admin.isProductReportModalOpen
   );
@@ -22,14 +25,38 @@ export default function ProductReportModal() {
     setReportDetail(null);
   };
 
+  const onWarning = () => {
+    adminApi.warningProductById(report.product.id)
+    .then((response) => {
+      openNotificationWithIcon('Thành công', 'Đã gửi cảnh báo')
+      triggerReload(state => !state)
+      onCancel();
+    }).catch((error) => {
+      openNotificationWithIcon('Lỗi', 'Có gì đó không đúng')
+      console.log(error);
+    })
+  }
+
+  const onDelete = () => {
+    adminApi.deleteProductById(report.product.id)
+    .then((response) => {
+      openNotificationWithIcon('Thành công', 'Đã xoá sản phẩm')
+      triggerReload(state => !state)
+      onCancel();
+    }).catch((error) => {
+      openNotificationWithIcon('Lỗi', 'Có gì đó không đúng')
+      console.log(error);
+    })
+  }
+
   useEffect(() => {
 
-    if(report) {
+    if (report) {
       adminApi.getReportsByProductId(report.product.id)
-      .then((response) => {
-        setReportDetail(response.data);
-        console.log(response.data)
-      })
+        .then((response) => {
+          setReportDetail(response.data);
+          console.log(response.data)
+        })
     }
   }, [report])
 
@@ -55,19 +82,37 @@ export default function ProductReportModal() {
           {/* Reports */}
           {reportDetail ? (
             <div className="col-span-4 flex flex-col p-4 gap-2">
-              <h2 className={`font-bold text-xl ${report.reportCount > 3 ? 'text-red-500' : 'text-orange-400'}`}>Sản phẩm này có <span className="font-bold text-2xl">{report.reportCount}</span> lượt báo xấu   <WarningOutlined/></h2>
+              <h2 className={`font-bold text-xl ${report.reportCount > 3 ? 'text-red-500' : 'text-orange-400'}`}>Sản phẩm này có <span className="font-bold text-2xl">{report.reportCount}</span> lượt báo xấu   <WarningOutlined /></h2>
               {reportDetail.report.map((report) => (
                 <div className="flex gap-4 items-center mt-4 pl-4">
                   <p className={`font-bold text-lg ${report.reasonCount > 3 ? 'text-red-500' : 'text-orange-400'}`}>{report.reasonCount}</p>
                   <p>{report.reason}</p>
                 </div>
               ))}
-              <button className={`mt-6 h-12 w-full rounded shadow bg-gradient-to-r from-orange-500 to-orange-700 text-white font-bold hover:brightness-125 active:brightness-110 duration-150`}>
-                Gửi cảnh cáo
-              </button>
-              <button className={`h-12 w-full rounded shadow bg-gradient-to-r from-red-500 to-red-800 text-white font-bold hover:brightness-125 active:brightness-110 duration-150`}>
-                Xoá sản phẩm
-              </button>
+              <Popconfirm
+                title="Gửi"
+                description="Bạn có chắc chắn muốn gửi cảnh cáo cho sản phẩm này?"
+                onConfirm={onWarning}
+                icon={<CheckCircleOutlined />}
+                okText="Gửi cảnh báo"
+                cancelText="Trở lại"
+              >
+                <button className={`mt-6 h-12 w-full rounded shadow bg-gradient-to-r from-orange-500 to-orange-700 text-white font-bold hover:brightness-125 active:brightness-110 duration-150`}>
+                  Gửi cảnh cáo
+                </button>
+              </Popconfirm>
+              <Popconfirm
+                title="Xoá sản phẩm"
+                description="Bạn có chắc chắn muốn xoá sản phẩm này?"
+                onConfirm={onDelete}
+                icon={<CheckCircleOutlined />}
+                okText="Xoá"
+                cancelText="Trở lại"
+              >
+                <button className={`h-12 w-full rounded shadow bg-gradient-to-r from-red-500 to-red-800 text-white font-bold hover:brightness-125 active:brightness-110 duration-150`}>
+                  Xoá sản phẩm
+                </button>
+              </Popconfirm>
             </div>
           ) : (
             <div className='col-span-4 flex justify-center items-center h-[80vh]'>
