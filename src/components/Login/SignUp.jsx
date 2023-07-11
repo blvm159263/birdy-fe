@@ -46,7 +46,7 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                 // SMS sent. Prompt user to type the code from the message, then sign the
                 // user in with confirmationResult.confirm(code).
                 window.confirmationResult = confirmationResult;
-                openNotificationWithIcon("Send OTP successfully", "Please check your message !")
+                openNotificationWithIcon("Đã gửi OTP", "Hãy kiểm tra tin nhấn điện thoại !")
             }).catch((error) => {
                 // Error; SMS not sent
 
@@ -57,7 +57,6 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
 
         window.confirmationResult.confirm(otp).then((result) => {
             // User signed in successfully.
-            openNotificationWithIcon("OTP valid", "Valid!")
             setIsVerified(true);
 
         }).catch((error) => {
@@ -110,7 +109,7 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                 {isVerifyState ? "" :
                     <div>
                         <h1 className="text-3xl mb-4">
-                            Sign Up
+                            Đăng kí
                         </h1>
                         <div className="mb-4">
                             <input
@@ -121,7 +120,7 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                                 className="w-full border-gray-300 border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
                                 onChange={(e) => setPhoneNumberRegister(e.target.value)}
                             />
-                            {isValidPhoneNumber ? "" : <div className="text-rose-600">Invalid Phone Number !</div>}
+                            {isValidPhoneNumber ? "" : <div className="text-rose-600">Số điện thoại không hợp lệ !</div>}
                         </div>
                         <div className="mb-4">
                             <input
@@ -132,7 +131,7 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                                 className="w-full border-gray-300 border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
                                 onChange={(e) => setPasswordRegister(e.target.value)}
                             />
-                            {isValidPassword ? "" : <div className="text-rose-600">Invalid Password !</div>}
+                            {isValidPassword ? "" : <div className="text-rose-600">Mật khẩu không hợp lệ !</div>}
                         </div>
                         <button
                             className="bg-orange-400	w-full my-2 text-white px-4 py-2 rounded hover:bg-white hover:text-orange-400 hover:border-orange-400 hover:outline outline-1 focus:outline-none focus:bg-blue-600"
@@ -141,24 +140,18 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                                 onSignUp();
                             }}
                         >
-                            Sign Up
+                            Đăng kí
                         </button>
 
-                        <p className="text-center text-gray-400 mb-4">OR</p>
-                        <button
-                            type="button"
-                            className="bg-red-500 w-full text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
-                        >
-                            Login with Google
-                        </button>
+                        
                         <div>
                             <p className="text-center mt-4">
-                                Have account already?{" "}
+                                Bạn đã có tài khoản?{" "}
                                 <a
                                     className="cursor-pointer text-orange-400 hover:text-orange-700"
                                     onClick={() => setIsSignIn(true)}
                                 >
-                                    Sign In
+                                    Đăng nhập
                                 </a>
                             </p>
                         </div>
