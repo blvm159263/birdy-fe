@@ -102,7 +102,7 @@ function SignIn({ setIsSignIn, setIsForgotPassword }) {
   return (
     <div className="lg:w-1/2 sm: w-full p-5 sm:mx-auto">
       <form className="lg:w-2/3 sm:w-full bg-white p-10 rounded-md">
-        <h1 className="text-3xl mb-4">Sign In</h1>
+        <h1 className="text-3xl mb-4">Đăng nhập</h1>
         <div className="mb-4">
           <input
             type="text"
@@ -115,7 +115,7 @@ function SignIn({ setIsSignIn, setIsForgotPassword }) {
           {isValidPhoneNumber ? (
             ""
           ) : (
-            <div className="text-rose-600">Invalid Phone Number !</div>
+            <div className="text-rose-600">Số điện thoại không hợp lệ !</div>
           )}
         </div>
         <div className="mb-4">
@@ -136,7 +136,7 @@ function SignIn({ setIsSignIn, setIsForgotPassword }) {
             onSignIn()
           }}
         >
-          Sign In
+          Đăng nhập
         </button>
         <div className="flex justify-between items-center mb-4">
           <a href="#" onClick={() => {
@@ -144,24 +144,18 @@ function SignIn({ setIsSignIn, setIsForgotPassword }) {
             setIsSignIn(false)
           }}
             className="text-blue-500 text-sm hover:underline">
-            Forgot Password?
+            Quên mật khẩu?
           </a>
         </div>
-        <p className="text-center text-gray-400 mb-4">OR</p>
-        <button
-          type="button"
-          className="bg-red-500 w-full text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
-        >
-          Login with Google
-        </button>
+
         <div>
           <p className="text-center mt-4">
-            You don’t have an account?{" "}
+            Bạn chưa có tài khoản?{" "}
             <a
               className="cursor-pointer text-orange-400 hover:text-orange-700"
               onClick={() => setIsSignIn(false)}
             >
-              Sign Up
+              Đăng kí ngay
             </a>
           </p>
         </div>

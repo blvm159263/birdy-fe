@@ -4,9 +4,6 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    fontFamily: {
-      sans: ['Poppins', 'sans-serif']
-    },
     container: {
       padding: {
         DEFAULT: '0.5rem',

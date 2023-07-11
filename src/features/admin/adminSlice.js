@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isProductRequestDetailModalOpen: false,
-    selectedProductRequest: null
+    isProductReportModalOpen: false,
+    selectedProductRequest: null,
+    selectedProductReport: null,
 }
 
 const adminSlice = createSlice({
@@ -16,6 +18,14 @@ const adminSlice = createSlice({
         closeProductRequestDetailModal: (state) => {
             state.isProductRequestDetailModalOpen = false;
             state.selectedProductRequest = null;
+        },
+        openProductReportModal: (state, action) => {
+            state.isProductReportModalOpen = true;
+            state.selectedProductReport = action.payload;
+        },
+        closeProductReportModal: (state) => {
+            state.isProductReportModalOpen = false;
+            state.selectedProductReport = null;
         }
     }
 })
@@ -24,5 +34,7 @@ export const adminReducer = adminSlice.reducer;
 
 export const {
     openProductRequestDetailModal,
-    closeProductRequestDetailModal
+    closeProductRequestDetailModal,
+    openProductReportModal,
+    closeProductReportModal
 } = adminSlice.actions;

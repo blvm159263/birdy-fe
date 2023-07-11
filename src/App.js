@@ -1,65 +1,65 @@
+import { FloatButton } from "antd"
 import {
   BrowserRouter,
-  Route,
-  Routes,
-  useNavigate,
   Navigate,
+  Route,
+  Routes
 } from "react-router-dom"
-import { FloatButton } from "antd"
 import "./App.css"
 import "./style.scss"
 // Components
+import CreateProduct from "./components/shop_manage/CreateProduct"
+import ShopDashboard from "./components/shop_manage/ShopDashboard"
+import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
+import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
+import ShopProfile from "./components/shop_manage/ShopProfile"
+import UserAddress from "./components/user/userAddress/UserAddress"
+import UserInfor from "./components/user/userInfor/UserInfor"
+import UserOrder from "./components/user/userOrder/UserOrder"
+import AdminLayout from "./layouts/AdminLayout"
 import Layout from "./layouts/Layout"
+import ShopLayout from "./layouts/ShopLayout"
+import AllShopsPage from "./pages/AllShopsPage"
+import CartPage from "./pages/CartPage"
+import CheckoutPage from "./pages/CheckoutPage"
+import DetailItemPage from "./pages/DetailItemPage"
+import HomeChat from "./pages/HomeChat"
 import HomePage from "./pages/HomePage"
+import LoginPage from "./pages/LoginPage"
 import NoPage from "./pages/NoPage"
 import SearchPage from "./pages/SearchPage"
-import LoginPage from "./pages/LoginPage"
-import DetailItemPage from "./pages/DetailItemPage"
-import AdminLayout from "./layouts/AdminLayout"
-import ShopLayout from "./layouts/ShopLayout"
-import ShopDashboard from "./components/shop_manage/ShopDashboard"
-import ShopProfile from "./components/shop_manage/ShopProfile"
-import ShopProductManage from "./components/shop_manage/ShopProductManage/ShopProductManage"
-import ShopOrderManage from "./components/shop_manage/ShopOrderManage"
-import CreateProduct from "./components/shop_manage/CreateProduct"
-import CartPage from "./pages/CartPage"
-import UserInfor from "./components/user/userInfor/UserInfor"
-import UserAddress from "./components/user/userAddress/UserAddress"
 import UserPage from "./pages/UserPage"
-import UserOrder from "./components/user/userOrder/UserOrder"
 import ViewShopPage from "./pages/ViewShopPage"
-import AllShopsPage from "./pages/AllShopsPage"
-import CheckoutPage from "./pages/CheckoutPage"
-import HomeChat from "./pages/HomeChat"
 // import ShopDashboard from "./components/shop_manage/ShopDashboard";
-import { useEffect, useContext, useState } from "react"
-import storageService from "./api/storage"
 import jwtDecode from "jwt-decode"
-import { LoginContext } from "./context/LoginProvider"
-import AllFeaturedPage from "./pages/AllFeaturedPage"
-import ShopHomeSubPage from "./components/store/ShopHomeSubPage"
+import { useContext, useEffect } from "react"
+import storageService from "./api/storage"
 import ShopAllProductsSubPage from "./components/store/ShopAllProductsSubPage"
-import ViewShopSubPageType from "./constants/ViewShopSubPageType"
+import ShopHomeSubPage from "./components/store/ShopHomeSubPage"
 import ShopLatestProductsSubPage from "./components/store/ShopLatestProductsSubPage"
 import ShopProductsByCategorySubPage from "./components/store/ShopProductsByCategorySubPage"
+import ViewShopSubPageType from "./constants/ViewShopSubPageType"
+import { LoginContext } from "./context/LoginProvider"
+import AllFeaturedPage from "./pages/AllFeaturedPage"
 
-import ShopLoginPage from "./pages/ShopLoginPage"
-import UserPendingOrder from "./components/user/userOrder/UserPendingOrder"
-import UserDeliveryOrder from "./components/user/userOrder/UserDeliveryOrder"
-import UserCompletedOrder from "./components/user/userOrder/UserCompletedOrder"
-import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
-import UserAllOrder from "./components/user/userOrder/UserAllOrder"
-import AdminDashboard from "./components/admin/subpages/AdminDashboard"
-import AdminSubPageType from "./constants/AdminSubPageType"
-import AdminAllShops from "./components/admin/subpages/AdminAllShops"
-import AdminNewShopRequests from "./components/admin/subpages/AdminNewShopRequests"
-import AdminProductRequests from "./components/admin/subpages/AdminProductRequests"
-import { ChatContext } from "./context/ChatContext"
-import shopApi from "./api/shopApi"
 import { useDispatch, useSelector } from "react-redux"
+import shopApi from "./api/shopApi"
 import userApi from "./api/userApi"
-import { getUser } from "./features/user/userSlice"
+import AdminAllShops from "./components/admin/subpages/AdminAllShops"
+import AdminDashboard from "./components/admin/subpages/AdminDashboard"
+import AdminProductReports from "./components/admin/subpages/AdminProductReports"
+import AdminProductRequests from "./components/admin/subpages/AdminProductRequests"
+import UserAllOrder from "./components/user/userOrder/UserAllOrder"
+import UserCompletedOrder from "./components/user/userOrder/UserCompletedOrder"
+import UserDeliveryOrder from "./components/user/userOrder/UserDeliveryOrder"
+import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
+import UserPendingOrder from "./components/user/userOrder/UserPendingOrder"
 import WishList from "./components/wishList/WishList"
+import AdminSubPageType from "./constants/AdminSubPageType"
+import { ChatContext } from "./context/ChatContext"
+import { getUser } from "./features/user/userSlice"
+import ShopLoginPage from "./pages/ShopLoginPage"
+import AdminLoginPage from "./components/admin/AdminLoginPage"
 
 function App() {
   const { isLogin, setIsLogin, setRole, role, setShopId } =
@@ -209,7 +209,7 @@ function App() {
 
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="*" element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
+            <Route index element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
             <Route
               path={AdminSubPageType.DASHBOARD.path}
               element={<AdminDashboard />}
@@ -219,14 +219,18 @@ function App() {
               element={<AdminAllShops />}
             />
             <Route
-              path={AdminSubPageType.NEW_SHOP_REQUESTS.path}
-              element={<AdminNewShopRequests />}
+              path={AdminSubPageType.PRODUCT_REPORTS.path}
+              element={<AdminProductReports />}
             />
             <Route
               path={AdminSubPageType.NEW_PRODUCT_REQUESTS.path}
               element={<AdminProductRequests />}
             />
           </Route>
+          <Route
+            path={'/admin/login'}
+            element={<AdminLoginPage />}
+          />
         </Routes>
       </BrowserRouter>
 

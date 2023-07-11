@@ -21,7 +21,7 @@ const reasonList = [
   "Khác",
 ];
 
-function ProductOverviewAction({ product }) {
+function ProductOverviewAction({ product, noControl }) {
   const openNotificationWithIcon = useContext(NotificationContext);
 
   const [quantity, setQuantity] = useState(1);
@@ -170,12 +170,12 @@ function ProductOverviewAction({ product }) {
     <div className="col-span-12 lg:col-span-6">
       <div className="flex justify-between">
         <h1 className="text-2xl md:text-3xl font-bold">{product.productName}</h1>
-        <button
+        {!noControl && <button
           onClick={handReport}
           className="font-semibold text-red-500 text-sm hover:text-white hover:bg-red-400 rounded px-2 md:px-4 duration-150 active:bg-red-600"
         >
           Tố cáo
-        </button>
+        </button>}
       </div>
       <p className="text-2xl md:text-4xl font-bold text-orange-400 py-4 md:py-8">
         ${product.unitPrice}
@@ -189,7 +189,7 @@ function ProductOverviewAction({ product }) {
           <span className="font-semibold">{product.quantity}</span> sản phẩm có sẵn
         </p>
       </div>
-      <div className="flex my-4 items-center">
+      <div className={`flex my-4 items-center ${noControl && 'hidden'}`}>
         <p className="mr-6">
           <span className="font-bold">Số lượng</span>:
         </p>
@@ -227,12 +227,12 @@ function ProductOverviewAction({ product }) {
               "Add to Cart Successfully!"
             );
           }}
-          className="grow shadow font-bold text-neutral-700 bg-sky-200 hover:bg-sky-300 active:bg-sky-200 rounded duration-150"
+          className={`grow shadow font-bold text-neutral-700 bg-sky-200 hover:bg-sky-300 active:bg-sky-200 rounded duration-150 ${noControl && 'hidden'}`}
         >
           Thêm vào giỏ hàng
         </button>
         <button
-          className="w-12 h-12 shadow flex items-center justify-center bg-red-400 hover:brightness-125 active:brightness-110 rounded-md duration-150"
+          className={`w-12 h-12 shadow flex items-center justify-center bg-red-400 hover:brightness-125 active:brightness-110 rounded-md duration-150 ${noControl && 'hidden'}`}
           onClick={onWishlist}
         >
           <HeartFilled className="text-2xl text-white" />
@@ -251,7 +251,7 @@ function ProductOverviewAction({ product }) {
             );
             navigate("/cart");
           }}
-          className="h-12 w-full rounded shadow bg-gradient-to-r from-blue-500 to-sky-500 text-white font-bold hover:brightness-125 active:brightness-110 duration-150"
+          className={`h-12 w-full rounded shadow bg-gradient-to-r from-blue-500 to-sky-500 text-white font-bold hover:brightness-125 active:brightness-110 duration-150 ${noControl && 'hidden'}`}
         >
           Mua ngay
         </button>
