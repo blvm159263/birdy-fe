@@ -29,8 +29,8 @@ function MainLogin() {
             />
           </div>
           <h1 className="text-violet-600	 font-normal tracking-wide	 text-3xl text-center ">
-            Welcome to Birdy!
-            <br /> A bird trading platform
+            Chào mừng bạn đến với Birdy!
+            <br /> Nền tảng giao dịch chim cảnh dành cho mọi người
           </h1>
         </div>
         {!isForgotPassword ?
