@@ -37,6 +37,18 @@ const adminApi = {
         const url = `/admin/product/${id}/delete`;
         return axiosClient.get(url);
     },
+    authenticate(username, password) {
+        const data = new FormData();
+        data.append('username', username);
+        data.append('password', password);
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+            },
+        };
+        const url = '/admin/sign-in'
+        return axiosClient.post(url, data, config);
+    },
 };
 
 export default adminApi;
