@@ -242,7 +242,7 @@ function UserAllOrder() {
                   <span className="font-bold">Delivery to: </span>{" "}
                   {order.address}
                 </p>
-                <p>Total Price: ${order.total.toFixed(2)}</p>
+                <p>Total Price: ${order?.total.toFixed(2)}</p>
               </div>
               <div className="py-2 relative flex justify-end">
                 {order.state === "CANCELED" ? (

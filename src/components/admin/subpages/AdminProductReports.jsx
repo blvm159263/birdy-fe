@@ -23,6 +23,9 @@ export default function AdminProductReports() {
       .then((response) => {
         setReports(response.data);
         setLoading(false);
+      }).catch((error) => {
+        console.log(error);
+        setLoading(false);
       })
   }, [])
 

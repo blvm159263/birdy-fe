@@ -299,10 +299,9 @@ function UserInfor({ isLoading }) {
               </Form.Item>
             </Form>
           </div>
-          <div className="col-span-3 h-full">
+          <div className="col-span-3 h-full flex flex-col justify-center items-center">
             <Avatar
               style={{
-                margin: 'auto',
                 display: 'block',
                 verticalAlign: 'middle',
                 marginTop: '50px',
@@ -326,9 +325,8 @@ function UserInfor({ isLoading }) {
                 style={{
                   margin: 'auto',
                   display: 'block',
-                  verticalAlign: 'middle',
                   marginTop: '50px',
-                  marginLeft: '100px',
+                  display: 'block',
                 }}
                 icon={<UploadOutlined />}
               >

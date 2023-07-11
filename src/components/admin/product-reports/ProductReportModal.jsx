@@ -29,7 +29,11 @@ export default function ProductReportModal() {
       .then((response) => {
         setReportDetail(response.data);
         console.log(response.data)
-      })
+      }).catch((error) => {
+        console.log(error);
+      }
+    )}
+    else {
     }
   }, [report])
 
