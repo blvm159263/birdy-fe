@@ -208,7 +208,7 @@ function App() {
 
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="*" element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
+            <Route index element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
             <Route
               path={AdminSubPageType.DASHBOARD.path}
               element={<AdminDashboard />}
