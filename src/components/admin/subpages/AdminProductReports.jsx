@@ -12,6 +12,7 @@ export default function AdminProductReports() {
   const [reports, setReports] = useState([]);
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(true);
+  const [reloadTrigger, triggerReload] = useState(false);
 
   useEffect(() => {
     setReports([]);
@@ -27,7 +28,7 @@ export default function AdminProductReports() {
         console.log(error);
         setLoading(false);
       })
-  }, [])
+  }, [reloadTrigger])
 
   return (
     <div id='admin-all-stores' className='p-4'>
@@ -49,7 +50,7 @@ export default function AdminProductReports() {
         </div>
       )}
 
-      <ProductReportModal/>
+      <ProductReportModal triggerReload={triggerReload}/>
     </div>
   )
 }
