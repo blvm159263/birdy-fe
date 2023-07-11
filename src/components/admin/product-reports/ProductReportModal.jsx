@@ -66,7 +66,7 @@ export default function ProductReportModal({triggerReload}) {
       open={isModalOpen}
       onCancel={onCancel}
       footer={null}
-      width='80vw'
+      width='90vw'
     >
       {report ? (
         <div className="grid grid-cols-12">
