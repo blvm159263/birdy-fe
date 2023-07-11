@@ -71,7 +71,7 @@ function UserPendingOrder() {
   }
 
   const handlePayment = async () => {
-    var amount = (orderPay.total * 23000).toFixed(0)
+    var amount = (orderPay.total * 23000)?.toFixed(0)
     const orderCp = (orderPay.code + orderPay.id).toString()
     await paymentApi
       .getQRMomoIndividual({ amount: amount, orderId: orderCp })
@@ -152,7 +152,7 @@ function UserPendingOrder() {
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
               </p>
-              <p>Total Price: ${order.total.toFixed(2)}</p>
+              <p>Total Price: ${order?.total?.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
               {order.state === "PENDING" &&

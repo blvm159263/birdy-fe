@@ -55,7 +55,7 @@ function UserAllOrder() {
 
   const handlePayment = async () => {
     if(orderPay === null) return
-    var amount = (orderPay.total * 23000).toFixed(0)
+    var amount = (orderPay.total * 23000)?.toFixed(0)
     const orderCp = (orderPay.code + orderPay.id).toString()
     await paymentApi
       .getQRMomoIndividual({ amount: amount, orderId: orderCp })
@@ -242,7 +242,7 @@ function UserAllOrder() {
                   <span className="font-bold">Delivery to: </span>{" "}
                   {order.address}
                 </p>
-                <p>Total Price: ${order.total.toFixed(2)}</p>
+                <p>Total Price: ${order?.total?.toFixed(2)}</p>
               </div>
               <div className="py-2 relative flex justify-end">
                 {order.state === "CANCELED" ? (

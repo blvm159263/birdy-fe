@@ -55,7 +55,7 @@ function UserOrderDetail({ detail, orderid, isDone }) {
         <p>Quantity: x{detail.quantity}</p>
       </div>
       <div className="text-md flex flex-col items-end w-2/5">
-        <div>${(detail.price * detail.quantity).toFixed(2)}</div>
+        <div>${(detail.price * detail.quantity)?.toFixed(2)}</div>
         {
           isDone && detail.rating ? (
             <div className="flex items-center">

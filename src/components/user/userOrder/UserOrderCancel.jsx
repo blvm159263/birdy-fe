@@ -73,7 +73,7 @@ function UserOrderCancel() {
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
               </p>
-              <p>Total Price: ${order.total.toFixed(2)}</p>
+              <p>Total Price: ${order?.total?.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-between">
               {/* <button className="px-2 py-1 border rounded-md">Feedback</button> */}

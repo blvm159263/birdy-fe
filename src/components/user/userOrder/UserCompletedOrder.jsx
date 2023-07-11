@@ -81,7 +81,7 @@ function UserCompletedOrder() {
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
               </p>
-              <p>Total Price: ${order.total.toFixed(2)}</p>
+              <p>Total Price: ${order?.total?.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
               {/* <button className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500">
