@@ -140,7 +140,7 @@ function ShopOrderManage() {
       width: 120,
     },
     {
-      title: 'Income',
+      title: 'Income (-2%)',
       dataIndex: 'income',
       width: 120,
     },
@@ -229,10 +229,10 @@ function ShopOrderManage() {
 
   const getColorIncome = (status) => {
     switch (status) {
-      case 'PENDING':
-        return '#d9d9d9'
-      case 'PAID':
+      case 'DONE':
         return '#78d431'
+      default:
+        return '#d9d9d9'
     }
   }
 
@@ -243,7 +243,7 @@ function ShopOrderManage() {
       date: order.orderDate,
       name: <p className="w-full truncate" >{order.customer}</p>,
       total: '$' + order.total,
-      income: <span style={{ color: getColorIncome(order.paymentStatus), fontWeight: "bold" }}>{'$' + (order.total * 0.98).toFixed(2)}</span>,
+      income: <span style={{ color: getColorIncome(order.state), fontWeight: "bold" }}>{order.state === 'DONE' ? `$${(order.total * 0.98).toFixed(2)}` : '0.00'}</span>,
       payment: order.paymentMethod.toUpperCase(),
       status: <Tag color={getColorTag(order.paymentStatus)}>{order.paymentStatus}</Tag>,
       shipping: <Badge status={getColorBadge(order.state)} text={order.state} />,
