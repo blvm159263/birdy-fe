@@ -209,7 +209,7 @@ function App() {
           <Route path="/shop-login" element={<ShopLoginPage />} />
 
           {/* Admin routes */}
-          <Route element={<ProtectedRoutes/>}>
+          <Route path="/admin" element={<ProtectedRoutes/>}>
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
               <Route

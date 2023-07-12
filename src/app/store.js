@@ -24,6 +24,7 @@ const persistConfig = {
 }
 
 const persistedReducer = persistReducer(persistConfig, cartReducer)
+const persistedAdminReducer = persistReducer(persistConfig, adminReducer)
 
 export const store = configureStore({
   reducer: {
@@ -32,7 +33,7 @@ export const store = configureStore({
     cart: persistedReducer,
     user: userReducer,
     shop: shopReducer,
-    admin: adminReducer
+    admin: persistedAdminReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

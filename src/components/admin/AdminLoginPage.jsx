@@ -1,9 +1,10 @@
+import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
-import AdminHeader from "./AdminHeader";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import adminApi from "../../api/adminApi";
+import { NotificationContext } from "../../context/NotificationProvider";
 import { saveAdminLoginInformation } from "../../features/admin/adminSlice";
-import { useEffect } from "react";
+import AdminHeader from "./AdminHeader";
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState('');
@@ -11,6 +12,8 @@ export default function AdminLoginPage() {
   const [isAuthenticating, setAuthenticating] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const openNotificationWithIcon = useContext(NotificationContext);
 
   const handleLogin = () => {
     setError(null);
@@ -28,6 +31,8 @@ export default function AdminLoginPage() {
           username: username,
           password: password
         }))
+        navigate("/admin/dashboard", { replace: true });
+        openNotificationWithIcon('Thành công', 'Bạn đã đăng nhập')
       }).catch((error) => {
         setError('Tên đăng nhập hoặc mật khẩu không đúng')
       }).finally(() => {
@@ -35,27 +40,21 @@ export default function AdminLoginPage() {
       })
   }
 
-  useEffect(() => {
-    console.log(username + ' - ' + password);
-  }, [username, password])
-
   return (
     <div className="h-screen bg-gradient-to-r from-sky-500 via-blue-500 to-sky-500">
       <AdminHeader />
-      <div className="container grid grid-cols-1 md:grid-cols-2 mx-auto h-[80vh]">
+      <div className="container grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto h-[80vh]">
         {/* Left */}
-        <div className="flex flex-col justify-center items-center">
-          <div className="flex flex-col gap-6 items-center">
-            <img
-              src="/assets/images/logo-white.png"
-              className="h-16"
-              alt="logo"
-            />
-            <h1 className="text-white font-normal tracking-wide text-3xl">
-              Welcome to Birdy!
-              <br /> A bird trading platform
-            </h1>
-          </div>
+        <div className="flex flex-col gap-6 justify-center items-center">
+          <img
+            src="/assets/images/logo-white.png"
+            className="h-16"
+            alt="logo"
+          />
+          <h1 className="text-white font-normal tracking-wide text-3xl">
+            Welcome to Birdy!
+            <br /> A bird trading platform
+          </h1>
         </div>
 
         {/* Right */}
