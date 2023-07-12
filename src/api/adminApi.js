@@ -35,7 +35,7 @@ const adminApi = {
     },
     deleteProductById(id) {
         const url = `/admin/product/${id}/delete`;
-        return axiosClient.get(url);
+        return axiosClient.delete(url);
     },
     authenticate(username, password) {
         const data = new FormData();

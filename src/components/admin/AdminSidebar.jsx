@@ -1,32 +1,28 @@
-import {AppstoreAddOutlined, HomeOutlined, LogoutOutlined, ShopOutlined, UserOutlined, WarningOutlined} from "@ant-design/icons";
-import {useDispatch, useSelector} from "react-redux";
+import { AppstoreAddOutlined, HomeOutlined, LogoutOutlined, ShopOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
+import { useContext, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import AdminSubPageType from "../../constants/AdminSubPageType";
-import {Link, useNavigate} from "react-router-dom";
-import {useContext, useEffect} from "react";
-import {resetAllState} from "../../features/search/searchSlice";
-import storageService from "../../api/storage";
-import {LoginContext} from "../../context/LoginProvider";
-import {NotificationContext} from "../../context/NotificationProvider";
+import { NotificationContext } from "../../context/NotificationProvider";
+import { clearAdminLoginInfomation } from "../../features/admin/adminSlice";
+import { resetAllState } from "../../features/search/searchSlice";
 
 export default function AdminSidebar() {
-  const {setIsLogin, setRole} = useContext(LoginContext);
   const currentPage = useSelector(state => state.ui.currentAdminSubPage);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const openNotificationWithIcon = useContext(NotificationContext);
 
   const onLogout = () => {
-    storageService.removeAccessToken();
-    setIsLogin(false);
-    setRole(null);
+    dispatch(clearAdminLoginInfomation());
     navigate("/");
-    openNotificationWithIcon('success', 'You have logged out!');
+    openNotificationWithIcon('Thành công', 'Bạn đã đăng xuất tài khoản admin!');
   }
 
   useEffect(() => {
     dispatch(resetAllState());
     console.log("reset all search state")
-  }, [currentPage])
+  }, [currentPage, dispatch])
 
   return (
     <aside className="flex flex-col top-0 left-0 col-span-3 bg-white h-full border-r">
@@ -77,7 +73,7 @@ export default function AdminSidebar() {
             </Link>
           </li>
           <li>
-            <button onClick={() => onLogout()} className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
+            <button onClick={() => onLogout()} className={`w-full relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
               <LogoutOutlined />
               <span className="ml-2 text-sm tracking-wide truncate">Đăng xuất</span>
             </button>
