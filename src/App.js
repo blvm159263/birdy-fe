@@ -1,10 +1,5 @@
 import { FloatButton } from "antd"
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes
-} from "react-router-dom"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import "./App.css"
 import "./style.scss"
 // Components
@@ -75,6 +70,7 @@ function App() {
     var token = storageService.getAccessToken()
     if (token) {
       token = jwtDecode(token)
+      console.log(token)
       const currentTime = Math.floor(Date.now() / 1000)
       if (currentTime > token.exp) {
         storageService.removeAccessToken()
@@ -125,7 +121,11 @@ function App() {
                   <Route path=":searchType" element={<SearchPage />} />
                 </Route>
                 <Route path="/detail-item/:id" element={<DetailItemPage />} />
-                {role === "USER"? (<Route path="/wishlist" element={<WishList />} />) : ''}
+                {role === "USER" ? (
+                  <Route path="/wishlist" element={<WishList />} />
+                ) : (
+                  ""
+                )}
                 <Route path="/cart">
                   <Route index element={<CartPage />} />
                   <Route path="/cart/checkout" element={<CheckoutPage />} />
@@ -209,7 +209,12 @@ function App() {
 
           {/* Admin routes */}
           <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
+            <Route
+              index
+              element={
+                <Navigate to={AdminSubPageType.DASHBOARD.path} replace />
+              }
+            />
             <Route
               path={AdminSubPageType.DASHBOARD.path}
               element={<AdminDashboard />}
@@ -227,10 +232,7 @@ function App() {
               element={<AdminProductRequests />}
             />
           </Route>
-          <Route
-            path={'/admin/login'}
-            element={<AdminLoginPage />}
-          />
+          <Route path={"/admin/login"} element={<AdminLoginPage />} />
         </Routes>
       </BrowserRouter>
 
