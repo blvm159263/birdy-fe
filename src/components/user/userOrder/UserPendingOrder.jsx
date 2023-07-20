@@ -18,6 +18,7 @@ const { TextArea } = Input
 function UserPendingOrder() {
   const { userid } = useParams()
   const userOrder = useSelector((state) => state.user.userOrder)
+  const [error, setError] = useState(null)
   const userInformation = useSelector((state) => state.user.userInformation)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [selectedOrderId, setSelectedOrderId] = useState(null)
@@ -37,11 +38,11 @@ function UserPendingOrder() {
         })
         .catch((e) => {
           console.log(e)
+          setError(e)
         })
-        await userApi.getUserById(userInformation.id).then((res) => {
-          dispatch(getUser(res.data))
-        }
-        )
+      await userApi.getUserById(userInformation.id).then((res) => {
+        dispatch(getUser(res.data))
+      })
     }
   }
 
@@ -77,11 +78,11 @@ function UserPendingOrder() {
       .getQRMomoIndividual({ amount: amount, orderId: orderCp })
       .then((res) => {
         window.location.href = res.data.payUrl
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e)
         openNotificationWithIcon("Error", "Momo is maintained!!!")
-      }
-      )
+      })
   }
 
   const handlePaymentFromBalance = async () => {
@@ -89,15 +90,17 @@ function UserPendingOrder() {
       openNotificationWithIcon("Error", "Your balance is not enough!!!")
       return
     }
-    await orderApi.payOrder(orderPay.id, userInformation.id, orderPay.total).then((res) => {
-      openNotificationWithIcon("Success", "Payment success!!!")
-      fetchUserOrder()
-      setIsModalPaymentVisible(false)
-    }).catch((e) => {
-      console.log(e)
-      openNotificationWithIcon("Error", "Payment failed!!!")
-    }
-    )
+    await orderApi
+      .payOrder(orderPay.id, userInformation.id, orderPay.total)
+      .then((res) => {
+        openNotificationWithIcon("Success", "Payment success!!!")
+        fetchUserOrder()
+        setIsModalPaymentVisible(false)
+      })
+      .catch((e) => {
+        console.log(e)
+        openNotificationWithIcon("Error", "Payment failed!!!")
+      })
   }
 
   const handleModalPaymentCancel = () => {
@@ -108,20 +111,25 @@ function UserPendingOrder() {
   //   setTotal(totalPrice)
   // }, [totalPrice])
   const pendingOrder =
-    userOrder &&
-    userOrder.filter(
-      (order) => order.state === "PENDING"
-    )
+    userOrder && userOrder.filter((order) => order.state === "PENDING")
 
   useEffect(() => {
     fetchUserOrder()
   }, [])
+
+  if (error && error.response && error.response.status === 404) {
+    // Handle 404 error, e.g., show a message or perform an action
+    return <p className="p-4">Không có đơn hàng.</p>
+  }
   return (
     <div>
       {userOrder &&
         pendingOrder.map((order) => (
-          <div key={order.id} className="px-6 mt-6 border-b border-b-gray-600">
-            <div className="flex justify-between border-b py-2">
+          <div
+            key={order.id}
+            className="lg:px-6 sm: px-3 border-b border-b-gray-600"
+          >
+            <div className="flex lg:flex-row sm: flex-col justify-between border-b py-2">
               <div className="flex items-center">
                 <h2 className="font-bold text-gray-300 mr-2">#{order.id}</h2>
                 <p className="font-bold mr-2">{order.code}</p>
@@ -156,38 +164,41 @@ function UserPendingOrder() {
             </div>
             <div className="py-2 flex justify-end">
               {order.state === "PENDING" &&
-                order.paymentStatus === "PENDING" ?
-                (<>
+              order.paymentStatus === "PENDING" ? (
+                <>
                   <button
+                    className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
+                    onClick={() => {
+                      setOrderPay(order)
+                      setIsModalPaymentVisible(true)
+                    }}
+                  >
+                    PAY THE ORDER
+                  </button>
+                  <Modal
+                    title="Choose payment method?"
+                    visible={isModalPaymentVisible}
+                    onCancel={handleModalPaymentCancel}
+                    cancelText="Cancel"
+                    okButtonProps={{ style: { display: "none" } }}
+                  >
+                    <button
                       className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                      onClick={() => {
-                        setOrderPay(order)
-                        setIsModalPaymentVisible(true)}}
+                      onClick={handlePaymentFromBalance}
                     >
-                      PAY THE ORDER
+                      Thanh toán bằng số dư
                     </button>
-                    <Modal
-                      title="Choose payment method?"
-                      visible={isModalPaymentVisible}
-                      onCancel={handleModalPaymentCancel}
-                      cancelText="Cancel"
-                      okButtonProps={{ style: { display: "none" }}}
+                    <button
+                      className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
+                      onClick={handlePayment}
                     >
-                      <button
-                        className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                        onClick={handlePaymentFromBalance}>
-                        Thanh toán bằng số dư
-                      </button>
-                      <button
-                        className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                        onClick={handlePayment}>
-                        Thanh toán bằng Momo QR code
-                      </button>
-                    </Modal>
-                </>)
-                :
-                ("")
-              }
+                      Thanh toán bằng Momo QR code
+                    </button>
+                  </Modal>
+                </>
+              ) : (
+                ""
+              )}
 
               <button
                 onClick={() => handleCancelOrder(order.id)}

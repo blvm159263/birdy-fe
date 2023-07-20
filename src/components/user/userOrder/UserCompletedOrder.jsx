@@ -9,7 +9,7 @@ import { getAllOrder } from "../../../features/user/userSlice"
 function UserCompletedOrder() {
   const { userid } = useParams()
   const isDone = true
-
+  const [error, setError] = useState(null)
   const userOrder = useSelector((state) => state.user.userOrder)
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
   // // const [userOrder, setUserOrder] = useState()
@@ -27,7 +27,10 @@ function UserCompletedOrder() {
           // setUserOrder(response.data)
           // console.log(userOrder)
         })
-        .catch((e) => console.log(e))
+        .catch((e) => {
+          console.log(e)
+          setError(e)
+        })
     }
   }
 
@@ -41,12 +44,20 @@ function UserCompletedOrder() {
     // setTotal(totalPrice)
   }, [userid])
 
+  if (error && error.response && error.response.status === 404) {
+    // Handle 404 error, e.g., show a message or perform an action
+    return <p className="p-4">Không có đơn hàng.</p>
+  }
+
   return (
     <div>
       {userOrder &&
         completedOrder.map((order) => (
-          <div key={order.id} className="px-6 mt-6 border-b border-b-gray-600">
-            <div className="flex justify-between border-b py-2">
+          <div
+            key={order.id}
+            className="lg:px-6 sm: px-3 border-b border-b-gray-600"
+          >
+            <div className="flex lg:flex-row sm: flex-col justify-between border-b py-2">
               <div className="flex items-center">
                 <h2 className="font-bold text-gray-300 mr-2">#{order.id}</h2>
                 <p className="font-bold mr-2">{order.code}</p>
@@ -81,7 +92,7 @@ function UserCompletedOrder() {
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
               </p>
-              <p>Total Price: ${order.total.toFixed(2)}</p>
+              <p>Total Price: ${order?.total?.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
               {/* <button className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500">

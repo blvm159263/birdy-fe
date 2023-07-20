@@ -12,7 +12,7 @@ function UserOrderCancel() {
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
   // // const [userOrder, setUserOrder] = useState()
   // const orderDetailProduct = useSelector((state) => state.user.userOrderDetail)
-
+  const [error, setError] = useState(null)
   // const [total, setTotal] = useState([])
 
   const dispatch = useDispatch()
@@ -25,7 +25,10 @@ function UserOrderCancel() {
           // setUserOrder(response.data)
           // console.log(userOrder)
         })
-        .catch((e) => console.log(e))
+        .catch((e) => {
+          console.log(e)
+          setError(e)
+        })
     }
   }
   const cancelOrder =
@@ -36,13 +39,20 @@ function UserOrderCancel() {
   // useEffect(() => {
   //   setTotal(totalPrice)
   // }, [totalPrice])
+  if (error && error.response && error.response.status === 404) {
+    // Handle 404 error, e.g., show a message or perform an action
+    return <p className="p-4">Không có đơn hàng.</p>
+  }
 
   return (
     <div>
       {userOrder &&
         cancelOrder.map((order) => (
-          <div key={order.id} className="px-6 mt-6 border-b border-b-gray-600">
-            <div className="flex justify-between border-b py-2">
+          <div
+            key={order.id}
+            className="lg:px-6 sm: px-3 border-b border-b-gray-600"
+          >
+            <div className="flex lg:flex-row sm: flex-col justify-between border-b py-2">
               <div className="flex items-center">
                 <h2 className="font-bold text-gray-300 mr-2">#{order.id}</h2>
                 <p className="font-bold mr-2">{order.code}</p>
@@ -73,7 +83,7 @@ function UserOrderCancel() {
               <p className="">
                 <span className="font-bold">Delivery to: </span> {order.address}
               </p>
-              <p>Total Price: ${order.total.toFixed(2)}</p>
+              <p>Total Price: ${order?.total?.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-between">
               {/* <button className="px-2 py-1 border rounded-md">Feedback</button> */}

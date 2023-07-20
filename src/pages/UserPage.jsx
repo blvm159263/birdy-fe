@@ -25,34 +25,23 @@ function UserPage() {
     if (token) {
       token = jwtDecode(token)
       await userApi
-      .getUserByPhoneNumber(token.sub)
-      .then((response) => {
-        dispatch(getUser(response.data))
-        setIsLoading(false)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .getUserByPhoneNumber(token.sub)
+        .then((response) => {
+          dispatch(getUser(response.data))
+          setIsLoading(false)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
-    
   }
 
   useEffect(() => {
     fetchUser()
   }, [])
   return (
-    <div className="flex h-full bg-gray-200 px-16 py-10">
+    <div className="flex lg:flex-row sm: flex-col h-full bg-gray-200 lg:px-16 sm: px-1 lg:py-10 sm: py-4">
       <UserSidebar />
-      {/* <Routes>
-        <Route
-          index
-          element={
-            <UserInfor isLoading={isLoading} setIsLoading={setIsLoading} />
-          }
-        />
-        <Route path="/address" element={<UserAddress />} />
-        <Route path="/order" element={<UserOrder />} />
-      </Routes> */}
       <Outlet />
     </div>
   )

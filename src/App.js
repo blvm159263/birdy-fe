@@ -209,7 +209,6 @@ function App() {
           <Route path="/shop-login" element={<ShopLoginPage />} />
 
           {/* Admin routes */}
-<<<<<<< HEAD
           <Route path="/admin" element={<AdminLayout />}>
             <Route
               index
@@ -233,10 +232,16 @@ function App() {
               path={AdminSubPageType.NEW_PRODUCT_REQUESTS.path}
               element={<AdminProductRequests />}
             />
-=======
-          <Route path="/admin" element={<ProtectedRoutes/>}>
+          </Route>
+          <Route path={"/admin/login"} element={<AdminLoginPage />} />
+          <Route path="/admin" element={<ProtectedRoutes />}>
             <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
+              <Route
+                index
+                element={
+                  <Navigate to={AdminSubPageType.DASHBOARD.path} replace />
+                }
+              />
               <Route
                 path={AdminSubPageType.DASHBOARD.path}
                 element={<AdminDashboard />}
@@ -254,7 +259,6 @@ function App() {
                 element={<AdminProductRequests />}
               />
             </Route>
->>>>>>> origin/dev
           </Route>
           <Route path={"/admin/login"} element={<AdminLoginPage />} />
         </Routes>

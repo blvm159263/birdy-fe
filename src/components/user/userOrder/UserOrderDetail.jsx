@@ -39,20 +39,22 @@ function UserOrderDetail({ detail, orderid, isDone }) {
 
   return (
     <>
-      <Link to={`/detail-item/${detail.productId}`} className="h-fit w-20">
-        <img
-          className="h-full object-contain"
-          src={product.id === detail.productId ? product.imageMain : ""}
-          alt=""
-        />
-      </Link>
-      <div>
-        <p>{product.id === detail.productId ? product.productName : ""}</p>
-        <p className="text-gray-400">
-          Category:{" "}
-          {product.id === detail.productId ? product.categoryName : ""}{" "}
-        </p>
-        <p>Quantity: x{detail.quantity}</p>
+      <div className="sm: flex sm: flex-col">
+        <Link to={`/detail-item/${detail.productId}`} className="h-fit w-20">
+          <img
+            className="h-full object-contain"
+            src={product.id === detail.productId ? product.imageMain : ""}
+            alt=""
+          />
+        </Link>
+        <div>
+          <p>{product.id === detail.productId ? product.productName : ""}</p>
+          <p className="text-gray-400">
+            Category:{" "}
+            {product.id === detail.productId ? product.categoryName : ""}{" "}
+          </p>
+          <p>Quantity: x{detail.quantity}</p>
+        </div>
       </div>
       <div className="text-md flex flex-col items-end w-2/5">
         <div>${(detail.price * detail.quantity).toFixed(2)}</div>

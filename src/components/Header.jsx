@@ -35,16 +35,15 @@ export default function NavBar() {
     if (token) {
       token = jwtDecode(token)
       await userApi
-      .getUserByPhoneNumber(token.sub)
-      .then((response) => {
-        dispatch(getUser(response.data))
-        // setIsLoading(false)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+        .getUserByPhoneNumber(token.sub)
+        .then((response) => {
+          dispatch(getUser(response.data))
+          // setIsLoading(false)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
-    
   }
 
   const fetchWishlist = () => {
@@ -223,11 +222,58 @@ export default function NavBar() {
               </Link>
             </li>
             <hr />
+            {isLogin ? (
+              <>
+                <li>
+                  <Link
+                    className="block p-2.5 mr-1 text-white relative"
+                    to="/wishlist"
+                  >
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      size="1x"
+                      style={{ color: "#e41b1b" }}
+                    />
+                    <span className="cart-count absolute left-8 top-3.5 text-center text-xs h-4 w-4 rounded-full bg-orange-500">
+                      {wishList ? wishList.length : "0"}
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/user" className="px-2 pt-1">
+                    Hồ sơ
+                  </Link>
+                </li>
+                <li>
+                  <span
+                    onClick={onLogout}
+                    className="px-2 pt-[0.2rem] cursor-pointer"
+                  >
+                    Đăng xuất
+                  </span>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/login">Đăng nhập</Link>
+                </li>
+                <li>
+                  <Link to="/shop-login">Bán sản phẩm</Link>
+                </li>
+              </>
+            )}
             <li>
-              <Link to="/login">Đăng nhập</Link>
-            </li>
-            <li>
-              <Link to="/shop-login">Bán sản phẩm</Link>
+              <Link
+                to="/cart"
+                className="block p-2.5 mr-1 text-white relative"
+                aria-current="page"
+              >
+                <FontAwesomeIcon icon={faCartShopping} size="1x" />
+                <span className="cart-count absolute left-8 top-3.5 text-center text-xs h-4 w-4 rounded-full bg-orange-500">
+                  {cartCount}
+                </span>
+              </Link>
             </li>
           </ul>
         </div>

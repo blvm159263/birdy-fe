@@ -7,12 +7,12 @@ import UserPendingOrder from "./UserPendingOrder"
 import UserCompletedOrder from "./UserCompletedOrder"
 
 function UserOrder() {
-  console.log("render UserOrder");
+  console.log("render UserOrder")
   return (
-    <div className="bg-white w-4/5">
+    <div className="bg-white lg:w-4/5 sm: w-full">
       <h1 className="text-center py-2 text-2xl font-bold">Đơn hàng của bạn</h1>
       <hr />
-      <div className="flex items-center justify-evenly py-1">
+      <div className="flex items-center lg:justify-evenly sm: justify-between py-1">
         <Link to="">Tất cả </Link>
         <Link to="pending">Đang chờ</Link>
         <Link to="delivery">Đang vận chuyển</Link>

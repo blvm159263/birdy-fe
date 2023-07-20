@@ -10,7 +10,7 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
   const userInformation = useSelector((state) => state.user.userInformation)
   const userAddresses = useSelector((state) => state.user.userAddress)
 
-  const maxId = userAddresses.reduce(
+  const maxId = userAddresses?.reduce(
     (max, obj) => (obj.id > max ? obj.id : max),
     0
   )
@@ -45,7 +45,7 @@ function AddressModal({ isAddNew, setIsAddNew, fetchAddress, setUpdated }) {
       fullName: "",
       phoneNumber: "",
       address: "",
-      userId: userAddresses.id,
+      userId: userAddresses?.id,
     })
   }
 

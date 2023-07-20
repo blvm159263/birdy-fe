@@ -9,6 +9,7 @@ import userApi from "../../../api/userApi"
 
 function UserDeliveryOrder() {
   const { userid } = useParams()
+  const [error, setError] = useState(null)
   const userOrder = useSelector((state) => state.user.userOrder)
   const userInformation = useSelector((state) => state.user.userInformation)
   // const totalPrice = useSelector((state) => state.user.totalPriceList)
@@ -28,11 +29,11 @@ function UserDeliveryOrder() {
         })
         .catch((e) => {
           console.log(e)
+          setError(e)
         })
-        await userApi.getUserById(userInformation.id).then((res) => {
-          dispatch(getUser(res.data))
-        }
-        )
+      await userApi.getUserById(userInformation.id).then((res) => {
+        dispatch(getUser(res.data))
+      })
     }
   }
 
@@ -51,10 +52,7 @@ function UserDeliveryOrder() {
   }
 
   const deliveryOrder =
-    userOrder &&
-    userOrder.filter(
-      (order) => order.state === "DELIVERING"
-    )
+    userOrder && userOrder.filter((order) => order.state === "DELIVERING")
 
   useEffect(() => {
     fetchUserOrder()
@@ -63,12 +61,20 @@ function UserDeliveryOrder() {
   //   setTotal(totalPrice)
   // }, [totalPrice])
 
+  if (error && error.response && error.response.status === 404) {
+    // Handle 404 error, e.g., show a message or perform an action
+    return <p className="p-4">Không có đơn hàng.</p>
+  }
+
   return (
     <div>
       {userOrder &&
         deliveryOrder.map((order) => (
-          <div key={order.id} className="px-6 mt-6 border-b border-b-gray-600">
-            <div className="flex justify-between border-b py-2">
+          <div
+            key={order.id}
+            className="lg:px-6 sm: px-3 border-b border-b-gray-600"
+          >
+            <div className="flex lg:flex-row sm: flex-col justify-between border-b py-2">
               <div className="flex items-center">
                 <h2 className="font-bold text-gray-300 mr-2">#{order.id}</h2>
                 <p className="font-bold mr-2">{order.code}</p>

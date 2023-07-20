@@ -39,7 +39,7 @@ function UserAddress() {
   if (error && error.response && error.response.status === 404) {
     // Handle 404 error, e.g., show a message or perform an action
     return (
-      <div className="w-5/6 bg-white">
+      <div className="lg:w-5/6 s: w-full bg-white">
         <div className="flex justify-between items-center py-4 px-10">
           <h1 className=" text-center text-2xl font-bold">Địa chỉ</h1>
           <button
@@ -73,7 +73,7 @@ function UserAddress() {
   }
 
   return (
-    <div className="w-5/6 bg-white">
+    <div className="lg:w-5/6 sm: w-full bg-white">
       <div className="flex justify-between items-center py-4 px-10">
         <h1 className=" text-center text-2xl font-bold">Địa chỉ</h1>
         <button
@@ -132,8 +132,8 @@ function UserAddress() {
       </div> */}
       <div className="py-4 px-6">
         {userAddresses &&
-          userAddresses.length > 0 &&
-          userAddresses.map((item) => (
+          userAddresses?.length > 0 &&
+          userAddresses?.map((item) => (
             <div
               key={item.id}
               className="flex justify-between items-center border-b py-4"
@@ -142,7 +142,7 @@ function UserAddress() {
                 <div className="flex">
                   <h2 className="">{item.fullName}</h2>
                   <div className="mx-2 border-l"></div>
-                  <p>{userInformation.phoneNumber}</p>
+                  <p>{userInformation?.phoneNumber}</p>
                 </div>
                 <p>{item.address}</p>
                 {item.isDefault && (

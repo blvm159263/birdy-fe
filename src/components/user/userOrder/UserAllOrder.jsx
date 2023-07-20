@@ -54,7 +54,7 @@ function UserAllOrder() {
   }
 
   const handlePayment = async () => {
-    if(orderPay === null) return
+    if (orderPay === null) return
     var amount = (orderPay.total * 23000).toFixed(0)
     const orderCp = (orderPay.code + orderPay.id).toString()
     await paymentApi
@@ -65,21 +65,23 @@ function UserAllOrder() {
   }
 
   const handlePaymentFromBalance = async () => {
-    if(orderPay === null) return
-    console.log(orderPay.id);
+    if (orderPay === null) return
+    console.log(orderPay.id)
     if (userInformation.balance < orderPay.total) {
       openNotificationWithIcon("Error", "Your balance is not enough!!!")
       return
     }
-    await orderApi.payOrder(orderPay.id, userInformation.id, orderPay.total).then((res) => {
-      openNotificationWithIcon("Success", "Payment success!!!")
-      fetchUserOrder()
-      setIsModalPaymentVisible(false)
-    }).catch((e) => {
-      console.log(e)
-      openNotificationWithIcon("Error", "Payment failed!!!")
-    }
-    )
+    await orderApi
+      .payOrder(orderPay.id, userInformation.id, orderPay.total)
+      .then((res) => {
+        openNotificationWithIcon("Success", "Payment success!!!")
+        fetchUserOrder()
+        setIsModalPaymentVisible(false)
+      })
+      .catch((e) => {
+        console.log(e)
+        openNotificationWithIcon("Error", "Payment failed!!!")
+      })
   }
 
   const handleCancelOrder = (id) => {
@@ -110,7 +112,6 @@ function UserAllOrder() {
   const handleModalPaymentCancel = () => {
     setIsModalPaymentVisible(false)
   }
-
 
   const showPromiseConfirm = () => {
     return new Promise((resolve, reject) => {
@@ -198,9 +199,9 @@ function UserAllOrder() {
       {userOrder &&
         userOrder.map((order) => (
           <div key={order.id}>
-            <div className="px-6 mt-6 border-b border-b-gray-600">
-              <div className="flex justify-between border-b py-2">
-                <div className="flex items-center">
+            <div className="lg:px-6 sm: px-3 mt-6 border-b border-b-gray-600">
+              <div className="flex lg:flex-row sm: flex-col justify-between border-b py-2">
+                <div className="flex justify-evenly items-center">
                   <h2 className="font-bold text-gray-300 mr-2">#{order.id}</h2>
                   <p className="font-bold mr-2">{order.code}</p>
                   <button
@@ -225,7 +226,9 @@ function UserAllOrder() {
                   </p>
                   <div className="mx-2 w-[1px]  h-4/5 bg-gray-200"></div>
                   <p className="text-sky-400">
-                    <span className="text-gray-400">Trạng thái thanh toán:</span>{" "}
+                    <span className="text-gray-400">
+                      Trạng thái thanh toán:
+                    </span>{" "}
                     {order.paymentStatus}
                   </p>
                 </div>
@@ -237,12 +240,15 @@ function UserAllOrder() {
                 order={order}
                 isDone={order.state === "DONE" ? isDone : !isDone}
               />
-              <div className="flex justify-between py-3 border-b">
+              <div className="flex lg:flex-row sm: flex-col justify-between py-3 border-b">
                 <p className="">
                   <span className="font-bold">Delivery to: </span>{" "}
                   {order.address}
                 </p>
-                <p>Total Price: ${order?.total.toFixed(2)}</p>
+                <p>
+                  <span className="font-bold">Total Price: </span>$
+                  {order?.total?.toFixed(2)}
+                </p>
               </div>
               <div className="py-2 relative flex justify-end">
                 {order.state === "CANCELED" ? (
@@ -253,7 +259,8 @@ function UserAllOrder() {
                 ) : (
                   ""
                 )}
-                {order.state === "DONE" && order.paymentStatus === "PAID" || order.state === "CANCELED" ? (
+                {(order.state === "DONE" && order.paymentStatus === "PAID") ||
+                order.state === "CANCELED" ? (
                   <>
                     <button className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500">
                       Buy Again
@@ -270,7 +277,8 @@ function UserAllOrder() {
                   ""
                 )}
 
-                {order.state === "Delivery" && order.paymentStatus === "PAID" ? (
+                {order.state === "Delivery" &&
+                order.paymentStatus === "PAID" ? (
                   <button
                     className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500"
                     onClick={() => handleUpdateState(order.id, "DONE", ".")}
@@ -282,15 +290,14 @@ function UserAllOrder() {
                 )}
 
                 {order.state === "PENDING" &&
-                  order.paymentStatus === "PENDING" ? (
+                order.paymentStatus === "PENDING" ? (
                   <>
                     <button
                       className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
                       onClick={() => {
                         setOrderPay(order)
                         setIsModalPaymentVisible(true)
-                      }
-                      }
+                      }}
                     >
                       PAY THE ORDER
                     </button>
@@ -303,12 +310,14 @@ function UserAllOrder() {
                     >
                       <button
                         className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                        onClick={handlePaymentFromBalance}>
+                        onClick={handlePaymentFromBalance}
+                      >
                         Thanh toán bằng số dư
                       </button>
                       <button
                         className="border border-green-500 bg-green-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-green-500 hover:border-green-500"
-                        onClick={handlePayment}>
+                        onClick={handlePayment}
+                      >
                         Thanh toán bằng Momo QR code
                       </button>
                     </Modal>
@@ -344,7 +353,6 @@ function UserAllOrder() {
                 ) : (
                   ""
                 )}
-
               </div>
             </div>
           </div>

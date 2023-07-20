@@ -6,51 +6,59 @@ import paymentApi from "../../api/paymentApi"
 import { useContext } from "react"
 import { NotificationContext } from "../../context/NotificationProvider"
 function UserSidebar(isAtPage, handleChangePage) {
-
-  const  openNotificationWithIcon  = useContext(NotificationContext)
+  const openNotificationWithIcon = useContext(NotificationContext)
 
   const [isDropDown, setIsDropDown] = useState(false)
   const userInformation = useSelector((state) => state.user.userInformation)
   const [chargeBalance, setChargeBalance] = useState(0)
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const showModal = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   const handleRecharge = async () => {
     if (chargeBalance < 1) {
       openNotificationWithIcon("Error", "Minimum recharge is 1$ !!!")
       return
     }
-    setIsModalOpen(false);
+    setIsModalOpen(false)
     var amount = (chargeBalance * 23000).toFixed(0)
     await paymentApi
-      .getQRMomoRecharge({ amount: amount, accountId: userInformation.accountId })
+      .getQRMomoRecharge({
+        amount: amount,
+        accountId: userInformation.accountId,
+      })
       .then((res) => {
         window.location.href = res.data.payUrl
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e)
         openNotificationWithIcon("Error", "Momo is maintained!!!")
-      }
-      )
+      })
   }
 
   return (
-    <div className="w-1/6 py-3 bg-sky-400 border-gray-200 text-white">
+    <div className="lg:w-1/6 sm: w-full py-3 bg-sky-400 border-gray-200 text-white">
       <div className="flex flex-col items-center ">
         <div className="h-10 mb-1">
-          <img className="h-full" src="/assets/images/shop_avar.png" alt="" />
+          <img
+            className="h-full rounded-3xl"
+            src={userInformation?.avatarUrl}
+            alt=""
+          />
         </div>
         <p>{userInformation && userInformation.fullName}</p>
         <p>
-          Số dư hiện tại: $ {userInformation && (userInformation?.balance).toFixed(2)}
-
+          Số dư hiện tại: ${" "}
+          {userInformation && (userInformation?.balance).toFixed(2)}
         </p>
-        <Button className="mb-2 mt-2" type="dashed" onClick={showModal}>Nap tiền</Button>
+        <Button className="mb-2 mt-2" type="dashed" onClick={showModal}>
+          Nap tiền
+        </Button>
         <Modal
           title="Nap tiền vào ví"
           open={isModalOpen}
@@ -58,7 +66,8 @@ function UserSidebar(isAtPage, handleChangePage) {
           okText="Nap tien bằng Momo QR Code"
           okType="dashed"
           onOk={handleRecharge}
-          onCancel={handleCancel}>
+          onCancel={handleCancel}
+        >
           Số tiền muốn nạp:
           <Input
             type="number"
