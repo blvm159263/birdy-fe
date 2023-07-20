@@ -55,6 +55,7 @@ import { ChatContext } from "./context/ChatContext"
 import { getUser } from "./features/user/userSlice"
 import ShopLoginPage from "./pages/ShopLoginPage"
 import AdminLoginPage from "./components/admin/AdminLoginPage"
+import ProtectedRoutes from "./components/admin/utils/ProtectedRoutes"
 
 function App() {
   const { isLogin, setIsLogin, setRole, role, setShopId } =
@@ -208,6 +209,7 @@ function App() {
           <Route path="/shop-login" element={<ShopLoginPage />} />
 
           {/* Admin routes */}
+<<<<<<< HEAD
           <Route path="/admin" element={<AdminLayout />}>
             <Route
               index
@@ -231,6 +233,28 @@ function App() {
               path={AdminSubPageType.NEW_PRODUCT_REQUESTS.path}
               element={<AdminProductRequests />}
             />
+=======
+          <Route path="/admin" element={<ProtectedRoutes/>}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Navigate to={AdminSubPageType.DASHBOARD.path} replace />} />
+              <Route
+                path={AdminSubPageType.DASHBOARD.path}
+                element={<AdminDashboard />}
+              />
+              <Route
+                path={AdminSubPageType.ALL_SHOPS.path}
+                element={<AdminAllShops />}
+              />
+              <Route
+                path={AdminSubPageType.PRODUCT_REPORTS.path}
+                element={<AdminProductReports />}
+              />
+              <Route
+                path={AdminSubPageType.NEW_PRODUCT_REQUESTS.path}
+                element={<AdminProductRequests />}
+              />
+            </Route>
+>>>>>>> origin/dev
           </Route>
           <Route path={"/admin/login"} element={<AdminLoginPage />} />
         </Routes>

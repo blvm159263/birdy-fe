@@ -5,6 +5,10 @@ const initialState = {
     isProductReportModalOpen: false,
     selectedProductRequest: null,
     selectedProductReport: null,
+    adminLoginInfomation: {
+        username: null,
+        password: null
+    }
 }
 
 const adminSlice = createSlice({
@@ -26,6 +30,15 @@ const adminSlice = createSlice({
         closeProductReportModal: (state) => {
             state.isProductReportModalOpen = false;
             state.selectedProductReport = null;
+        },
+        saveAdminLoginInformation: (state, action) => {
+            state.adminLoginInfomation = action.payload
+        },
+        clearAdminLoginInfomation: (state) => {
+            state.adminLoginInfomation = {
+                username: null,
+                password: null
+            }
         }
     }
 })
@@ -36,5 +49,7 @@ export const {
     openProductRequestDetailModal,
     closeProductRequestDetailModal,
     openProductReportModal,
-    closeProductReportModal
+    closeProductReportModal,
+    saveAdminLoginInformation,
+    clearAdminLoginInfomation
 } = adminSlice.actions;
