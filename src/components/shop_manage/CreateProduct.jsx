@@ -241,6 +241,9 @@ function CreateProduct() {
             categoryName: category,
             shopId: shopId,
             shopName: "shop name",
+            isDisabled: false,
+            isWarned: false,
+            isBanned: false,
         }
 
         const listFile = []
