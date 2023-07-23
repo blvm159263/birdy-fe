@@ -47,7 +47,7 @@ function UserSidebar(isAtPage, handleChangePage) {
         </div>
         <p>{userInformation && userInformation.fullName}</p>
         <p>
-          Số dư hiện tại: $ {userInformation && (userInformation.balance).toFixed(2)}
+          Số dư hiện tại: $ {userInformation && (userInformation?.balance).toFixed(2)}
 
         </p>
         <Button className="mb-2 mt-2" type="dashed" onClick={showModal}>Nap tiền</Button>

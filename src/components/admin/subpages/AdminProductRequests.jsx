@@ -35,6 +35,9 @@ export default function AdminProductRequests() {
       setProducts(response.data[0]);
       setTotalPage(response.data[1]);
       setLoading(false);
+    }).catch((error) => {
+      console.log(error);
+      setLoading(false);
     });
   }, [page, searchTrigger]);
 

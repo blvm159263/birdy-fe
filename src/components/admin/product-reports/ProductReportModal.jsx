@@ -53,10 +53,14 @@ export default function ProductReportModal({triggerReload}) {
 
     if (report) {
       adminApi.getReportsByProductId(report.product.id)
-        .then((response) => {
-          setReportDetail(response.data);
-          console.log(response.data)
-        })
+      .then((response) => {
+        setReportDetail(response.data);
+        console.log(response.data)
+      }).catch((error) => {
+        console.log(error);
+      }
+    )}
+    else {
     }
   }, [report])
 

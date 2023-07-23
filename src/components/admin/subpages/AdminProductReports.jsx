@@ -1,11 +1,10 @@
 import { Empty, Spin } from "antd";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import shopApi from "../../../api/shopApi";
+import { useDispatch } from "react-redux";
+import adminApi from "../../../api/adminApi";
 import AdminSubPageType from "../../../constants/AdminSubPageType";
 import { setCurrentAdminSubPage } from "../../../features/ui/uiSlice";
 import ProductReportList from "../product-reports/ProductReportList";
-import adminApi from "../../../api/adminApi";
 import ProductReportModal from "../product-reports/ProductReportModal";
 
 export default function AdminProductReports() {
@@ -24,8 +23,11 @@ export default function AdminProductReports() {
       .then((response) => {
         setReports(response.data);
         setLoading(false);
+      }).catch((error) => {
+        console.log(error);
+        setLoading(false);
       })
-  }, [reloadTrigger])
+  }, [reloadTrigger, dispatch])
 
   return (
     <div id='admin-all-stores' className='p-4'>
