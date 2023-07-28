@@ -71,7 +71,6 @@ function App() {
     var token = storageService.getAccessToken()
     if (token) {
       token = jwtDecode(token)
-      console.log(token)
       const currentTime = Math.floor(Date.now() / 1000)
       if (currentTime > token.exp) {
         storageService.removeAccessToken()

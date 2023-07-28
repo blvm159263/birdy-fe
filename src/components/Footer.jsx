@@ -22,7 +22,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="contact lg:w-1/3 sm: w-full sm: mb-4 sm: pl-5">
-          <h1 className="font-bold text-xl">Contact Us</h1>
+          <h1 className="font-bold text-xl">Liên hệ</h1>
           <div className="flex mt-6">
             <img
               src="assets/images/location-log.png"
@@ -30,7 +30,7 @@ export default function Footer() {
               className="w-4 h-5 mt-1 mr-1"
             />
             <p className=" ml-1">
-              FPTU, District 9, <br /> Thu Duc City, Ho Chi Minh City
+              FPTU, Quận 9, <br /> TP. Thủ Đức, TP.Hồ Chí Minh
             </p>
           </div>
           <div className="flex mt-6">
@@ -51,45 +51,13 @@ export default function Footer() {
           </div>
         </div>
         <div className="payment lg:w-1/3 sm:w-full sm: pl-5">
-          <h1 className="text-xl font-bold mb-7 ">We Accept</h1>
-          <div className="pay-img flex flex-wrap">
+          <h1 className="text-xl font-bold mb-7 ">Phương thức thanh toán</h1>
+          <a className="pay-img block" href="https://momo.vn/" target="_blank">
             <img
-              src="assets/images/visa.png"
-              alt=""
-              className=" w-15 h-10 mr-12 mb-7 "
-            />
-            <img
-              src="assets/images/discover.png"
-              alt=""
+              src="assets/images/momo.png"
               className="w-15 h-10 mr-12 mb-7"
             />
-            <img
-              src="assets/images/american-express.png"
-              alt=""
-              className="w-15 h-10 mr-12 mb-7"
-            />
-            <img
-              src="assets/images/mastercard.png"
-              alt=""
-              className="w-15 h-10 mr-12 mb-7"
-            />
-
-            <img
-              src="assets/images/jcb.png"
-              alt=""
-              className="w-15 h-10 mr-12 mb-7"
-            />
-            <img
-              src="assets/images/payment.png"
-              alt=""
-              className="w-15 h-10 mr-12 mb-7"
-            />
-            <img
-              src="assets/images/paypal.png"
-              alt=""
-              className="w-15 h-10 mr-12 mb-7"
-            />
-          </div>
+          </a>
         </div>
       </div>
     </div>

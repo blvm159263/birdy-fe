@@ -39,6 +39,7 @@ function UserCompletedOrder() {
     userOrder.filter(
       (order) => order.state === "DONE" && order.paymentStatus === "PAID"
     )
+
   useEffect(() => {
     fetchUserOrder(userid)
     // setTotal(totalPrice)

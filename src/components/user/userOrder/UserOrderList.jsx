@@ -19,27 +19,12 @@ function UserOrderList({ orderid, isDone }) {
   // const [totalPrice, setTotalPrice] = useState(0)
   const fetchOrderDetail = async () => {
     await orderApi.getAllOrderDetailsByOrderId(orderid).then((response) => {
-      // const order = {
-      //   id: orderid,
-      //   data: response.data,
-      // }
       setOrderDetail(response.data)
-
-      // dispatch(getOrderDetail(order))
-      // console.log("orderdetail", orderDetail)
     })
   }
-  // console.log(ordercode)
 
-  // console.log(totalPrice(product, orderid))
   useEffect(() => {
     fetchOrderDetail()
-
-    // onGetTotal(totalPrice)
-    // console.log(totalPrice)
-    // console.log(orderDetail)
-
-    // console.log(total)
   }, [])
 
   return (

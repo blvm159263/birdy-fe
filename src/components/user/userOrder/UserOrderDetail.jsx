@@ -40,9 +40,23 @@ function UserOrderDetail({ detail, orderid, isDone }) {
   return (
     <>
       <div className="sm: flex sm: flex-col">
-        <Link to={`/detail-item/${detail.productId}`} className="h-fit w-20">
+        <Link
+          to={`/detail-item/${detail.productId}`}
+          className="h-fit w-20 relative"
+        >
+          {/* Not valid product overlay */}
+          <div
+            className="absolute inset-0 h-full w-full bg-gray-700 opacity-50 flex items-center justify-center text-white"
+            style={{ zIndex: 1 }}
+          >
+            <span className="text-sm text-white text-center">
+              Product is not valid
+            </span>
+          </div>
+
+          {/* Image */}
           <img
-            className="h-full object-contain"
+            className="h-full object-contain relative"
             src={product.id === detail.productId ? product.imageMain : ""}
             alt=""
           />
