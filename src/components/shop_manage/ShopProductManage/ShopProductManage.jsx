@@ -8,6 +8,7 @@ import shopManageApi from "../../../api/shopManageApi"
 import { setShowShopProductEditModal } from "../../../features/ui/uiSlice";
 import { LoginContext } from "../../../context/LoginProvider";
 import { resetAllState } from "../../../features/search/searchSlice";
+import DeleteOptionModal from "./DeleteOptionModal";
 
 function ShopProductManage() {
   const [searchCategory, setSearchCategory] = useState('ALL_PRODUCTS');
@@ -105,6 +106,9 @@ function ShopProductManage() {
 
       {/* Pagination */}
       <Pagination totalPage={totalPage} />
+
+      {/* Delete product options modal */}
+      <DeleteOptionModal onDeleteSuccess={handleDeleteSuccess}/>
     </div>
   )
 }

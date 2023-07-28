@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setShowShopProductEditModal} from "../../../../features/ui/uiSlice";
+import {setShowShopProductEditModal, setUpdateOptionModalOpen} from "../../../../features/ui/uiSlice";
 import CategoryField from "./field/CategoryField";
 import NameField from "./field/NameField";
 import {resetAllState} from "../../../../features/shops/shopSlice";
@@ -21,6 +21,7 @@ import productApi from "../../../../api/productApi";
 import MainImageField from "./field/MainImageField";
 import SubImagesField from "./field/SubImagesField";
 import {NotificationContext} from "../../../../context/NotificationProvider";
+import EditOptionModal from "../EditOptionModal";
 
 export default function EditProductForm({onEditSuccess}) {
   const openNotificationWithIcon = useContext(NotificationContext);
@@ -45,6 +46,19 @@ export default function EditProductForm({onEditSuccess}) {
   function handleFormSubmit(e) {
     e.preventDefault();
 
+    // Check if product have orders
+    productApi.checkIfProductHaveOrderById(formValues.id).then((response) => {
+      if(response.status === 200) {
+        dispatch(setUpdateOptionModalOpen(true));
+      }
+    }).catch((error) => {
+      // No orders, update immediately
+      if(error.response.status === 404) cancelAllOrdersAndUpdate();
+      console.log(error);
+    })
+  }
+
+  function getParams() {
     const productDTO = {
       id: formValues.id,
       productName: formValues.productName,
@@ -70,6 +84,10 @@ export default function EditProductForm({onEditSuccess}) {
       categoryName: formValues.categoryName,
       shopId: formValues.shopId,
       shopName: formValues.shopName,
+      isWarned: formValues.isWarned,
+      isDisabled: formValues.isDisabled,
+      isBanned: formValues.isBanned,
+      totalRating: formValues.totalRating
     }
 
     const params = {
@@ -79,13 +97,26 @@ export default function EditProductForm({onEditSuccess}) {
       objects: JSON.stringify(objects),
     }
 
-    console.log("Submitted form! With below data:");
-    console.log(params);
+    return params;
+  }
 
-    productApi.updateProductById(productDTO.id, params).then((response) => {
-      console.log(response);
+  function cancelAllOrdersAndUpdate() {
+    productApi.cancelAllOrdersAndUpdateProductById(formValues.id, getParams()).then((response) => {
       if (response.status === 200) {
         openNotificationWithIcon('Success', 'Edit product successfully!');
+        dispatch(setShowShopProductEditModal(false));
+        onEditSuccess();
+      }
+    }).catch((error) => {
+      openNotificationWithIcon('Error', 'Image size is too big!');
+      console.log(error);
+    })
+  }
+
+  function hideProductAndCreateNewProduct() {
+    productApi.hideOldProductByIdAndCreateNewProduct(formValues.id, getParams()).then((response) => {
+      if (response.status === 200) {
+        openNotificationWithIcon('Success', 'Hidden the product and created a new product!');
         dispatch(setShowShopProductEditModal(false));
         onEditSuccess();
       }
@@ -129,10 +160,12 @@ export default function EditProductForm({onEditSuccess}) {
                 onClick={() => {
                   dispatch(setShowShopProductEditModal(false));
                   dispatch(resetAllState());
-                }}>Close</button>
+                }}>Huỷ bỏ</button>
         <button className="text-green-600 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                type="submit">Submit</button>
+                type="submit">Chấp thuận</button>
       </div>
+
+      <EditOptionModal onCancelOrderAndUpdate={cancelAllOrdersAndUpdate} onHideAndCreateNew={hideProductAndCreateNewProduct}/>
     </form>
   )
 }

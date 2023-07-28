@@ -1,33 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import ProductOverview from "../components/detail-page/ProductOverview/ProductOverview";
-import ShopInfo from "../components/detail-page/ShopInfo";
 import ProductDetails from "../components/detail-page/ProductDetails";
 import Review from "../components/detail-page/Review";
 import RelatedProduct from "../components/detail-page/RelatedProduct";
 import productApi from "../api/productApi";
 import shopApi from "../api/shopApi";
-import { useParams } from "react-router";
+import {useParams} from "react-router";
 import StoreCard from "../components/store/StoreCard";
-import { Spin } from "antd";
+import {Spin} from "antd";
+import {useNavigate} from "react-router-dom";
 
 function DetailItemPage() {
   const [shop, setShop] = useState(null);
   const [product, setProduct] = useState(null);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     productApi
       .getProductById(id)
       .then((response) => {
+        if(response.data.status === false || response.data.isBanned === true) navigate("/notfound");
+
         setProduct(response.data);
-        console.log(response.data);
 
         shopApi.getShopDetailByShopId(response.data.shopId).then((response) => {
           console.log(response);
           setShop(response.data[0]);
         })
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error)
+        if(error.response.status === 404) navigate("/notfound");
+      });
 
     window.scrollTo(0, 0);
   }, [id]);

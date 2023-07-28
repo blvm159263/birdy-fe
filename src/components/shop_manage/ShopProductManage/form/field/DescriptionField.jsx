@@ -4,7 +4,7 @@ import {updateProductFormValues} from "../../../../../features/shops/shopSlice";
 import ReactQuill from "react-quill";
 
 export default function DescriptionField() {
-  const description = useSelector(state => state.shop.productFormValues.description);
+  const description = useSelector(state => state.shop.productFormValues.description || "");
   const dispatch = useDispatch();
 
   const modules = {
