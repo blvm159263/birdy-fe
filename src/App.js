@@ -1,10 +1,5 @@
-import { FloatButton } from "antd"
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes
-} from "react-router-dom"
+import {FloatButton} from "antd"
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom"
 import "./App.css"
 import "./style.scss"
 // Components
@@ -32,17 +27,17 @@ import UserPage from "./pages/UserPage"
 import ViewShopPage from "./pages/ViewShopPage"
 // import ShopDashboard from "./components/shop_manage/ShopDashboard";
 import jwtDecode from "jwt-decode"
-import { useContext, useEffect } from "react"
+import {useContext, useEffect} from "react"
 import storageService from "./api/storage"
 import ShopAllProductsSubPage from "./components/store/ShopAllProductsSubPage"
 import ShopHomeSubPage from "./components/store/ShopHomeSubPage"
 import ShopLatestProductsSubPage from "./components/store/ShopLatestProductsSubPage"
 import ShopProductsByCategorySubPage from "./components/store/ShopProductsByCategorySubPage"
 import ViewShopSubPageType from "./constants/ViewShopSubPageType"
-import { LoginContext } from "./context/LoginProvider"
+import {LoginContext} from "./context/LoginProvider"
 import AllFeaturedPage from "./pages/AllFeaturedPage"
 
-import { useDispatch, useSelector } from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import shopApi from "./api/shopApi"
 import userApi from "./api/userApi"
 import AdminAllShops from "./components/admin/subpages/AdminAllShops"
@@ -56,11 +51,12 @@ import UserOrderCancel from "./components/user/userOrder/UserOrderCancel"
 import UserPendingOrder from "./components/user/userOrder/UserPendingOrder"
 import WishList from "./components/wishList/WishList"
 import AdminSubPageType from "./constants/AdminSubPageType"
-import { ChatContext } from "./context/ChatContext"
-import { getUser } from "./features/user/userSlice"
+import {ChatContext} from "./context/ChatContext"
+import {getUser} from "./features/user/userSlice"
 import ShopLoginPage from "./pages/ShopLoginPage"
 import AdminLoginPage from "./components/admin/AdminLoginPage"
 import ProtectedRoutes from "./components/admin/utils/ProtectedRoutes"
+import ShopDelivery from "./components/shop_manage/ShopDelivery";
 
 function App() {
   const { isLogin, setIsLogin, setRole, role, setShopId } =
@@ -202,6 +198,7 @@ function App() {
                 <Route path="orders" element={<ShopOrderManage />} />
                 <Route path="products" element={<ShopProductManage />} />
                 <Route path="product/new" element={<CreateProduct />} />
+                <Route path="delivery" element={<ShopDelivery />} />
               </Route>
             </>
           )}

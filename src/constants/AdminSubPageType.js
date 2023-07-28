@@ -11,9 +11,9 @@ const AdminSubPageType = {
   PRODUCT_REPORTS: {
     path: "product-reports"
   },
-  ALL_USERS: {
-    path: "all-users"
-  },
+  // ALL_USERS: {
+  //   path: "all-users"
+  // },
 }
 
 export default AdminSubPageType;

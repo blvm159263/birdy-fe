@@ -31,11 +31,7 @@ const adminApi = {
     },
     warningProductById(id) {
         const url = `/admin/product/${id}/warning`;
-        return axiosClient.get(url);
-    },
-    deleteProductById(id) {
-        const url = `/admin/product/${id}/delete`;
-        return axiosClient.delete(url);
+        return axiosClient.patch(url);
     },
     authenticate(username, password) {
         const data = new FormData();
@@ -49,6 +45,22 @@ const adminApi = {
         const url = '/admin/sign-in'
         return axiosClient.post(url, data, config);
     },
+    banProductById(id) {
+      const url = `/admin/product/${id}/banned`;
+      return axiosClient.patch(url);
+    },
+    getAdminDefaultIncome() {
+        const url = `/admin/income/default`;
+        return axiosClient.get(url);
+    },
+    getAdminIncomeByRange(startDate, endDate) {
+        const url = `/admin/income`;
+        const params = {
+            start: startDate,
+            end: endDate
+        }
+        return axiosClient.get(url, {params});
+    }
 };
 
 export default adminApi;

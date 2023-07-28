@@ -56,7 +56,7 @@ const productApi = {
         const url = `/products/view/all`;
         return axiosClient.get(url, { params });
     },
-    updateProductById(id, params) {
+    cancelAllOrdersAndUpdateProductById(id, params) {
         const data = new FormData();
         data.append('productDTO', params.productDTO);
         data.append('mainImage', params.mainImage);
@@ -73,6 +73,36 @@ const productApi = {
                 "Content-Type": "multipart/form-data",
             },
         });
+    },
+    hideOldProductByIdAndCreateNewProduct(id, params) {
+        const data = new FormData();
+        data.append('productDTO', params.productDTO);
+        data.append('mainImage', params.mainImage);
+        if (params.subImages) {
+            params.subImages.forEach((image) => {
+                data.append('subImages', image);
+            });
+        }
+        data.append('objects', params.objects);
+
+        const url = `/products/update-new/${id}`;
+        return axiosClient.put(url, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
+    checkIfProductHaveOrderById(id) {
+        const url = `/products/check-product/${id}`;
+        return axiosClient.get(url);
+    },
+    hideProductById(id) {
+        const url = `/products/hide/${id}`;
+        return axiosClient.patch(url);
+    },
+    showProductById(id) {
+        const url = `/products/show/${id}`;
+        return axiosClient.patch(url);
     }
 };
 

@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useRef, useContext } from "react"
-import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Upload, Avatar } from 'antd';
+import React, {useContext, useEffect, useRef, useState} from "react"
+import {PlusOutlined} from '@ant-design/icons';
+import {Avatar, Modal, Upload} from 'antd';
 import ImgCrop from 'antd-img-crop'
 import format from "date-fns/format";
 import shopApi from "../../api/shopApi";
-import { NotificationContext } from "../../context/NotificationProvider";
-import { LoginContext } from "../../context/LoginProvider";
+import {NotificationContext} from "../../context/NotificationProvider";
+import {LoginContext} from "../../context/LoginProvider";
 import ChangeAddressModal from "./ChangeAddressModal";
-import { useDispatch } from "react-redux";
-import { setUpdated } from "../../features/shops/shopSlice";
+import {useDispatch} from "react-redux";
+import {setUpdated} from "../../features/shops/shopSlice";
 
 
 const getBase64 = (file) =>
@@ -320,7 +320,7 @@ function ShopProfile() {
                           {shopAvar.length >= 1 ? null : uploadButton}
                         </Upload>
                       </ImgCrop>
-                      <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+                      <Modal open={previewOpen} footer={null} onCancel={handleCancel}>
                         <img
                           alt="example"
                           style={{

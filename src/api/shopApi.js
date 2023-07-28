@@ -59,6 +59,22 @@ const shopApi = {
     getAllShopProducts(id, params) {
         const url = `/shops/${id}/products`;
         return axiosClient.get(url, { params });
+    },
+    getDefaultIncomeByShopId(id) {
+        const url = `/shops/${id}/income/default`;
+        return axiosClient.get(url);
+    },
+    getIncomeByShopIdAndDateRange(id, startDate, endDate) {
+        const url = `/shops/${id}/income`;
+        const params = {
+            startDate: startDate,
+            endDate: endDate
+        }
+        return axiosClient.get(url, {params});
+    },
+    updateShipmentByShopIdAndShipmentType(shopId, shipmentTypeId, price) {
+        const url = `/shops/${shopId}/shipment/update?shipmentTypeId=${shipmentTypeId}&price=${price}`;
+        return axiosClient.patch(url);
     }
 }
 

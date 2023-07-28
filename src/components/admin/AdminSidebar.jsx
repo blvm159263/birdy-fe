@@ -1,11 +1,11 @@
-import { AppstoreAddOutlined, HomeOutlined, LogoutOutlined, ShopOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
-import { useContext, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import {AppstoreAddOutlined, HomeOutlined, LogoutOutlined, ShopOutlined, WarningOutlined} from "@ant-design/icons";
+import {useContext, useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {Link, useNavigate} from "react-router-dom";
 import AdminSubPageType from "../../constants/AdminSubPageType";
-import { NotificationContext } from "../../context/NotificationProvider";
-import { clearAdminLoginInfomation } from "../../features/admin/adminSlice";
-import { resetAllState } from "../../features/search/searchSlice";
+import {NotificationContext} from "../../context/NotificationProvider";
+import {clearAdminLoginInfomation} from "../../features/admin/adminSlice";
+import {resetAllState} from "../../features/search/searchSlice";
 
 export default function AdminSidebar() {
   const currentPage = useSelector(state => state.ui.currentAdminSubPage);
@@ -61,17 +61,17 @@ export default function AdminSidebar() {
           </li>
 
           {/* Manage users */}
-          <li className="px-5">
-            <div className="flex flex-row items-center h-8">
-              <div className="text-sm font-light tracking-wide text-gray-500">Quản lý người dùng</div>
-            </div>
-          </li>
-          <li>
-            <Link to={`/admin/${AdminSubPageType.ALL_USERS.path}`} className={`${currentPage === AdminSubPageType.ALL_USERS ? 'font-bold bg-sky-200 hover:bg-sky-100' : ''} relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
-              <UserOutlined />
-              <span className="ml-2 text-sm tracking-wide truncate">Tất cả người dùng</span>
-            </Link>
-          </li>
+          {/*<li className="px-5">*/}
+          {/*  <div className="flex flex-row items-center h-8">*/}
+          {/*    <div className="text-sm font-light tracking-wide text-gray-500">Quản lý người dùng</div>*/}
+          {/*  </div>*/}
+          {/*</li>*/}
+          {/*<li>*/}
+          {/*  <Link to={`/admin/${AdminSubPageType.ALL_USERS.path}`} className={`${currentPage === AdminSubPageType.ALL_USERS ? 'font-bold bg-sky-200 hover:bg-sky-100' : ''} relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>*/}
+          {/*    <UserOutlined />*/}
+          {/*    <span className="ml-2 text-sm tracking-wide truncate">Tất cả người dùng</span>*/}
+          {/*  </Link>*/}
+          {/*</li>*/}
           <li>
             <button onClick={() => onLogout()} className={`w-full relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-sky-500 p-6`}>
               <LogoutOutlined />

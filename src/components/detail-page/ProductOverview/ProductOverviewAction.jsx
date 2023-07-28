@@ -1,13 +1,13 @@
-import { HeartFilled } from "@ant-design/icons";
-import { Modal, Radio, Rate, Space } from "antd";
+import {HeartFilled} from "@ant-design/icons";
+import {Modal, Radio, Rate, Space} from "antd";
 import jwtDecode from "jwt-decode";
-import React, { useContext, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, {useContext, useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import storageService from "../../../api/storage";
 import userApi from "../../../api/userApi";
-import { NotificationContext } from "../../../context/NotificationProvider";
-import { addToCart } from "../../../features/cart/cartSlice";
+import {NotificationContext} from "../../../context/NotificationProvider";
+import {addToCart} from "../../../features/cart/cartSlice";
 
 const reasonList = [
   "Sản phẩm bị cấm buôn bán (động vật hoang dã, 18+,...)",
@@ -182,7 +182,7 @@ function ProductOverviewAction({ product, noControl }) {
       </p>
       <div className="flex items-baseline">
         <Rate disabled value={product.rating} />
-        <p className="ml-2 text-sm font-medium text-gray-400">(13)</p>
+        <p className="ml-2 text-sm font-medium text-gray-400">({product.totalRating})</p>
       </div>
       <div className="my-4 mt-6">
         <p>

@@ -1,7 +1,7 @@
 import { AppstoreAddOutlined, AppstoreOutlined, ShopOutlined, UserOutlined, DollarOutlined, InboxOutlined } from "@ant-design/icons";
 import { Select, Spin } from "antd";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import adminApi from "../../../api/adminApi";
 
@@ -106,24 +106,24 @@ export default function SalesChart() {
     <div className="">
       <div className="grid grid-cols-4 my-4 gap-2">
         <div className="p-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">
+          <AppstoreAddOutlined className="text-lg" /><div className='w-full'></div>
+          <p className="text-sm">Yêu cầu đang chờ</p>
           <p className="font-bold text-2xl px-2">{data.totalProductRequests}</p>
-          <p className="text-sm">Pending product requests</p>
-          <AppstoreAddOutlined className="text-lg" />
         </div>
         <div className="p-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">
+          <ShopOutlined className="text-lg" /><div className='w-full'></div>
+          <p className="text-sm">Shop hoạt động</p>
           <p className="font-bold text-2xl px-2">{data.totalShop}</p>
-          <p className="text-sm">Active shops </p>
-          <ShopOutlined className="text-lg" />
         </div>
         <div className="p-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">
+          <AppstoreOutlined className="text-lg" /><div className='w-full'></div>
+          <p className="text-sm">Tổng sản phẩm</p>
           <p className="font-bold text-2xl px-2">{data.totalActiveProducts}</p>
-          <p className="text-sm">Active products</p>
-          <AppstoreOutlined className="text-lg" />
         </div>
         <div className="p-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">
+          <UserOutlined className="text-lg" /><div className='w-full'></div>
+          <p className="text-sm">Số người dùng</p>
           <p className="font-bold text-2xl px-2">{data.totalUsers}</p>
-          <p className="text-sm">Users</p>
-          <UserOutlined className="text-lg" />
         </div>
       </div>
       <div className="flex gap-8 pt-4">
@@ -144,14 +144,14 @@ export default function SalesChart() {
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-3">
           <div className="p-4 mt-4 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-600">
-            <p className="font-bold text-2xl px-2">{data.dataOrders.reduce((total, num) => total + num)}</p>
+            <InboxOutlined className="text-lg" /><div className='w-full'></div>
             <p className="text-sm">Tổng số đơn</p>
-            <InboxOutlined className="text-lg" />
+            <p className="font-bold text-2xl px-2">{data.dataOrders.reduce((total, num) => total + num)}</p>
           </div>
           <div className="p-4 mt-2 gap-4 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-green-400 to-green-600">
-            <p className="font-bold text-2xl px-2">${data.dataRevenue.reduce((total, num) => total + num)}</p>
+            <DollarOutlined className="text-lg" /><div className='w-full'></div>
             <p className="text-sm">Tổng doanh thu</p>
-            <DollarOutlined className="text-lg" />
+            <p className="font-bold text-2xl px-2">${data.dataRevenue.reduce((total, num) => total + num)}</p>
           </div>
         </div>
         <div className="col-span-9">

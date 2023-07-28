@@ -1,6 +1,7 @@
 import React from "react"
 import EChart from "../chart/EChart"
 import LineChart from "../chart/LineChart"
+import ShopIncomeSection from "./ShopIncomeSection";
 
 function ShopDashboard() {
 
@@ -20,13 +21,14 @@ function ShopDashboard() {
                         </div>
                     </div>
 
+
                     <div className="mt-10">
                         <EChart />
                     </div>
                     <div className="mt-10">
                         <LineChart />
                     </div>
-
+                    <ShopIncomeSection/>
                 </div>
             </div>
         </div>

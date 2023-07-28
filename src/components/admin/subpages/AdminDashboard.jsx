@@ -3,6 +3,7 @@ import {useDispatch} from "react-redux";
 import {setCurrentAdminSubPage} from "../../../features/ui/uiSlice";
 import AdminSubPageType from "../../../constants/AdminSubPageType";
 import SalesChart from "../dashboard/SalesChart";
+import AdminIncomeSection from "../dashboard/AdminIncomeSection";
 
 export default function AdminDashboard() {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ export default function AdminDashboard() {
       <div className='rounded shadow bg-white p-4'>
         <h1 className='text-2xl font-bold'>Dashboard</h1>
         <SalesChart/>
+        <AdminIncomeSection/>
       </div>
     </div>
   )

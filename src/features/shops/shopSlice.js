@@ -29,6 +29,10 @@ const initialState = {
     categoryName: undefined,
     shopId: undefined,
     shopName: undefined,
+    isWarned: undefined,
+    isDisabled: undefined,
+    isBanned: undefined,
+    totalRating: undefined
   },
   subImages: undefined,
   updated: false,
@@ -39,6 +43,8 @@ export const fetchProductFormValues = createAsyncThunk(
   'shop/fetchProductFormValues',
   async (id) => {
     const response = await productApi.getProductById(id);
+    console.log("Edit product data:")
+    console.log(response.data)
     return response.data;
   }
 )

@@ -7,7 +7,9 @@ const initialState = {
     isShowCartDeleteAllSelectedModal: false,
     isShowCartDeleteModal: false,
     isShowShopProductEditModal: false,
-    currentAdminSubPage: undefined
+    currentAdminSubPage: undefined,
+    isUpdateOptionModalOpen: false,
+    isDeleteOptionModalOpen: false
 }
 
 export const uiSlice = createSlice({
@@ -31,6 +33,12 @@ export const uiSlice = createSlice({
         },
         setShowShopProductEditModal: (state, action) => {
             state.isShowShopProductEditModal = action.payload;
+        },
+        setUpdateOptionModalOpen: (state, action) => {
+            state.isUpdateOptionModalOpen = action.payload;
+        },
+        setDeleteOptionModalOpen: (state, action) => {
+            state.isDeleteOptionModalOpen = action.payload;
         }
     }
 });
@@ -40,6 +48,8 @@ export const {toggleFilterSideBar,
     setShowCartDeleteAllSelectedModal,
     setShowCartDeleteModal,
     setCurrentAdminSubPage,
-    setShowShopProductEditModal} = uiSlice.actions;
+    setShowShopProductEditModal,
+    setUpdateOptionModalOpen,
+    setDeleteOptionModalOpen} = uiSlice.actions;
 
 export default uiSlice.reducer;

@@ -17,9 +17,9 @@ export default function GenderField() {
       <Select
         size="large"
         className="block"
-        onChange={(value) => dispatch(updateProductFormValues({gender: genders.indexOf(value)}))}
-        defaultValue={gender[0]}
-        value={genders[gender]}
+        onChange={(value) => dispatch(updateProductFormValues({gender: genders.indexOf(value) === 0 ? null : genders.indexOf(value)}))}
+        defaultValue={genders[0]}
+        value={gender === null ? genders[0] : genders[gender]}
         options={genders.map((gender) => ({
           label: gender,
           value: gender,

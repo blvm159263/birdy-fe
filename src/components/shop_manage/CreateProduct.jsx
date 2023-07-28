@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useState} from "react"
+import React, {useContext, useEffect, useRef, useState} from "react"
 import {DatePicker, Modal, Select, Upload} from "antd"
 import {PlusOutlined} from "@ant-design/icons"
 import productApi from "../../api/productApi"
@@ -6,6 +6,8 @@ import {NotificationContext} from "../../context/NotificationProvider"
 import {LoginContext} from "../../context/LoginProvider"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
+import shopApi from "../../api/shopApi";
+import {useNavigate} from "react-router-dom";
 
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
@@ -33,7 +35,13 @@ function CreateProduct() {
     const [nameLength, setNameLength] = useState(0)
     const [des, setDes] = useState("")
     const [desLength, setDesLength] = useState(0)
+    const navigate = useNavigate();
+    const [isCreated, setCreated] = useState(false);
     // const textAreaRef = useRef(null);
+
+    useEffect(() => {
+        console.log(isCreated);
+    }, [isCreated]);
 
     const modules = {
         toolbar: [
@@ -47,6 +55,21 @@ function CreateProduct() {
             [{ list: "ordered" }, { list: "bullet" }],
             ["clean"],
         ],
+    }
+
+    function resetAllStates() {
+        setError(null)
+        setErrorSub(null)
+        setMessage(null)
+        setCategory("bird");
+        setPreviewOpen(false);
+        setPreviewImage("")
+        setSubImages([])
+        setImageMain([])
+        setGender(null)
+        setNameLength(0)
+        setDes("")
+        setDesLength(0)
     }
 
     const formats = [
@@ -204,8 +227,20 @@ function CreateProduct() {
         return parsedDate.toISOString()
     }
 
-    const onSubmit = (list) => {
+    const onSubmit = async (list) => {
         const values = getValue(list)
+
+        const haveShipmentInfo = await shopApi.getShipmentByShopId(shopId).then((response) => {
+            return response.data?.length >= 3
+        }).catch((error) => {
+            return false;
+        })
+
+        if(!haveShipmentInfo) {
+            openNotificationWithIcon('Từ từ đã', 'Hãy cập nhật thông tin giao hàng trước khi thêm sản phẩm mới');
+            navigate("/delivery");
+            return;
+        }
 
         for (let item of values) {
             if (item.value === "" || item.value === "xx") {
@@ -261,17 +296,19 @@ function CreateProduct() {
         // productDto.subImages = params.subImages;
         console.log(params)
         productApi
-            .addNewProduct(params)
-            .then((res) => {
-                console.log(res)
-                if (res.status === 201) {
-                    openNotificationWithIcon("Success", "Add new product successfully!")
-                }
-            })
-            .catch((err) => {
-                console.log(err)
-                openNotificationWithIcon("Failed", "Image size is too big!")
-            })
+          .addNewProduct(params)
+          .then((res) => {
+              console.log(res)
+              if (res.status === 201) {
+                  openNotificationWithIcon("Success", "Add new product successfully!")
+                  resetAllStates();
+                  setCreated(state => !state);
+              }
+          })
+          .catch((err) => {
+              console.log(err)
+              openNotificationWithIcon("Failed", "Image size is too big!")
+          })
     }
 
     const handleEntailmentRequest = (e) => {

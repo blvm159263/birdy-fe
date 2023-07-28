@@ -7,7 +7,7 @@ import {LoginContext} from "../../context/LoginProvider";
 
 function ShopOrderManage() {
   const openNotificationWithIcon = useContext(NotificationContext);
-  const [value, setValue] = useState('Đơn hàng đã hết khả dụng');
+  const [value, setValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updateStatus, setUpdateStatus] = useState(false);
   const [stepStatus, setStepStatus] = useState('process');
@@ -30,6 +30,8 @@ function ShopOrderManage() {
   const [commentModel, setCommentModel] = useState(false)
   const [search, setSearch] = useState("")
   const { shopId } = useContext(LoginContext)
+  const [commentModalType, setCommentModalType] = useState(null)
+  const [paymentStatus, setPaymentStatus] = useState(null);
 
   const fetchOrder = async () => {
     try {
@@ -66,7 +68,9 @@ function ShopOrderManage() {
   //   console.log(current);
   // }
 
-  const handleViewModal = (id, state, comment) => {
+  const handleViewModal = (id, state, comment, paymentStatus) => {
+    setPaymentStatus(paymentStatus);
+    console.log(paymentStatus);
     setCurrent(0);
     setStepStatus('process');
     setTitle1('Deliver | Cancel');
@@ -97,8 +101,6 @@ function ShopOrderManage() {
         setComment(comment);
         break;
     }
-    console.log(current);
-    console.log(state);
 
     setOrderId(id)
     setShowModal(!showModal)
@@ -247,7 +249,9 @@ function ShopOrderManage() {
       payment: order.paymentMethod.toUpperCase(),
       status: <Tag color={getColorTag(order.paymentStatus)}>{order.paymentStatus}</Tag>,
       shipping: <Badge status={getColorBadge(order.state)} text={order.state} />,
-      details: <button className="font-medium text-blue-600 hover:underline text-center" onClick={() => handleViewModal(order.id, order.state, order.comment)}>View</button>
+      details: <button className="font-medium text-blue-600 hover:underline text-center" onClick={() => {
+        handleViewModal(order.id, order.state, order.comment, order.paymentStatus);
+      }}>View</button>
     }
   });
 
@@ -302,6 +306,16 @@ function ShopOrderManage() {
     setCommentModel(false);
   };
 
+  const done = () => {
+    setCurrent(current + 2);
+    setTitle1('Delivered');
+    setDes1('Order is Delivered.');
+    setTitle2('Done');
+    setDes2('Order is completed.');
+    setStepStatus('finish');
+    setCommentModel(false);
+  };
+
   const next = (status, cmt) => {
     switch (status) {
       case 'DELIVERING':
@@ -309,6 +323,10 @@ function ShopOrderManage() {
         break;
       case 'CANCELED':
         cancel();
+        setComment(cmt);
+        break;
+      case 'DONE':
+        done();
         setComment(cmt);
         break;
     }
@@ -394,28 +412,30 @@ function ShopOrderManage() {
       </div>
 
       <Modal
-        title="Canceling Order"
+        title="Huỷ đơn hàng"
         centered
         open={commentModel}
         onOk={() => next('CANCELED', value)}
         onCancel={() => setCommentModel(false)}
       >
-        <Radio.Group onChange={onComment} value={value}>
+        <Radio.Group onChange={onComment} value={value !== null ? value :
+          (commentModalType === 'CANCEL' ? "Đơn hàng đã hết khả dụng" : 'Địa chỉ giao hàng không chính xác')}>
           <Space direction="vertical" className="mt-2">
-            <Radio value={'Đơn hàng đã hết khả dụng'}>Đơn hàng đã hết khả dụng</Radio>
-            <Radio value={'Đơn hàng có sản phẩm đã hết hàng'}>Đơn hàng có sản phẩm đã hết hàng</Radio>
-            <Radio value={'Đơn hàng không được công nhận bởi Shop'}>Đơn hàng không được công nhận bởi Shop</Radio>
-            {/* <Radio value={4}>
-              Khác...
-              {value === 4 ? (
-                <Input
-                  style={{
-                    width: 100,
-                    marginLeft: 10,
-                  }}
-                />
-              ) : null}
-            </Radio> */}
+            {commentModalType === 'CANCEL' &&
+              <>
+                <Radio value={'Đơn hàng đã hết khả dụng'}>Đơn hàng đã hết khả dụng</Radio>
+                <Radio value={'Đơn hàng có sản phẩm đã hết hàng'}>Đơn hàng có sản phẩm đã hết hàng</Radio>
+                <Radio value={'Đơn hàng không được công nhận bởi Shop'}>Đơn hàng không được công nhận bởi Shop</Radio>
+              </>
+            }
+            {commentModalType === 'CANCEL_DELIVERY' &&
+              <>
+                <Radio value={'Địa chỉ giao hàng không chính xác'}>Địa chỉ giao hàng không chính xác</Radio>
+                <Radio value={'Người nhận không lấy hàng'}>Người nhận không lấy hàng</Radio>
+                <Radio value={'Quá trình vận chuyển không thành công'}>Quá trình vận chuyển không thành công</Radio>
+                <Radio value={'Không liên hệ được người nhận'}>Không liên hệ được người nhận</Radio>
+              </>
+            }
           </Space>
         </Radio.Group>
       </Modal>
@@ -451,14 +471,35 @@ function ShopOrderManage() {
                     <>
                       {current === 0 && (
                         <div className="mt-2">
+                          {paymentStatus === 'PAID' &&
                           <Button
                             className="mr-2"
                             type="primary" onClick={() => next('DELIVERING', null)}>
-                            Deliver
+                            Giao hàng
+                          </Button>}
+
+                          <Button type="primary" danger onClick={() => {
+                            setCommentModalType("CANCEL");
+                            setCommentModel(true)}
+                          }>
+                            Huỷ đơn
+                          </Button>
+                        </div>
+                      )}
+
+                      {current === 1 && (
+                        <div className="mt-2">
+                          <Button
+                            className="mr-2"
+                            type="primary" onClick={() => next('DONE', null)}>
+                            Hoàn tất
                           </Button>
 
-                          <Button type="primary" danger onClick={() => setCommentModel(true)}>
-                            Cancel
+                          <Button type="primary" danger onClick={() => {
+                            setCommentModalType("CANCEL_DELIVERY");
+                            setCommentModel(true)
+                          }}>
+                            Huỷ đơn
                           </Button>
                         </div>
                       )}

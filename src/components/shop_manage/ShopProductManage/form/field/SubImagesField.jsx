@@ -34,10 +34,10 @@ export default function SubImagesField({setSubImages, setObjects}) {
   },[subImagesFetched]);
 
   const handlePreview = async (file) => {
-    if (!file.preview) {
+    if (!file.url) {
       file.preview = await getBase64(file.originFileObj)
     }
-    setPreviewImage(file.preview)
+    setPreviewImage(file.url || file.preview)
     setPreviewOpen(true)
   }
 

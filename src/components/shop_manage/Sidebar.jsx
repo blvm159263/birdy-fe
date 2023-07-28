@@ -88,7 +88,23 @@ const items = [
     getItem('Create New Product', '5'),
   ]),
 
-  getItem('Logout', '6',
+  getItem('Shop Delivery', '6',
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-5 h-5 mr-2"
+      fill="none"
+      viewBox="0 0 30 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+      />
+    </svg>),
+
+  getItem('Logout', '7',
     <svg
       xmlns="http://www.w3.org/2000/svg"
       className="w-5 h-5 mr-2"
@@ -155,6 +171,8 @@ function Sidebar() {
       case "/orders": return ['3'];
       case "/products": return ['4'];
       case "/product/new": return ['5'];
+      case "/delivery":
+        return ['6'];
     }
   }
 
@@ -207,8 +225,12 @@ function Sidebar() {
                     <Link to="/product/new" />
                   </Menu.Item>
                 </SubMenu>
-                <Menu.Item onClick={onLogout} className="font-medium text-base text-gray-400" key="6" icon={items[4].icon}>
+                <Menu.Item className="font-medium text-base text-gray-400" key="6" icon={items[4].icon}>
                   {items[4].label}
+                  <Link to="/delivery" />
+                </Menu.Item>
+                <Menu.Item onClick={onLogout} className="font-medium text-base text-gray-400" key="7" icon={items[5].icon}>
+                  {items[5].label}
                 </Menu.Item>
               </Menu>
 
