@@ -75,7 +75,7 @@ export default function NavBar() {
           onClick={() => dispatch(resetAllState())}
         >
           <img
-            src="/assets/images/logo-white.png"
+            src="/assets/images/btp.png"
             className="h-8 md:h-12 mr-3"
             alt="Birdy Logo"
           />

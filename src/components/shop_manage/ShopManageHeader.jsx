@@ -10,7 +10,7 @@ export default function ShopManageHeader() {
     <header className='bg-gradient-to-r from-sky-500 via-blue-500 to-sky-500 border-gray-200 p-4'>
       <Link to="/" className="flex items-center" onClick={() => dispatch(resetAllState())}>
         <img
-          src="/assets/images/logo-white.png"
+          src="/assets/images/btp.png"
           className="h-4 md:h-8 mr-3"
           alt="Birdy Logo"
         />

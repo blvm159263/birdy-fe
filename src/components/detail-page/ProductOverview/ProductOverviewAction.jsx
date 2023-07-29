@@ -18,6 +18,11 @@ const reasonList = [
   "Sản phẩm có dấu hiệu lừa đảo",
   "Tên sản phẩm (Name) không phù hợp với hình ảnh sản phẩm",
   "Sản phẩm có dấu hiệu tăng đơn ảo",
+  "Sản phẩm không thuộc danh mục được phép bán trên Birdy",
+  "Sản phẩm giao hàng rất chậm",
+  "Sản phẩm không có sẵn",
+  "Shop không trả lời tin nhắn của khách hàng",
+  "Shop không giao hàng",
   "Khác",
 ];
 

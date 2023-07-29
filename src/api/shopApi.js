@@ -65,12 +65,13 @@ const shopApi = {
         return axiosClient.get(url);
     },
     getIncomeByShopIdAndDateRange(id, startDate, endDate) {
-        const url = `/shops/${id}/income`;
-        const params = {
-            startDate: startDate,
-            endDate: endDate
-        }
-        return axiosClient.get(url, {params});
+        const url = `/shops/${id}/income?startDate=${startDate}&endDate=${endDate}`;
+        // const params = {
+        //     startDate: startDate,
+        //     endDate: endDate
+        // }
+        console.log('url', url);
+        return axiosClient.get(url);
     },
     updateShipmentByShopIdAndShipmentType(shopId, shipmentTypeId, price) {
         const url = `/shops/${shopId}/shipment/update?shipmentTypeId=${shipmentTypeId}&price=${price}`;

@@ -1,6 +1,6 @@
-import {AppstoreAddOutlined, AppstoreOutlined, ShopOutlined, UserOutlined} from "@ant-design/icons";
-import React, {useEffect, useState} from "react";
-import {DatePicker, Spin} from "antd";
+import { AppstoreAddOutlined, AppstoreOutlined, ShopOutlined, UserOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { DatePicker, Spin } from "antd";
 import dayjs from "dayjs";
 import adminApi from "../../../api/adminApi";
 import AdminApi from "../../../api/adminApi";
@@ -43,7 +43,7 @@ export default function AdminIncomeSection() {
     console.log(dateStrings[0]);
     console.log(dateStrings[1]);
 
-    if (firstDate !== null && lastDate !== null) {
+    if (firstDate !== dateStrings[0] && lastDate !== dateStrings[1]) {
       adminApi.getAdminIncomeByRange(dateStrings[0], dateStrings[1]).then((response) => {
         setData(response.data);
         console.log(response.data)
@@ -55,17 +55,19 @@ export default function AdminIncomeSection() {
     AdminApi.getAdminDefaultIncome().then((response) => {
       setData(response.data);
       console.log(response.data);
-      rangePresets.push({
-        label: 'All Time',
-        value: [dayjs(response.data.startDate), dayjs(response.data.endDate)],
-      })
+      if (rangePresets.length < 5) {
+        rangePresets.push({
+          label: 'All Time',
+          value: [dayjs(response.data.startDate), dayjs(response.data.endDate)],
+        })
+      }
     }).catch((error) => {
       console.log(error);
     })
   }, [])
 
-  {/* Loading icon */}
-  if(!data) return (
+  {/* Loading icon */ }
+  if (!data) return (
     <div className='flex justify-center items-center h-[200px]'>
       <Spin size='large' />
     </div>
@@ -77,7 +79,7 @@ export default function AdminIncomeSection() {
         <p className="m-0 mt-6 font-bold text-xl">Thu nhập</p>
       </div>
       <div className="mt-4">
-        <RangePicker status='error' presets={rangePresets} onChange={onRangeChange} defaultValue={[dayjs(data.startDate, "YYYY-MM-DD"), dayjs(data.endDate, "YYYY-MM-DD")]}/>
+        <RangePicker status='error' presets={rangePresets} onChange={onRangeChange} defaultValue={[dayjs(data.startDate, "YYYY-MM-DD"), dayjs(data.endDate, "YYYY-MM-DD")]} />
       </div>
       <div className="grid grid-cols-4 my-4 gap-3">
         <div className="p-4 gap-2 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">

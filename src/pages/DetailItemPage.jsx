@@ -20,7 +20,7 @@ function DetailItemPage() {
     productApi
       .getProductById(id)
       .then((response) => {
-        if(response.data.status === false || response.data.isBanned === true) navigate("/notfound");
+        if(response.data.status === false || response.data.isBanned === true || response.data.isDisabled === true) navigate("/notfound");
 
         setProduct(response.data);
 

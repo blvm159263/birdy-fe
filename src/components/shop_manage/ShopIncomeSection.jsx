@@ -1,8 +1,8 @@
-import {AppstoreAddOutlined, AppstoreOutlined, ShopOutlined, UserOutlined} from "@ant-design/icons";
-import React, {useContext, useEffect, useState} from "react";
+import { AppstoreAddOutlined, AppstoreOutlined, ShopOutlined, UserOutlined } from "@ant-design/icons";
+import React, { useContext, useEffect, useState } from "react";
 import ShopApi from "../../api/shopApi";
-import {LoginContext} from "../../context/LoginProvider";
-import {DatePicker, Spin} from "antd";
+import { LoginContext } from "../../context/LoginProvider";
+import { DatePicker, Spin } from "antd";
 import dayjs from "dayjs";
 import shopApi from "../../api/shopApi";
 
@@ -31,7 +31,7 @@ export default function ShopIncomeSection() {
   const [data, setData] = useState(null);
   const [firstDate, setFirstDate] = useState(null);
   const [lastDate, setLastDate] = useState(null);
-  const {shopId} = useContext(LoginContext);
+  const { shopId } = useContext(LoginContext);
 
   const onRangeChange = (dates, dateStrings) => {
     if (dates) {
@@ -47,7 +47,7 @@ export default function ShopIncomeSection() {
     console.log(dateStrings[0]);
     console.log(dateStrings[1]);
 
-    if (firstDate !== null && lastDate !== null) {
+    if (firstDate !== dateStrings[0] && lastDate !== dateStrings[1]) {
       shopApi.getIncomeByShopIdAndDateRange(shopId, dateStrings[0], dateStrings[1]).then((response) => {
         setData(response.data);
         console.log(response.data)
@@ -56,20 +56,22 @@ export default function ShopIncomeSection() {
   };
 
   useEffect(() => {
-    if(shopId) {
+    if (shopId) {
       ShopApi.getDefaultIncomeByShopId(shopId).then((response) => {
         setData(response.data);
         console.log(response.data);
-        rangePresets.push({
-          label: 'All Time',
-          value: [dayjs(response.data.firstDate), dayjs(response.data.lastDate)],
-        })
+        if (rangePresets.length < 5) {
+          rangePresets.push({
+            label: 'All Time',
+            value: [dayjs(response.data.firstDate), dayjs(response.data.lastDate)],
+          })
+        }
       })
     }
   }, [shopId])
 
-  {/* Loading icon */}
-  if(!data) return (
+  {/* Loading icon */ }
+  if (!data) return (
     <div className='flex justify-center items-center h-[200px]'>
       <Spin size='large' />
     </div>
@@ -81,7 +83,7 @@ export default function ShopIncomeSection() {
         <p className="m-0 mt-6 font-bold text-xl">Thu nhập</p>
       </div>
       <div className="mt-4">
-        <RangePicker status='error' presets={rangePresets} onChange={onRangeChange} defaultValue={[dayjs(data.firstDate, "YYYY-MM-DD"), dayjs(data.lastDate, "YYYY-MM-DD")]}/>
+        <RangePicker status='error' presets={rangePresets} onChange={onRangeChange} defaultValue={[dayjs(data.firstDate, "YYYY-MM-DD"), dayjs(data.lastDate, "YYYY-MM-DD")]} />
       </div>
       <div className="grid grid-cols-4 my-4 gap-3">
         <div className="p-4 gap-2 text-white flex flex-wrap items-center shadow rounded bg-gradient-to-r from-sky-400 to-sky-500">
