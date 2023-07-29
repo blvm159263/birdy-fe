@@ -13,6 +13,8 @@ import Feedback from "./Feedback"
 function UserOrderDetail({ detail, orderid, isDone }) {
   const [product, setProducts] = useState([])
 
+  const [reload, setReload] = useState(false)
+
   const dispatch = useDispatch()
   // console.log(detail)
   const fetchProduct = async () => {
@@ -35,7 +37,7 @@ function UserOrderDetail({ detail, orderid, isDone }) {
 
   useEffect(() => {
     fetchProduct()
-  }, [])
+  }, [reload])
 
   return (
     <>
@@ -80,7 +82,7 @@ function UserOrderDetail({ detail, orderid, isDone }) {
           )
           // {}
         }
-        {isDone && !detail.rating ? <Feedback /> : ""}
+        {isDone && !detail.rating ? <Feedback detail={detail} setReload={setReload} reload={reload}/> : ""}
         {isDone && detail.comment && <div className="">"{detail.comment}"</div>}
       </div>
     </>

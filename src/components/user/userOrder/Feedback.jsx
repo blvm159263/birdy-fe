@@ -4,12 +4,48 @@ import {
   faStar,
 } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React, { useState } from "react"
+import { set } from "date-fns"
+import React, { useEffect, useState } from "react"
+import orderApi from "../../../api/orderApi"
+import { NotificationContext } from "../../../context/NotificationProvider"
+import { useContext } from "react"
+import { useNavigate } from "react-router-dom"
 
-function Feedback() {
+function Feedback({ detail, reload, setReload }) {
+
+  const openNotificationWithIcon = useContext(NotificationContext)
+  const navigate = useNavigate();
+
   const [rating, setRating] = useState(0)
   const [hover, setHover] = useState(0)
   const [isComment, setIsComment] = useState(false)
+  const [comment, setComment] = useState("")
+  const [orderDetail, setOrderDetail] = useState()
+
+  useEffect(() => {
+    setOrderDetail(detail);
+  }, [detail])
+
+  const handleSubmitRating = () => {
+    orderApi.updateOrderDetail({
+      id: orderDetail.id,
+      quantity: orderDetail.quantity,
+      price: orderDetail.price,
+      rating: rating,
+      comment: comment,
+      productId: orderDetail.productId,
+      productName: orderDetail.productName,
+      productCategory: orderDetail.productCategory,
+      orderId: orderDetail.orderId,
+    }).then((response) => {
+      openNotificationWithIcon("Success", "Review success!!!")
+      navigate("/user/order");
+    }).catch((error) => {
+      openNotificationWithIcon("Fail", "Review Fail!!!")
+    })
+
+  }
+
   return (
     <div>
       <div>
@@ -21,11 +57,10 @@ function Feedback() {
                 aria-hidden="true"
                 type="button"
                 key={index}
-                className={`${
-                  index <= (hover || rating)
-                    ? "text-yellow-400"
-                    : "text-gray-300"
-                }
+                className={`${index <= (hover || rating)
+                  ? "text-yellow-400"
+                  : "text-gray-300"
+                  }
                     cursor-pointer w-5 h-5`}
                 onClick={() => setRating(index)}
                 onMouseEnter={() => setHover(index)}
@@ -57,8 +92,11 @@ function Feedback() {
               id=""
               cols="35"
               rows="5"
+              onChange={(e) => setComment(e.target.value)}
             ></textarea>
-            <button className="text-sm text-blue-500">
+            <button className="text-sm text-blue-500"
+              onClick={handleSubmitRating}
+            >
               <FontAwesomeIcon icon={faMessage} />
               Submit feedback
             </button>

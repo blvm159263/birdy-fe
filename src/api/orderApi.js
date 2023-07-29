@@ -28,6 +28,10 @@ const orderApi = {
     paymentCheckout(code, userId, amount){
         const url = `/orders/payment?amount=${amount}&code=${code}&userId=${userId}`
         return axiosClient.put(url)
+    },
+    updateOrderDetail(data){
+        const url = `/orders/detail`
+        return axiosClient.put(url, data)
     }
 }
 

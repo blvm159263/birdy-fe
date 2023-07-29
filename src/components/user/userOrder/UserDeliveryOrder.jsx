@@ -102,12 +102,12 @@ function UserDeliveryOrder() {
               <p>Total Price: ${order?.total?.toFixed(2)}</p>
             </div>
             <div className="py-2 flex justify-end">
-              <button
+              {/* <button
                 onClick={() => handleUpdateState(order.id, "DONE", ".")}
                 className="border border-sky-500 bg-sky-500 text-white px-2 py-1 rounded-md ml-2 hover:bg-white hover:text-sky-500 hover:border-sky-500"
               >
                 RECEIVED
-              </button>
+              </button> */}
             </div>
           </div>
         ))}
