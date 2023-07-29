@@ -18,19 +18,15 @@ export const SelectionChatContextProvider = ({ children }) => {
     const { currentUser } = useContext(AuthContext);
     const { dispatch, setIsChatOpen } = useContext(ChatContext);
 
-    const handleSelect = async (userSelect) => {
+    const handleSelect = async () => {
         let userChat;
-        if(userSelect === null){
-            userChat = user;
-        }else{
-            userChat = userSelect;
-        }
+        userChat = user;
         //check whether the group(chats in firestore) exists, if not create
         const combinedId =
             currentUser.phoneNumber > userChat.phoneNumber
                 ? currentUser.phoneNumber + userChat.phoneNumber
                 : userChat.phoneNumber + currentUser.phoneNumber;
-                console.log("handelSelect " + combinedId);
+        console.log("handelSelect " + combinedId);
         try {
             const res = await getDoc(doc(db, "chats", combinedId));
 
