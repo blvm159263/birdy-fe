@@ -19,13 +19,11 @@ export const SelectionChatContextProvider = ({ children }) => {
     const { dispatch, setIsChatOpen } = useContext(ChatContext);
 
     const handleSelect = async () => {
-        let userChat;
-        userChat = user;
         //check whether the group(chats in firestore) exists, if not create
         const combinedId =
-            currentUser.phoneNumber > userChat.phoneNumber
-                ? currentUser.phoneNumber + userChat.phoneNumber
-                : userChat.phoneNumber + currentUser.phoneNumber;
+            currentUser.phoneNumber > user.phoneNumber
+                ? currentUser.phoneNumber + user.phoneNumber
+                : user.phoneNumber + currentUser.phoneNumber;
         console.log("handelSelect " + combinedId);
         try {
             const res = await getDoc(doc(db, "chats", combinedId));
@@ -37,9 +35,9 @@ export const SelectionChatContextProvider = ({ children }) => {
                 //create user chats
                 await updateDoc(doc(db, "userChats", currentUser.phoneNumber), {
                     [combinedId + ".userInfo"]: {
-                        phoneNumber: userChat.phoneNumber,
-                        fullName: userChat.fullName,
-                        avatarUrl: userChat.avatarUrl,
+                        phoneNumber: user.phoneNumber,
+                        fullName: user.fullName,
+                        avatarUrl: user.avatarUrl,
                     },
                     [combinedId + ".date"]: serverTimestamp(),
                 });
@@ -54,7 +52,7 @@ export const SelectionChatContextProvider = ({ children }) => {
                 });
             }
             setIsChatOpen(true);
-            dispatch({ type: "CHANGE_USER", payload: userChat });
+            dispatch({ type: "CHANGE_USER", payload: user });
         } catch (err) { }
 
     };
