@@ -107,7 +107,7 @@ export default function NavBar() {
                 to={`/search/${SearchType.ACCESSORY.text}`}
                 onClick={() => dispatch(resetAllState())}
               >
-                Phụ kiện
+                Thức ăn
               </Link>
             </li>
             <li>
@@ -115,7 +115,7 @@ export default function NavBar() {
                 to={`/search/${SearchType.FOOD.text}`}
                 onClick={() => dispatch(resetAllState())}
               >
-                Thức ăn
+                Phụ kiện
               </Link>
             </li>
           </ul>
