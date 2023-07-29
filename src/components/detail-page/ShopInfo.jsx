@@ -9,6 +9,10 @@ function ShopInfo({ product }) {
 
   const { setUser, handleSelect } = useContext(SelectionChatContext);
 
+  const onChat = () => {
+    handleSelect()
+  }
+
   useEffect(() => {
     shopApi.getShopInformationByShopId(product.shopId).then((res) => {
       setShop(res.data);
@@ -34,7 +38,7 @@ function ShopInfo({ product }) {
         </div>
         <div className="lg:ml-6 sm: ml-0 flex flex-col justify-between">
           <button className="py-1 px-10 my-1 bg-sky-300 rounded-md text-white border border-white font-bold hover:bg-white hover:border-blue-400 hover:text-blue-400"
-            onClick={() => handleSelect()}>
+            onClick={onChat}>
             Chat
           </button>
           <button className="py-1 px-10 my-1 bg-sky-300 rounded-md text-white border border-white font-bold hover:bg-white hover:border-blue-400 hover:text-blue-400">
