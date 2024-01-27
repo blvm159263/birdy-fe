@@ -3,17 +3,17 @@ import { Link } from "react-router-dom"
 
 export default function ProductCard({ product }) {
   return (
-    <Link to={`/detail-item/${product.id}`}>
-      <div className="productCard cursor-pointer bg-white rounded-sm">
-        <div className="max-h-[250px] overflow-hidden">
+    <Link to={`/detail-item/${product.id}`} className='rounded-md overflow-hidden shadow-md hover:scale-105 duration-150'>
+      <div className="productCard cursor-pointer bg-white">
+        <div className="h-60 overflow-hidden">
           <img
-            className="object-cover"
-            src="/assets/images/product-demo.png"
+            className="object-cover w-full h-80"
+            src={product.imageMain}
             alt="product"
           />
         </div>
         <div className="p-3">
-          <p className="line-clamp-2 text-sm md:text-base">
+          <p className="line-clamp-2 text-sm md:text-base h-12">
             {product.productName}
           </p>
           <p className="text-base md:text-lg font-bold text-orange-500 py-2">
@@ -34,7 +34,7 @@ export default function ProductCard({ product }) {
                 </svg>
               ))}
             <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-              ({product.salePtc})
+              ({product.totalRating})
             </p>
           </div>
         </div>

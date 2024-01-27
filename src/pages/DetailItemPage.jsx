@@ -1,40 +1,61 @@
-import React, { useEffect, useState } from "react"
-import ProductOverview from "../components/detail-page/ProductOverview/ProductOverview"
-import ShopInfo from "../components/detail-page/ShopInfo"
-import ProductDetails from "../components/detail-page/ProductDetails"
-import Review from "../components/detail-page/Review"
-import RelatedProduct from "../components/detail-page/RelatedProduct"
-import productApi from "../api/productApi"
-import { useParams } from "react-router"
+import React, {useEffect, useState} from "react";
+import ProductOverview from "../components/detail-page/ProductOverview/ProductOverview";
+import ProductDetails from "../components/detail-page/ProductDetails";
+import Review from "../components/detail-page/Review";
+import RelatedProduct from "../components/detail-page/RelatedProduct";
+import productApi from "../api/productApi";
+import shopApi from "../api/shopApi";
+import {useParams} from "react-router";
+import StoreCard from "../components/store/StoreCard";
+import {Spin} from "antd";
+import {useNavigate} from "react-router-dom";
 
 function DetailItemPage() {
-  const [product, setProduct] = useState(undefined);
-  const { id } = useParams()
+  const [shop, setShop] = useState(null);
+  const [product, setProduct] = useState(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    productApi.getProductById(id)
+    productApi
+      .getProductById(id)
       .then((response) => {
+        if(response.data.status === false || response.data.isBanned === true) navigate("/notfound");
+
         setProduct(response.data);
-        console.log(response.data);
+
+        shopApi.getShopDetailByShopId(response.data.shopId).then((response) => {
+          console.log(response);
+          setShop(response.data[0]);
+        })
       })
-      .catch((error) => console.log(error));
-    
+      .catch((error) => {
+        console.log(error)
+        if(error.response.status === 404) navigate("/notfound");
+      });
+
     window.scrollTo(0, 0);
-  }, [id])
+  }, [id]);
 
   return (
-    <div className="bg-gray-200 py-10">
-      <div className=" flex flex-col justify-center items-center mx-20">
-        <ProductOverview product={product}/>
-        <ShopInfo />
-        <div className="flex">
-          <ProductDetails product={product}/>
-          <Review />
+    <div className="bg-gray-200 py-4">
+      {product ? (
+        <div className="container mx-auto">
+          <ProductOverview product={product} />
+          <StoreCard shop={shop}/>
+          <div className="grid grid-cols-12 gap-2 mt-2">
+            <ProductDetails product={product} />
+            <Review product={product} />
+          </div>
+          <RelatedProduct product={product} />
         </div>
-        <RelatedProduct />
-      </div>
+      ) : (
+        <div className="flex justify-center items-center h-[60vh]">
+          <Spin size="large" />
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
-export default DetailItemPage
+export default DetailItemPage;

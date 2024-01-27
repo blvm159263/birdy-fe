@@ -1,14 +1,16 @@
 
 import React from "react"
-import { useState } from "react"
+import { useState, useContext } from "react"
 import validator from 'validator'
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
-import app from "../../config/firebaseConfig"
-
+import {app} from "../../config/firebaseConfig"
+import { NotificationContext } from "../../context/NotificationProvider"
 import accountApi from "../../api/accountApi"
 
 
 function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumberRegister, setPasswordRegister, setIsVerified}) {
+
+    const openNotificationWithIcon = useContext(NotificationContext);
 
     const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(true);
     const [isValidPassword, setIsValidPassword] = useState(true);
@@ -44,9 +46,10 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                 // SMS sent. Prompt user to type the code from the message, then sign the
                 // user in with confirmationResult.confirm(code).
                 window.confirmationResult = confirmationResult;
-                alert("otp send!")
+                openNotificationWithIcon("Đã gửi OTP", "Hãy kiểm tra tin nhấn điện thoại !")
             }).catch((error) => {
                 // Error; SMS not sent
+
             });
     }
 
@@ -54,35 +57,37 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
 
         window.confirmationResult.confirm(otp).then((result) => {
             // User signed in successfully.
-            alert("valid code");
             setIsVerified(true);
 
         }).catch((error) => {
             // User couldn't sign in (bad verification code?)
-            alert("invalid code");
+            openNotificationWithIcon("OTP invalid", "Error! Please check OTP again!")
             setIsValidOtp(false);
         });
     }
 
     const validationPhoneNumber = () => {
-        setIsValidPhoneNumber(validator.isMobilePhone(phoneNumberRegister, 'vi-VN'));
+        const isValid = validator.isMobilePhone(phoneNumberRegister, 'vi-VN')
+        setIsValidPhoneNumber(isValid);
+        console.log("phone :" + isValid);
+        return isValid;
     }
 
     const validationPassword = () => {
-        setIsValidPassword(validator.isStrongPassword(passwordRegister));
+        const isValid = validator.isStrongPassword(passwordRegister);
+        setIsValidPassword(isValid);
+        console.log("pass :" +isValid);
+        return isValid
     }
 
     const onSignUp = () => {
-        validationPhoneNumber();
-        validationPassword();
-        if (isValidPhoneNumber && isValidPassword) {
+        if (validationPhoneNumber() && validationPassword()) {
             console.log("Valid");
             accountApi.checkPhoneExist({ phoneNumber: phoneNumberRegister })
                 .then(res => {
                     if (res.data) {
-                        alert("Phone number is existed!");
+                        openNotificationWithIcon("Existed!", "Phone number is exited! Please try again!")
                     } else {
-                        alert("Phone number valid!");
                         setIsVerifyState(true);
                         verifyPhone();
                     }
@@ -91,7 +96,6 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
             console.log("Invalid")
         }
 
-        console.log("sign up")
     }
 
     const handleEntailmentRequest = (e) => {
@@ -101,11 +105,11 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
 
     return (
         <div className="lg:w-1/2 sm:w-full p-5 sm:mx-auto">
-            <form className="lg:w-1/2 sm:w-full bg-white p-10 rounded-md">
+            <form className="lg:w-2/3 sm:w-full bg-white p-10 rounded-md">
                 {isVerifyState ? "" :
                     <div>
                         <h1 className="text-3xl mb-4">
-                            Sign Up
+                            Đăng kí
                         </h1>
                         <div className="mb-4">
                             <input
@@ -116,7 +120,7 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                                 className="w-full border-gray-300 border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
                                 onChange={(e) => setPhoneNumberRegister(e.target.value)}
                             />
-                            {isValidPhoneNumber ? "" : <div className="text-rose-600">Invalid Phone Number !</div>}
+                            {isValidPhoneNumber ? "" : <div className="text-rose-600">Số điện thoại không hợp lệ !</div>}
                         </div>
                         <div className="mb-4">
                             <input
@@ -127,7 +131,7 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                                 className="w-full border-gray-300 border rounded px-3 py-2 mt-1 focus:outline-none focus:ring focus:border-blue-300"
                                 onChange={(e) => setPasswordRegister(e.target.value)}
                             />
-                            {isValidPassword ? "" : <div className="text-rose-600">Invalid Password !</div>}
+                            {isValidPassword ? "" : <div className="text-rose-600">Mật khẩu không hợp lệ !</div>}
                         </div>
                         <button
                             className="bg-orange-400	w-full my-2 text-white px-4 py-2 rounded hover:bg-white hover:text-orange-400 hover:border-orange-400 hover:outline outline-1 focus:outline-none focus:bg-blue-600"
@@ -136,24 +140,18 @@ function SignUp({setIsSignIn,phoneNumberRegister,passwordRegister, setPhoneNumbe
                                 onSignUp();
                             }}
                         >
-                            Sign Up
+                            Đăng kí
                         </button>
 
-                        <p className="text-center text-gray-400 mb-4">OR</p>
-                        <button
-                            type="button"
-                            className="bg-red-500 w-full text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
-                        >
-                            Login with Google
-                        </button>
+                        
                         <div>
                             <p className="text-center mt-4">
-                                Have account already?{" "}
+                                Bạn đã có tài khoản?{" "}
                                 <a
                                     className="cursor-pointer text-orange-400 hover:text-orange-700"
                                     onClick={() => setIsSignIn(true)}
                                 >
-                                    Sign In
+                                    Đăng nhập
                                 </a>
                             </p>
                         </div>

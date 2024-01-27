@@ -11,7 +11,7 @@ export default function Footer() {
               Privacy Policy
             </a>
           </div>
-          <div className="my-5">
+          <div className="my-5 ">
             <a href="">Return Policy</a>
           </div>
           <div className="my-5">

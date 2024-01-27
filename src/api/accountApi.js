@@ -16,6 +16,10 @@ const accountApi = {
     add(data) {
         const url = '/admin/products/create'
         return axiosClient.post(url, data);
+    },
+    updatePassword(params) {
+        const url = '/accounts/password'
+        return axiosClient.put(url, params);
     }
 };
 

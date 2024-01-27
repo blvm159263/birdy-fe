@@ -6,48 +6,103 @@ const productApi = {
         return axiosClient.get(url, { params })
     },
     getAll(params) {
-        const url = '/products/view'
+        let url = '/products/view'
+        if (params.id !== undefined) url = '/categories/' + params.id + url;
         return axiosClient.get(url, { params })
     },
     getAllAscending(params) {
-        const url = '/products/view/price-asc'
+        let url = '/products/view/price-asc'
+        if (params.id !== undefined) url = '/categories/' + params.id + url;
         return axiosClient.get(url, { params })
     },
     getAllDescending(params) {
-        const url = '/products/view/price-desc'
+        let url = '/products/view/price-desc'
+        if (params.id !== undefined) url = '/categories/' + params.id + url;
         return axiosClient.get(url, { params })
     },
     getAllLatest(params) {
-        const url = '/products/view/latest'
+        let url = '/products/view/latest'
+        if (params.id !== undefined) url = '/categories/' + params.id + url;
         return axiosClient.get(url, { params })
     },
     getProductById(id) {
         const url = `/products/${id}`
         return axiosClient.get(url);
     },
-    add(data) {
-        const url = '/admin/products/create'
-        return axiosClient.post(url, data);
+    addNewProduct(params) {
+        const data = new FormData();
+        data.append('productDTO', params.productDTO);
+        data.append('mainImage', params.mainImage);
+        params.subImages.forEach((image) => {
+            data.append('subImages', image);
+        });
+        const config = {
+            headers: {
+                'Content-type': 'multipart/form-data',
+            },
+        };
+        const url = '/products/create'
+        return axiosClient.post(url, data, config);
     },
-    update(data) {
-        const url = `/admin/products/update/${data.productId}`
-        return axiosClient.put(url, data);
+    getProductReview(productId, params) {
+        const url = `/products/review/${productId}`
+        return axiosClient.get(url, { params });
     },
-    remove(id) {
-        const url = `/admin/products/delete/${id}`
+    deleteProduct(productId) {
+        const url = `/products/delete/${productId}`
         return axiosClient.delete(url);
     },
-    getAllByPage(params) {
-        const url = '/admin/products/'
-        return axiosClient.get(url, { params })
+    getAllFeaturedProduct(params) {
+        const url = `/products/view/all`;
+        return axiosClient.get(url, { params });
     },
-    getTotal() {
-        const url = '/admin/products/total'
-        return axiosClient.get(url)
+    cancelAllOrdersAndUpdateProductById(id, params) {
+        const data = new FormData();
+        data.append('productDTO', params.productDTO);
+        data.append('mainImage', params.mainImage);
+        if (params.subImages) {
+            params.subImages.forEach((image) => {
+                data.append('subImages', image);
+            });
+        }
+        data.append('objects', params.objects);
+
+        const url = `/products/update/${id}`;
+        return axiosClient.put(url, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
     },
-    getByPageAndName(params) {
-        const url = '/admin/products/name'
-        return axiosClient.get(url, { params })
+    hideOldProductByIdAndCreateNewProduct(id, params) {
+        const data = new FormData();
+        data.append('productDTO', params.productDTO);
+        data.append('mainImage', params.mainImage);
+        if (params.subImages) {
+            params.subImages.forEach((image) => {
+                data.append('subImages', image);
+            });
+        }
+        data.append('objects', params.objects);
+
+        const url = `/products/update-new/${id}`;
+        return axiosClient.put(url, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    },
+    checkIfProductHaveOrderById(id) {
+        const url = `/products/check-product/${id}`;
+        return axiosClient.get(url);
+    },
+    hideProductById(id) {
+        const url = `/products/hide/${id}`;
+        return axiosClient.patch(url);
+    },
+    showProductById(id) {
+        const url = `/products/show/${id}`;
+        return axiosClient.patch(url);
     }
 };
 
